@@ -1,0 +1,70 @@
+<form class="text-left" [formGroup]="form" (ngSubmit)="enviar()">
+
+    <p class="h5 mb-4">Formulário ({{acao}})</p>
+
+    <div class="form-group">
+        <label for="usr">Tipo:</label>
+        <label class="form-control">
+            <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="PF">
+            Pessoa Física
+        </label>
+        <label class="form-control">
+            <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="PJ">
+            Pessoa Jurídica
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="cpfCnpj">CPF/CNPJ:</label>
+        <input type="text" class="form-control" id="cpfCnpj" formControlName="cpfCnpj">
+    </div>
+    <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" class="form-control" id="nome" formControlName="nome">
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" class="form-control" id="email" formControlName="email">
+    </div>
+    <div class="form-group">
+        <label for="contato1">Contato 1:</label>
+        <input type="text" class="form-control" id="contato1" formControlName="contato1">
+    </div>
+    <div class="form-group">
+        <label for="contato2">Contato 2:</label>
+        <input type="text" class="form-control" id="contato2" formControlName="contato2">
+    </div>
+    <div class="form-group">
+        <label for="contato3">Contato 3:</label>
+        <input type="text" class="form-control" id="contato3" formControlName="contato3">
+    </div>
+
+    <div class="form-group">
+        <label for="endereco">Endereço(s):</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Logradouro</th>
+                    <th>Complemento</th>
+                    <th>Número</th>
+                    <th>Bairro</th>
+                    <th>Cidade</th>
+                    <th>UF</th>
+                    <th>Cep</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let el of form.value.enderecoList; let i = index">
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.logradouro"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.complemento"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.numero"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.bairro"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.cidade"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.uf"></td>
+                    <td><input class="form-control" type="text" formControlName="el.endereco.value.cep"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button class="btn btn-info btn-block" type="submit">Enviar</button>
+</form>

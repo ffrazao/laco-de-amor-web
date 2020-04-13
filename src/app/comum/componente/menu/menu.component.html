@@ -1,0 +1,53 @@
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
+
+    <!-- Navbar brand -->
+    <mdb-navbar-brand><a class="navbar-brand" href="/">Laço de Amor</a></mdb-navbar-brand>
+
+    <!-- Collapsible content -->
+    <links>
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active dropdown" dropdown>
+                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+                Cadastro<span class="caret"></span></a>
+                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="/cadastro/pessoa">Pessoas</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Fornecedor</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Parceiro</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Cliente</a>
+                    <div class="divider dropdown-divider"></div>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Usuário</a>
+                </div>
+            </li>
+
+            <li class="nav-item active dropdown" dropdown>
+                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+                Ações<span class="caret"></span></a>
+                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Cotar</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Comprar Matéria Prima</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Produzir</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Vender</a>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link waves-light" mdbWavesEffect>Configuração</a>
+            </li>
+
+        </ul>
+        <!-- Links -->
+
+<!-- Search form -->
+        <!-- <form class="form-inline waves-light" mdbWavesEffect>
+            <div class="md-form my-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            </div>
+        </form> -->
+    </links>
+    <!-- Collapsible content -->
+
+</mdb-navbar>
+<!--/.Navbar-->

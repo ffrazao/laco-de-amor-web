@@ -1,0 +1,13 @@
+<div class="container text-center border border-light p-5">
+    <div class="bg-primary">
+        <p class="h4 text-center">{{formulario.nome}}</p>
+    </div>
+
+    <p>
+        <a [routerLink]="['novo']">Novo</a> |
+        <a [routerLink]="['filtro']">Filtrar</a> |
+        <a [routerLink]="['./']">Listar</a>
+    </p>
+
+    <router-outlet></router-outlet>
+</div>
