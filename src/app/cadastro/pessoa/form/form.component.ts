@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta';
 import { Pessoa } from '../pessoa';
@@ -14,32 +14,43 @@ import { Endereco } from '../../endereco/endereco';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
-
-  public form: FormGroup;
+  
+  public frm = this.criarFormulario(new Pessoa());
+  
   isEnviado = false;
   public entidade: Pessoa;
   id: number;
   public acao: string;
-
+  
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private servico: PessoaService,
     private router: Router) { }
-
-  ngOnInit(): void {
-    this.route.params.subscribe((p) => {
-      this.id = p['id'];
+    
+  ngOnInit() {
+    this.route.params.subscribe(p => {
+      this.id = p.id;
+      console.log('id', p, this.id);
     });
+
     this.route.data.subscribe((info) => {
-      this.entidade = info.resolve.principal;
-      this.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
-      this.form = this.criarFormulario(this.entidade);
-      console.log(this.form);
+      this.entidade = info['resolve']['principal'];
+      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this.frm = this.criarFormulario(this.entidade);
+      console.log(this.frm);
     });
   }
 
-  criarFormulario(entidade) {
+  get enderecoList(): FormArray {
+     return this.frm.get('enderecoList') as FormArray;
+  }
+
+  criarFormulario(entidade: Pessoa) {
+    if (!entidade) {
+      entidade = new Pessoa();
+    }
+
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
@@ -50,30 +61,36 @@ export class FormComponent implements OnInit {
         contato1: [entidade.contato1, []],
         contato2: [entidade.contato2, []],
         contato3: [entidade.contato3, []],
-        enderecoList: this.formBuilder.array([]).setValue(this.criarFormularioPessoaEndereco(entidade.enderecoList))
+        enderecoList: this.criarFormularioEnderecoList(entidade.enderecoList)
       }
     );
 
     return result;
   }
 
-  criarFormularioPessoaEndereco(lista: PessoaEndereco[]) {
+
+  criarFormularioEnderecoList(lista: PessoaEndereco[]) {
     let result = [];
-    
-    for (let i = 0; i < lista.length; i++) {
-      let e = this.criarFormularioEndereco(lista[i].endereco);
-      let r = this.formBuilder.group(
-        {
-          id: [lista[i].id, []],
-          endereco: e,
-        }
-      );
-      result.push(r);
+
+    if (lista && lista.length) {
+      for (let i = 0; i < lista.length; i++) {
+        result.push(
+          this.formBuilder.group(
+            {
+              id: [lista[i].id, []],
+              endereco: this.criarFormularioEndereco(lista[i].endereco),
+            }
+          )
+        );
+      }
     }
-    return result;
+    return this.formBuilder.array(result);
   }
 
   criarFormularioEndereco(entidade: Endereco) {
+    if (!entidade) {
+      entidade = new Endereco();
+    }
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
@@ -91,7 +108,7 @@ export class FormComponent implements OnInit {
 
   public enviar() {
     this.isEnviado = true;
-    this.entidade = this.form.value;
+    this.entidade = this.frm.value;
     if ('Novo' === this.acao) {
       this.servico.create(this.entidade);
     } else {
@@ -101,3 +118,48 @@ export class FormComponent implements OnInit {
   }
 
 }
+/*
+
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, FormArray, FormBuilder } from '@angular/forms';
+
+@Component({
+  selector: 'my-app',
+  template: `
+    <form [formGroup]="form">
+      <input type="checkbox" formControlName="published"> Published
+      <div *ngIf="form.controls.published.value">
+
+        <h2>Credentials</h2>
+        <button (click)="addCreds()">Add</button>
+
+        <div formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index">
+          <ng-container [formGroupName]="i">
+            <input placeholder="Username" formControlName="username">
+            <input placeholder="Password" formControlName="password">
+          </ng-container>
+        </div>
+
+      </div>
+    </form>
+  `,
+})
+export class FormComponent  {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      published: true,
+      credentials: this.fb.array([]),
+    });
+  }
+
+  addCreds() {
+    const creds = this.form.controls.credentials as FormArray;
+    creds.push(this.fb.group({
+      username: '',
+      password: '',
+    }));
+  }
+}
+*/

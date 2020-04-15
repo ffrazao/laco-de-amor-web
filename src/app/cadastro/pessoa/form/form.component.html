@@ -1,6 +1,6 @@
-<form class="text-left" [formGroup]="form" (ngSubmit)="enviar()">
+<form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
 
-    <p class="h5 mb-4">Formulário ({{acao}})</p>
+    <p class="h5 mb-4">Formulário ({{acao}}) /{{id}}/</p>
 
     <div class="form-group">
         <label for="usr">Tipo:</label>
@@ -38,7 +38,7 @@
         <input type="text" class="form-control" id="contato3" formControlName="contato3">
     </div>
 
-    <div class="form-group">
+    <div class="form-group" formArrayName="enderecoList">
         <label for="endereco">Endereço(s):</label>
         <table class="table">
             <thead>
@@ -53,18 +53,20 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let el of form.value.enderecoList; let i = index">
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.logradouro"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.complemento"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.numero"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.bairro"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.cidade"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.uf"></td>
-                    <td><input class="form-control" type="text" formControlName="el.endereco.value.cep"></td>
+                <tr *ngFor="let el of enderecoList.controls; index as i" [formGroupName]="i">
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="logradouro"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="complemento"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="numero"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="bairro"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="cidade"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="uf"></td>
+                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="cep"></td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+    / {{frm.value | json}} /
 
     <button class="btn btn-info btn-block" type="submit">Enviar</button>
 </form>
