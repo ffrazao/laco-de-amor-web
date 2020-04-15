@@ -50,20 +50,47 @@
                     <th>Cidade</th>
                     <th>UF</th>
                     <th>Cep</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let el of enderecoList.controls; index as i" [formGroupName]="i">
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="logradouro"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="complemento"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="numero"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="bairro"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="cidade"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="uf"></td>
-                    <td [formGroup]="el.controls.endereco"><input class="form-control" type="text" formControlName="cep"></td>
+                <tr *ngFor="let el of enderecoList.controls; index as i;" [formGroupName]="i">
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="logradouro">
+                        <label *ngIf="!el.editar">{{el.value.endereco.logradouro}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="complemento">
+                        <label *ngIf="!el.editar">{{el.value.endereco.complemento}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="numero">
+                        <label *ngIf="!el.editar">{{el.value.endereco.numero}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="bairro">
+                        <label *ngIf="!el.editar">{{el.value.endereco.bairro}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="cidade">
+                        <label *ngIf="!el.editar">{{el.value.endereco.cidade}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="uf">
+                        <label *ngIf="!el.editar">{{el.value.endereco.uf}}</label>
+                    </td>
+                    <td [formGroup]="el.controls.endereco">
+                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="cep">
+                        <label *ngIf="!el.editar">{{el.value.endereco.cep}}</label>
+                    </td>
+                    <td>
+                        <a (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</a> | 
+                        <a (click)="excluirEndereco(el);" *ngIf="!el.editar">excluir</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <button type="button" (click)="novoEndereco()">Adicionar</button>
     </div>
 
     / {{frm.value | json}} /

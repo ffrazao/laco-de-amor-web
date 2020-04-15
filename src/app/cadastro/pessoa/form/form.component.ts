@@ -21,6 +21,7 @@ export class FormComponent implements OnInit {
   public entidade: Pessoa;
   id: number;
   public acao: string;
+  editar: boolean[];
   
   constructor(
     private formBuilder: FormBuilder,
@@ -74,17 +75,23 @@ export class FormComponent implements OnInit {
 
     if (lista && lista.length) {
       for (let i = 0; i < lista.length; i++) {
-        result.push(
-          this.formBuilder.group(
-            {
-              id: [lista[i].id, []],
-              endereco: this.criarFormularioEndereco(lista[i].endereco),
-            }
-          )
-        );
+        result.push(this.criarFormularioPessoaEndereco(lista[i]));
       }
     }
     return this.formBuilder.array(result);
+  }
+
+  criarFormularioPessoaEndereco(entidade: PessoaEndereco) {
+    if (!entidade) {
+      entidade = new PessoaEndereco();
+    }
+    let result = this.formBuilder.group(
+      {
+        id: [entidade.id, []],
+        endereco: this.criarFormularioEndereco(entidade.endereco),
+      }
+    );
+    return result;
   }
 
   criarFormularioEndereco(entidade: Endereco) {
@@ -115,6 +122,17 @@ export class FormComponent implements OnInit {
       this.servico.update(this.id, this.entidade);
     }
     this.router.navigate(['cadastro', 'pessoa']);
+  }
+
+  public novoEndereco() {
+    let reg = this.criarFormularioPessoaEndereco(new PessoaEndereco());
+    reg['editar'] = true;
+    this.enderecoList.push(reg);
+  }
+
+  public excluirEndereco(reg) {
+    console.log(reg);
+    this.enderecoList.removeAt(reg);
   }
 
 }
