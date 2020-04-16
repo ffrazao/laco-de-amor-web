@@ -11,14 +11,19 @@
     </thead>
     <tbody>
       <tr *ngFor="let el of elements; let i = index">
+        <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+          <a [routerLink]="[el.id]">{{el.nome}}</a>
+        </td>
+        <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+          <a [routerLink]="[el.id]">
+            {{exibeVinculo(el)}}
+          </a>
+        </td>
         <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex" scope="row">
           <a [routerLink]="[el.id]">{{el.tipo}}</a>
         </th>
         <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
           {{el.cpfCnpj}}
-        </td>
-        <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-          <a [routerLink]="[el.id]">{{el.nome}}</a>
         </td>
         <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
           {{el.email}}

@@ -15,7 +15,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
   elements: Pessoa[] = [];
   previous: Pessoa[] = [];
-  headElements = ['Tipo', 'CPF/CNPJ', 'Nome', 'E-mail'];
+  headElements = ['Nome', 'Vínculo', 'Tipo', 'CPF/CNPJ', 'E-mail'];
 
   constructor(private cdRef: ChangeDetectorRef, private route: ActivatedRoute) { }
 
@@ -38,4 +38,14 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.mdbTablePagination.calculateLastItemIndex();
     this.cdRef.detectChanges();
   }
+
+  public exibeVinculo(reg) {
+    let vinc =
+      (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? reg.parceiro.funcao : 'Não informado') + ') ' : '') +
+      (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
+      (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
+    console.log(vinc);
+    return vinc ? vinc : 'Sem vínculo';
+  }
+
 }
