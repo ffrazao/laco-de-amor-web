@@ -1,25 +1,57 @@
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
 
-    <p class="h5 mb-4">Formulário ({{acao}}) /{{id}}/</p>
+    <p class="h5 mb-4">Formulário ({{acao}})</p>
 
     <div class="form-group">
-        <label for="usr">Tipo:</label>
+        <label for="nome">Nome da Pessoa:</label>
+        <input type="text" class="form-control" id="nome" formControlName="nome">
+    </div>
+
+    <div class="form-group">
+        <label for="parceiro">Tipo de Vínculo:</label>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="parceiro" [(ngModel)]="isParceiro" 
+                [ngModelOptions]="{standalone: true}"
+                (click)="setParceiro()">
+            <label class="form-check-label" for="parceiro">Parceiro</label>
+            <div class="form-group" *ngIf="isParceiro" [formGroup]="parceiro">
+                <label>
+                    Função
+                </label>
+                <select name="funcao" id="funcao" formControlName="funcao" class="form-control">
+                    <option>Costureiro(a)</option>
+                    <option>Entregador(a)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="fornecedor" [(ngModel)]="isFornecedor" 
+                [ngModelOptions]="{standalone: true}"
+                (click)="setFornecedor()">
+            <label class="form-check-label" for="fornecedor">Fornecedor</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="cliente" [(ngModel)]="isCliente" 
+                [ngModelOptions]="{standalone: true}"
+                (click)="setCliente()">
+            <label class="form-check-label" for="cliente">Cliente</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="usr">Tipo de Pessoa:</label>
         <label class="form-control">
             <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="PF">
-            Pessoa Física
+            Física
         </label>
         <label class="form-control">
             <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="PJ">
-            Pessoa Jurídica
+            Jurídica
         </label>
     </div>
     <div class="form-group">
         <label for="cpfCnpj">CPF/CNPJ:</label>
         <input type="text" class="form-control" id="cpfCnpj" formControlName="cpfCnpj">
-    </div>
-    <div class="form-group">
-        <label for="nome">Nome:</label>
-        <input type="text" class="form-control" id="nome" formControlName="nome">
     </div>
     <div class="form-group">
         <label for="email">E-mail:</label>
@@ -84,8 +116,8 @@
                         <label *ngIf="!el.editar">{{el.value.endereco.cep}}</label>
                     </td>
                     <td>
-                        <a (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</a> | 
-                        <a (click)="excluirEndereco(el);" *ngIf="!el.editar">excluir</a>
+                        <a (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</a> |
+                        <a (click)="excluirEndereco(i);" *ngIf="!el.editar">excluir</a>
                     </td>
                 </tr>
             </tbody>

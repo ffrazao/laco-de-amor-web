@@ -1,4 +1,5 @@
 export class Endereco {
+
     public id: number;
     public logradouro: string;
     public complemento: string;
@@ -6,5 +7,6 @@ export class Endereco {
     public bairro: string;
     public cidade: string;
     public uf: string;
-    public cep: string;    
+    public cep: string;
+
 }
