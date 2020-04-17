@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
-import { gerarFormulario } from '../../../comum/ferramenta/ferramenta';
 import { Pessoa } from '../pessoa';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
@@ -10,6 +9,7 @@ import { Endereco } from '../../endereco/endereco';
 import { Parceiro } from '../../parceiro/parceiro';
 import { Fornecedor } from '../../fornecedor/fornecedor';
 import { Cliente } from '../../cliente/cliente';
+import { MensagemService } from 'src/app/comum/servico/mensagem/mensagem.service';
 
 @Component({
   selector: 'app-form',
@@ -20,11 +20,10 @@ export class FormComponent implements OnInit {
 
   public frm = this.criarFormularioPessoa(new Pessoa());
 
-  isEnviado = false;
+  public isEnviado = false;
   public entidade: Pessoa;
-  id: number;
+  public id: number;
   public acao: string;
-  editar: boolean[];
   public isParceiro: boolean = false;
   public isFornecedor: boolean = false;
   public isCliente: boolean = false;
@@ -33,7 +32,8 @@ export class FormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private servico: PessoaService,
-    private router: Router) { }
+    private router: Router,
+    private _mensagem: MensagemService) { }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -47,6 +47,7 @@ export class FormComponent implements OnInit {
       this.isCliente = !!this.entidade.cliente && !!this.entidade.cliente.id;
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this.criarFormularioPessoa(this.entidade);
+      console.log(this.frm);
     });
   }
 
@@ -74,19 +75,25 @@ export class FormComponent implements OnInit {
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
-        nome: [entidade.nome, []],
+        nome: [entidade.nome, [Validators.required]],
         parceiro: this.criarFormularioParceiro(entidade.parceiro),
         fornecedor: this.criarFormularioFornecedor(entidade.fornecedor),
         cliente: this.criarFormularioCliente(entidade.cliente),
-        tipo: [entidade.tipo, []],
+        tipo: [entidade.tipo, [Validators.required]],
         cpfCnpj: [entidade.cpfCnpj, []],
-        email: [entidade.email, []],
+        email: [entidade.email, [Validators.email]],
         contato1: [entidade.contato1, []],
         contato2: [entidade.contato2, []],
         contato3: [entidade.contato3, []],
         enderecoList: this.criarFormularioEnderecoList(entidade.enderecoList),
       }
     );
+
+    // inserir validador a depender de condição
+    result.get('parceiro').get('id').valueChanges.subscribe((vlr) => {
+      result.get('parceiro').get('funcao').setValidators(vlr ? [Validators.required] : []);
+      result.get('parceiro').get('funcao').updateValueAndValidity();
+    });
 
     return result;
   }
@@ -165,7 +172,7 @@ export class FormComponent implements OnInit {
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
-        logradouro: [entidade.logradouro, []],
+        logradouro: [entidade.logradouro, [Validators.required]],
         complemento: [entidade.complemento, []],
         numero: [entidade.numero, []],
         bairro: [entidade.bairro, []],
@@ -177,8 +184,17 @@ export class FormComponent implements OnInit {
     return result;
   }
 
-  public enviar() {
+  public enviar(event) {
+    event.preventDefault();
     this.isEnviado = true;
+
+    if (this.frm.invalid) {
+      console.log(this.frm); // Process your form
+      let msg = 'Dados inválidos!';
+      this._mensagem.erro(msg);
+      throw new Error(msg);
+    }
+
     this.entidade = this.frm.value;
     if ('Novo' === this.acao) {
       this.servico.create(this.entidade);
@@ -217,7 +233,7 @@ export class FormComponent implements OnInit {
       v.funcao = null;
       this.parceiro.setValue(v);
     } else {
-      this.parceiro.setValue({id: null, funcao: null});
+      this.parceiro.setValue({ id: null, funcao: null });
     }
   }
 
@@ -227,7 +243,7 @@ export class FormComponent implements OnInit {
       v.id = this.frm.value.id ? this.frm.value.id : -1;
       this.cliente.setValue(v);
     } else {
-      this.cliente.setValue({id: null});
+      this.cliente.setValue({ id: null });
     }
   }
 
@@ -237,7 +253,7 @@ export class FormComponent implements OnInit {
       v.id = this.frm.value.id ? this.frm.value.id : -1;
       this.fornecedor.setValue(v);
     } else {
-      this.fornecedor.setValue({id: null});
+      this.fornecedor.setValue({ id: null });
     }
   }
 

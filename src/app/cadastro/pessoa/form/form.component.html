@@ -1,18 +1,22 @@
-<form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
+<form class="text-left" [formGroup]="frm" (ngSubmit)="enviar($event)">
 
     <p class="h5 mb-4">Formulário ({{acao}})</p>
 
     <div class="form-group">
         <label for="nome">Nome da Pessoa:</label>
         <input type="text" class="form-control" id="nome" formControlName="nome">
+        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.nome.invalid">
+            <p *ngIf="frm.controls.nome.errors.required">
+                Campo obrigatório!
+            </p>
+        </div>
     </div>
 
     <div class="form-group">
         <label for="parceiro">Tipo de Vínculo:</label>
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="parceiro" [(ngModel)]="isParceiro" 
-                [ngModelOptions]="{standalone: true}"
-                (click)="setParceiro()">
+            <input type="checkbox" class="form-check-input" id="parceiro" [(ngModel)]="isParceiro"
+                [ngModelOptions]="{standalone: true}" (click)="setParceiro()">
             <label class="form-check-label" for="parceiro">Parceiro</label>
             <div class="form-group" *ngIf="isParceiro" [formGroup]="parceiro">
                 <label>
@@ -22,18 +26,21 @@
                     <option>Costureiro(a)</option>
                     <option>Entregador(a)</option>
                 </select>
+                <div class="alert alert-danger" role="alert" *ngIf="isEnviado && parceiro.controls.funcao.invalid">
+                    <p *ngIf="parceiro.controls.funcao.errors.required">
+                        Campo obrigatório!
+                    </p>
+                </div>
             </div>
         </div>
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="fornecedor" [(ngModel)]="isFornecedor" 
-                [ngModelOptions]="{standalone: true}"
-                (click)="setFornecedor()">
+            <input type="checkbox" class="form-check-input" id="fornecedor" [(ngModel)]="isFornecedor"
+                [ngModelOptions]="{standalone: true}" (click)="setFornecedor()">
             <label class="form-check-label" for="fornecedor">Fornecedor</label>
         </div>
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="cliente" [(ngModel)]="isCliente" 
-                [ngModelOptions]="{standalone: true}"
-                (click)="setCliente()">
+            <input type="checkbox" class="form-check-input" id="cliente" [(ngModel)]="isCliente"
+                [ngModelOptions]="{standalone: true}" (click)="setCliente()">
             <label class="form-check-label" for="cliente">Cliente</label>
         </div>
     </div>
@@ -48,6 +55,11 @@
             <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="PJ">
             Jurídica
         </label>
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.tipo.invalid">
+        <p *ngIf="frm.controls.tipo.errors.required">
+            Campo obrigatório!
+        </p>
     </div>
     <div class="form-group">
         <label for="cpfCnpj">CPF/CNPJ:</label>
@@ -90,6 +102,11 @@
                     <td [formGroup]="el.controls.endereco">
                         <input *ngIf="el.editar" class="form-control" type="text" formControlName="logradouro">
                         <label *ngIf="!el.editar">{{el.value.endereco.logradouro}}</label>
+                        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && el.controls.endereco.controls.logradouro.invalid">
+                            <p *ngIf="el.controls.endereco.controls.logradouro.errors.required">
+                                Campo obrigatório!
+                            </p>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
                         <input *ngIf="el.editar" class="form-control" type="text" formControlName="complemento">
@@ -124,8 +141,6 @@
         </table>
         <button type="button" (click)="novoEndereco()">Adicionar</button>
     </div>
-
-    / {{frm.value | json}} /
 
     <button class="btn btn-info btn-block" type="submit">Enviar</button>
 </form>
