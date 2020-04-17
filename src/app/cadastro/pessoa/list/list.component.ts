@@ -44,7 +44,6 @@ export class ListComponent implements OnInit, AfterViewInit {
       (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? reg.parceiro.funcao : 'Não informado') + ') ' : '') +
       (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
       (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
-    console.log(vinc);
     return vinc ? vinc : 'Sem vínculo';
   }
 

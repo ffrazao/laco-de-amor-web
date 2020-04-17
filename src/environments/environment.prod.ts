@@ -1,5 +1,9 @@
 export const environment = {
   production: true,
-  API_URL: 'http://localhost:8080',
-  OAUTH_URL: 'http://localhost:8081',
+  ambiente: 'local',
+  REST_API_URL: 'http://laco-de-amor.herokuapp.com/rest', 
+  AUTHORIZATION_SERVER: 'http://laco-de-amor.herokuapp.com/oauth', 
+  CLIENT_ID: 'laco_de_amor_web',
+  CLIENT_SECRET: 'laco_de_amor_web'
+
 };
