@@ -6,7 +6,7 @@ export class ProdutoModelo {
     public nome: string;
     public codigo: string;
     public materiaPrima: string;
-    public foto: string;
+    public foto: any;
     public produtoDescricaoList: ProdutoDescricao[] = [];
 
 }

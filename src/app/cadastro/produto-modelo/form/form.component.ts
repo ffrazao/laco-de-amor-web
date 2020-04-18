@@ -7,6 +7,9 @@ import { ProdutoModelo } from '../produto-modelo';
 import { ProdutoModeloService } from '../produto-modelo.service';
 import { ProdutoDescricao } from '../produto-descricao';
 import { ProdutoAtributo } from '../produto-atributo';
+import { environment } from 'src/environments/environment';
+import { AnexarService } from 'src/app/comum/servico/anexar/anexar.service';
+import { AnexarTipo } from 'src/app/comum/servico/anexar/anexar-tipo';
 
 @Component({
   selector: 'app-form',
@@ -21,13 +24,15 @@ export class FormComponent implements OnInit {
   public entidade: ProdutoModelo;
   public id: number;
   public acao: string;
+  public fotoLocal: any = environment.SEM_IMAGEM;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private servico: ProdutoModeloService,
     private router: Router,
-    private _mensagem: MensagemService) { }
+    private _mensagem: MensagemService,
+    private _anexar: AnexarService) { }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -38,7 +43,7 @@ export class FormComponent implements OnInit {
       this.entidade = info['resolve']['principal'];
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this.criarFormulario(this.entidade);
-      console.log(this.frm);
+      this.atualizarFoto();
     });
   }
 
@@ -110,7 +115,7 @@ export class FormComponent implements OnInit {
     this.isEnviado = true;
 
     if (this.frm.invalid) {
-      console.log(this.frm); 
+      console.log(this.frm);
       let msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
@@ -134,6 +139,26 @@ export class FormComponent implements OnInit {
 
   public excluirProdutoDescricao(reg) {
     this.produtoDescricaoList.removeAt(reg);
+  }
+
+  public carregarFoto(event) {
+    event.preventDefault();
+    this._anexar.carregar([AnexarTipo.IMAGEM, AnexarTipo.SOM]).subscribe((v) => {
+      console.log(v);
+    });
+  }
+
+  public limparFoto(event) {
+    event.preventDefault();
+    this.frm.get('foto').setValue(null);
+    this.atualizarFoto();
+  }
+
+  public atualizarFoto() {
+    this.fotoLocal = environment.SEM_IMAGEM;
+    if (this.frm && this.frm.get('foto') && this.frm.get('foto').value) {
+      this.fotoLocal = this.frm.get('foto').value;
+    }
   }
 
 }

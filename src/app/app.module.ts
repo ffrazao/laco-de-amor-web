@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuModule } from './comum/componente/menu/menu.module';
 import { RodapeModule } from './comum/componente/rodape/rodape.module';
 import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
+import { AnexarModule } from './comum/servico/anexar/anexar.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
     MenuModule,
     RodapeModule,
     MensagemModule,
+    AnexarModule,
   ],
   exports: [
     MDBBootstrapModule,

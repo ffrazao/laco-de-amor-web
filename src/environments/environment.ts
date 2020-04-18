@@ -8,7 +8,9 @@ export const environment = {
   REST_API_URL: 'http://localhost:8080', 
   AUTHORIZATION_SERVER: 'http://localhost:8081', 
   CLIENT_ID: 'laco_de_amor_web',
-  CLIENT_SECRET: 'laco_de_amor_web'
+  CLIENT_SECRET: 'laco_de_amor_web',
+  
+  SEM_IMAGEM: '/assets/img/sem-imagem.png'
 };
 
 /*

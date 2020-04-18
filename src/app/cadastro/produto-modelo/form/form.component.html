@@ -25,11 +25,11 @@
     <div class="form-group">
         <label for="usr">Matéria Prima:</label>
         <label class="form-control">
-            <input type="radio" name="materiaPrima" id="S" formControlName="materiaPrima" autocomplete="off" value="PF">
+            <input type="radio" name="materiaPrima" id="S" formControlName="materiaPrima" autocomplete="off" value="S">
             Sim
         </label>
         <label class="form-control">
-            <input type="radio" name="materiaPrima" id="N" formControlName="materiaPrima" autocomplete="off" value="PJ">
+            <input type="radio" name="materiaPrima" id="N" formControlName="materiaPrima" autocomplete="off" value="N">
             Não
         </label>
     </div>
@@ -40,9 +40,19 @@
     </div>
     <div class="form-group">
         <label for="foto">Foto:</label>
-        <input type="text" class="form-control" id="foto" formControlName="foto">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary m-2" (click)="carregarFoto($event)">Carregar</button>
+                <button class="btn btn-primary m-2" (click)="limparFoto($event)">Limpar</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <img alt="Foto" id="foto" [src]="fotoLocal" class="img-fluid">
+            </div>
+        </div>
     </div>
-
+    <!--
     <div class="form-group" formArrayName="produtoDescricaoList">
         <label for="produtoDescricao">Descrição(ões):</label>
         <table class="table">
@@ -51,6 +61,7 @@
                     <th>Atributo</th>
                     <th>Valor</th>
                     <th>Ordem</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +69,8 @@
                     <td [formGroup]="el.controls.produtoDescricao">
                         <input *ngIf="el.editar" class="form-control" type="text" formControlName="produtoAtributo">
                         <label *ngIf="!el.editar">{{el.value.produtoDescricao.produtoAtributo}}</label>
-                        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && el.controls.produtoDescricao.controls.produtoAtributo.invalid">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.produtoAtributo.invalid">
                             <p *ngIf="el.controls.produtoDescricao.controls.produtoAtributo.errors.required">
                                 Campo obrigatório!
                             </p>
@@ -67,7 +79,8 @@
                     <td [formGroup]="el.controls.produtoDescricao">
                         <input *ngIf="el.editar" class="form-control" type="text" formControlName="valor">
                         <label *ngIf="!el.editar">{{el.value.produtoDescricao.valor}}</label>
-                        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && el.controls.produtoDescricao.controls.valor.invalid">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.valor.invalid">
                             <p *ngIf="el.controls.produtoDescricao.controls.valor.errors.required">
                                 Campo obrigatório!
                             </p>
@@ -76,7 +89,8 @@
                     <td [formGroup]="el.controls.produtoDescricao">
                         <input *ngIf="el.editar" class="form-control" type="text" formControlName="ordem">
                         <label *ngIf="!el.editar">{{el.value.produtoDescricao.ordem}}</label>
-                        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && el.controls.produtoDescricao.controls.ordem.invalid">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.ordem.invalid">
                             <p *ngIf="el.controls.produtoDescricao.controls.ordem.errors.required">
                                 Campo obrigatório!
                             </p>
@@ -91,6 +105,8 @@
         </table>
         <button type="button" (click)="novoProdutoDescricao()">Adicionar</button>
     </div>
+    -->
+
     <!-- <p>{{frm.status}}</p>
     <p>{{frm.errors | json}}</p>
     <p>{{frm.value | json}}</p> -->
