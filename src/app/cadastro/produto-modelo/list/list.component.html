@@ -1,0 +1,33 @@
+<!-- Default form contact -->
+<form>
+
+  <p class="h5 mb-4">Listagem</p>
+
+  <table mdbTable #tableEl="mdbTable" class="z-depth-1">
+    <thead>
+      <tr>
+        <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of elements; let i = index">
+        <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+          <a [routerLink]="[el.id]">{{el.nome}}</a>
+        </td>
+        <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+          <a [routerLink]="[el.id]">{{el.codigo}}</a>
+        </td>
+        <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex" scope="row">
+          <a [routerLink]="[el.id]">{{el.materiaPrima}}</a>
+        </th>
+      </tr>
+    </tbody>
+    <tfoot class="grey lighten-5 w-100">
+      <tr>
+        <td colspan="3">
+          <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</form>

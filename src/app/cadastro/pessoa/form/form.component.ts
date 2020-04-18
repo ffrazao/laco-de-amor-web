@@ -18,7 +18,7 @@ import { MensagemService } from 'src/app/comum/servico/mensagem/mensagem.service
 })
 export class FormComponent implements OnInit {
 
-  public frm = this.criarFormularioPessoa(new Pessoa());
+  public frm = this.criarFormulario(new Pessoa());
 
   public isEnviado = false;
   public entidade: Pessoa;
@@ -46,7 +46,7 @@ export class FormComponent implements OnInit {
       this.isFornecedor = !!this.entidade.fornecedor && !!this.entidade.fornecedor.id;
       this.isCliente = !!this.entidade.cliente && !!this.entidade.cliente.id;
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this.criarFormularioPessoa(this.entidade);
+      this.frm = this.criarFormulario(this.entidade);
       console.log(this.frm);
     });
   }
@@ -67,7 +67,7 @@ export class FormComponent implements OnInit {
     return this.frm.get('enderecoList') as FormArray;
   }
 
-  criarFormularioPessoa(entidade: Pessoa) {
+  criarFormulario(entidade: Pessoa) {
     if (!entidade) {
       entidade = new Pessoa();
     }

@@ -1,5 +1,5 @@
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
-
+    
     <p class="h5 mb-4">Filtrar</p>
     
     <div class="form-group">
@@ -7,23 +7,23 @@
         <input type="text" class="form-control" id="nome" formControlName="nome">
     </div>
     <div class="form-group">
-        <label for="usr">Tipo:</label>
+        <label for="codigo">Código:</label>
+        <input type="text" class="form-control" id="codigo" formControlName="codigo">
+    </div>
+    <div class="form-group">
+        <label for="usr">Matéria Prima:</label>
         <label class="form-control">
             <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="">
             Todos
         </label>
         <label class="form-control">
-            <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="PF">
-            Pessoa Física
+            <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="S">
+            Sim
         </label>
         <label class="form-control">
-            <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="PJ">
-            Pessoa Jurídica
+            <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="N">
+            Não
         </label>
-    </div>
-    <div class="form-group">
-        <label for="cpfCnpj">CPF/CNPJ:</label>
-        <input type="text" class="form-control" id="cpfCnpj" formControlName="cpfCnpj">
     </div>
 
     <button class="btn btn-info btn-block" type="submit">Enviar</button>
