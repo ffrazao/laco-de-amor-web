@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-imagem',
@@ -9,10 +10,17 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 export class ImagemComponent implements OnInit {
 
   fileData: File = null;
+  @Output('resultado')
+  resultado = new EventEmitter<string[]>();
+
   previewUrl: any = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
+
   constructor(private http: HttpClient) { }
+
+  @Input('multiplo')
+  multiplo: boolean = false;
 
   ngOnInit(): void {
   }
@@ -33,6 +41,7 @@ export class ImagemComponent implements OnInit {
     reader.readAsDataURL(this.fileData);
     reader.onload = (_event) => {
       this.previewUrl = reader.result;
+      this.resultado.emit([this.previewUrl]);
     }
   }
 
@@ -49,10 +58,10 @@ export class ImagemComponent implements OnInit {
       .subscribe(events => {
         if (events.type === HttpEventType.UploadProgress) {
           this.fileUploadProgress = Math.round(events.loaded / events.total * 100) + '%';
-          console.log(this.fileUploadProgress);
+          //console.log(this.fileUploadProgress);
         } else if (events.type === HttpEventType.Response) {
           this.fileUploadProgress = '';
-          console.log(events.body);
+          // console.log(events.body);
           alert('SUCCESS !!');
         }
       });

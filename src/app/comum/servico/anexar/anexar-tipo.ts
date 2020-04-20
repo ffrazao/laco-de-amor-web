@@ -1,7 +1,7 @@
 export enum AnexarTipo {
-    DOCUMENTO = "Documento",
-    IMAGEM = "Imagem",
-    LOCALIZACAO = "Localização",
-    SOM = "Som",
-    VIDEO = "Vídeo",
+    DOCUMENTO = "DOCUMENTO",
+    IMAGEM = "IMAGEM",
+    LOCALIZACAO = "LOCALIZACAO",
+    SOM = "SOM",
+    VIDEO = "VIDEO",
 }

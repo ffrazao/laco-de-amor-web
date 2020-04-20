@@ -66,6 +66,7 @@ export class FormComponent implements OnInit {
         produtoDescricaoList: this.criarFormularioProdutoDescricaoList(entidade.produtoDescricaoList),
       }
     );
+    console.log(result);
 
     return result;
   }
@@ -143,8 +144,10 @@ export class FormComponent implements OnInit {
 
   public carregarFoto(event) {
     event.preventDefault();
-    this._anexar.carregar([AnexarTipo.IMAGEM, AnexarTipo.SOM]).subscribe((v) => {
-      console.log(v);
+    this._anexar.carregar([AnexarTipo.IMAGEM], false).subscribe((v) => {
+      let foto = v['IMAGEM'][0];
+      this.frm.get('foto').setValue(foto);
+      this.atualizarFoto();
     });
   }
 

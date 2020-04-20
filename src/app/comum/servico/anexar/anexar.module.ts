@@ -1,21 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImagemModule } from './imagem/imagem.module';
 
 import { AnexarService } from './anexar.service';
 import { AnexarComponent } from './anexar.component';
+import { ImagemComponent } from './imagem/imagem.component';
+import { ImagemService } from './imagem/imagem.service';
 
 @NgModule({
-  declarations: [AnexarComponent],
+  declarations: [
+    AnexarComponent,
+    ImagemComponent],
   imports: [
-    CommonModule,
-    ImagemModule
+    CommonModule
   ],
   entryComponents: [
-    AnexarComponent
+    AnexarComponent,
+    ImagemComponent
   ],
   providers: [
-    AnexarService
+    AnexarService,
+    ImagemService
   ]
 })
 export class AnexarModule { }

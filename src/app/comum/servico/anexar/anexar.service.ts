@@ -16,27 +16,25 @@ export class AnexarService {
     private _modalService: MDBModalService) {
   }
 
-  public carregar(tipoAnexoList: AnexarTipo[]) {
+  public carregar(tipoAnexoList: AnexarTipo[], multiplo: boolean) {
     return new Observable((observer) => {
-
-      this._modalService.close.observers.length = 0;
-      this._modalService.close.subscribe(() => {
-        console.log('close');
-        observer.next('Fechando');
-        observer.complete();
-      });
-
       this._modalRef = this._modalService.show(AnexarComponent, {
         backdrop: true,
         keyboard: true,
         show: false,
-        ignoreBackdropClick: false,
-        class: 'modal-side modal-top-right',
+        ignoreBackdropClick: true,
+        class: 'modal-lg',
         containerClass: 'right',
         animated: true,
         data: {
           tipoAnexoList,
-        }
+          multiplo
+        },
+      });
+
+      this._modalRef.content.resultado.subscribe((result: any) => { 
+        observer.next(result);
+        observer.complete();
       });
     });
   }
