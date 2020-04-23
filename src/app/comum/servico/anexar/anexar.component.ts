@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MDBModalRef } from 'angular-bootstrap-md';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import { AnexarTipo } from './anexar-tipo';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-anexar',
@@ -10,36 +10,42 @@ import { Subject } from 'rxjs';
 })
 export class AnexarComponent implements OnInit {
 
-  @Input('multiplo')
-  multiplo: boolean;
-
   public AnexarTipo: AnexarTipo;
-
-  public tipoAnexoList: AnexarTipo[];
-
-  public resultado: Subject<any> = new Subject();
 
   public imagem: string;
 
-  constructor(public modalRef: MDBModalRef) { }
+  constructor(
+    public dialogRef: MatDialogRef<AnexarComponent>,
+
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      tipoAnexoList: AnexarTipo[],
+      multiplo: boolean
+    }
+  ) { }
 
   ngOnInit(): void {
   }
 
   exibirAnexarTipo(tipo: string) {
     const tipoEnum: AnexarTipo = (<any>AnexarTipo)[tipo];
-    return this.tipoAnexoList.lastIndexOf(tipoEnum) >= 0;
+    return this.data.tipoAnexoList.lastIndexOf(tipoEnum) >= 0;
   }
 
-  public getImagem(imagem) {
+  public setImagem(imagem) {
     this.imagem = imagem;
   }
 
-  public confirmar() {
+  public confirmar(event) {
+    let result = null;
     if (this.imagem) {
-      this.resultado.next({'IMAGEM': this.imagem});
+      result = { 'IMAGEM': this.imagem };
     }
-    this.modalRef.hide();
+    this.dialogRef.close(result);
   }
 
+  public cancelar(event) {
+    let result = null;
+    this.dialogRef.close(result);
+  }
 }

@@ -1,4 +1,50 @@
-<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-button [matMenuTriggerFor]="cadastroMenu">Cadastro</button>
+        <mat-menu #cadastroMenu="matMenu">
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'cadastro', 'pessoa']">Pessoas</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'cadastro', 'usuario']">Usuário</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'cadastro', 'produto-modelo']">Modelo de Produtos</a>
+            </button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="acoesMenu">Ações</button>
+        <mat-menu #acoesMenu="matMenu">
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'acao', 'cota']">Cotar</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'acao', 'comprar']">Comprar</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'acao', 'produzir']">Produzir</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'acao', 'vender']">Vender</a>
+            </button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="sistemaMenu"><i class="fas fa-user"></i><span
+                class="caret"></span>Sistema</button>
+        <mat-menu #sistemaMenu="matMenu">
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'login']">Efetuar login (Entrar)</a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'logout']">Efetuar logout (Sair)</a>
+            </button>
+        </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+
+<!-- 
+            <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
     <mdb-navbar-brand><a class="navbar-brand" [routerLink]="['/']">Laço de Amor</a></mdb-navbar-brand>
     <links>
         <ul class="navbar-nav mr-auto">
@@ -46,3 +92,4 @@
         </ul>
     </links>
 </mdb-navbar>
+-->

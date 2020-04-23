@@ -1,89 +1,142 @@
+
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar($event)">
 
-    <p class="h5 mb-4">Formulário ({{acao}})</p>
+    <p class="h5 mb-4 text-left">Formulário ({{acao}})</p>
 
     <div class="form-group">
-        <label for="nome">Nome da Pessoa:</label>
-        <input type="text" class="form-control" id="nome" formControlName="nome">
-        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.nome.invalid">
-            <p *ngIf="frm.controls.nome.errors.required">
+        <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Nome da Pessoa" formControlName="nome">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.nome.invalid">
+            <div *ngIf="frm.controls.nome.errors.required">
                 Campo obrigatório!
-            </p>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="parceiro">Tipo de Vínculo:</label>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="parceiro" [(ngModel)]="isParceiro"
-                [ngModelOptions]="{standalone: true}" (click)="setParceiro()">
-            <label class="form-check-label" for="parceiro">Parceiro</label>
-            <div class="form-group" *ngIf="isParceiro" [formGroup]="parceiro">
-                <label>
-                    Função
-                </label>
-                <select name="funcao" id="funcao" formControlName="funcao" class="form-control">
-                    <option>Costureiro(a)</option>
-                    <option>Entregador(a)</option>
-                </select>
-                <div class="alert alert-danger" role="alert" *ngIf="isEnviado && parceiro.controls.funcao.invalid">
-                    <p *ngIf="parceiro.controls.funcao.errors.required">
-                        Campo obrigatório!
-                    </p>
-                </div>
             </div>
         </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="fornecedor" [(ngModel)]="isFornecedor"
-                [ngModelOptions]="{standalone: true}" (click)="setFornecedor()">
-            <label class="form-check-label" for="fornecedor">Fornecedor</label>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="cliente" [(ngModel)]="isCliente"
-                [ngModelOptions]="{standalone: true}" (click)="setCliente()">
-            <label class="form-check-label" for="cliente">Cliente</label>
+    </div>
+
+    <div class="form-group">
+        <mat-label>Tipo de Vínculo:</mat-label>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-action">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isParceiro" (click)="setParceiro()">
+                    Parceiro
+                </mat-checkbox>
+
+                <div *ngIf="isParceiro" [formGroup]="parceiro">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Função</mat-label>
+                        <mat-select formControlName="funcao">
+                            <mat-option value="Costureiro(a)">Costureiro(a)</mat-option>
+                            <mat-option value="Entregador(a)">Entregador(a)</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="text-danger" *ngIf="isEnviado && parceiro.controls.funcao.invalid">
+                        <div *ngIf="parceiro.controls.funcao.errors.required">
+                            Campo obrigatório!
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isFornecedor"
+                    (click)="setFornecedor()">
+                    Fornecedor
+                </mat-checkbox>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isCliente" (click)="setCliente()">
+                    Cliente
+                </mat-checkbox>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form-group">
+        <mat-label>Tipo de Pessoa:</mat-label>
+        <mat-radio-group formControlName="tipo" aria-label="Selecione uma Opção">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action">
+                    <mat-radio-button value="PF">Física</mat-radio-button>
+                </li>
+                <li class="list-group-item list-group-item-action">
+                    <mat-radio-button value="PJ">Jurídica</mat-radio-button>
+                </li>
+            </ul>
+        </mat-radio-group>
+
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.tipo.invalid">
+            <div *ngIf="frm.controls.tipo.errors.required">
+                Campo obrigatório!
+            </div>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="usr">Tipo de Pessoa:</label>
-        <label class="form-control">
-            <input type="radio" name="tipo" id="pf" formControlName="tipo" autocomplete="off" value="PF">
-            Física
-        </label>
-        <label class="form-control">
-            <input type="radio" name="tipo" id="pj" formControlName="tipo" autocomplete="off" value="PJ">
-            Jurídica
-        </label>
+        <mat-form-field appearance="outline">
+            <mat-label>CPF/CNPJ</mat-label>
+            <input matInput placeholder="Documento da Pessoa" formControlName="cpfCnpj">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.cpfCnpj.invalid">
+            <div *ngIf="frm.controls.cpfCnpj.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
     </div>
-    <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.tipo.invalid">
-        <p *ngIf="frm.controls.tipo.errors.required">
-            Campo obrigatório!
-        </p>
-    </div>
+
     <div class="form-group">
-        <label for="cpfCnpj">CPF/CNPJ:</label>
-        <input type="text" class="form-control" id="cpfCnpj" formControlName="cpfCnpj">
+        <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput placeholder="E-mail da Pessoa" formControlName="email">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.email.invalid">
+            <div *ngIf="frm.controls.email.errors.required">
+                Campo obrigatório!
+            </div>
+            <div *ngIf="frm.controls.email.errors.email">
+                E-mail inválido!
+            </div>
+        </div>
     </div>
+
     <div class="form-group">
-        <label for="email">E-mail:</label>
-        <input type="email" class="form-control" id="email" formControlName="email">
+        <mat-form-field appearance="outline">
+            <mat-label>Contato 1</mat-label>
+            <input matInput placeholder="Contato 1 da Pessoa" formControlName="contato1">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.contato1.invalid">
+            <div *ngIf="frm.controls.contato1.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
     </div>
+
     <div class="form-group">
-        <label for="contato1">Contato 1:</label>
-        <input type="text" class="form-control" id="contato1" formControlName="contato1">
+        <mat-form-field appearance="outline">
+            <mat-label>Contato 2</mat-label>
+            <input matInput placeholder="Contato 2 da Pessoa" formControlName="contato2">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.contato2.invalid">
+            <div *ngIf="frm.controls.contato2.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
     </div>
+
     <div class="form-group">
-        <label for="contato2">Contato 2:</label>
-        <input type="text" class="form-control" id="contato2" formControlName="contato2">
-    </div>
-    <div class="form-group">
-        <label for="contato3">Contato 3:</label>
-        <input type="text" class="form-control" id="contato3" formControlName="contato3">
+        <mat-form-field appearance="outline">
+            <mat-label>Contato 3</mat-label>
+            <input matInput placeholder="Contato 3 da Pessoa" formControlName="contato3">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.contato3.invalid">
+            <div *ngIf="frm.controls.contato3.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
     </div>
 
     <div class="form-group" formArrayName="enderecoList">
-        <label for="endereco">Endereço(s):</label>
+        <mat-label for="endereco">Endereço(s):</mat-label>
         <table class="table">
             <thead>
                 <tr>
@@ -100,47 +153,116 @@
             <tbody>
                 <tr *ngFor="let el of enderecoList.controls; index as i;" [formGroupName]="i">
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="logradouro">
-                        <label *ngIf="!el.editar">{{el.value.endereco.logradouro}}</label>
-                        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && el.controls.endereco.controls.logradouro.invalid">
-                            <p *ngIf="el.controls.endereco.controls.logradouro.errors.required">
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.logradouro}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Logradouro</mat-label>
+                                <input matInput placeholder="Logradouro do endereço" formControlName="logradouro">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.logradouro.invalid">
+                            <div *ngIf="el.controls.endereco.controls.logradouro.errors.required">
                                 Campo obrigatório!
-                            </p>
+                            </div>
                         </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="complemento">
-                        <label *ngIf="!el.editar">{{el.value.endereco.complemento}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.complemento}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Complemento</mat-label>
+                                <input matInput placeholder="Complemento do endereço" formControlName="complemento">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.complemento.invalid">
+                            <div *ngIf="el.controls.endereco.controls.complemento.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="numero">
-                        <label *ngIf="!el.editar">{{el.value.endereco.numero}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.numero}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Número</mat-label>
+                                <input matInput placeholder="Número do endereço" formControlName="numero">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.numero.invalid">
+                            <div *ngIf="el.controls.endereco.controls.numero.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="bairro">
-                        <label *ngIf="!el.editar">{{el.value.endereco.bairro}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.bairro}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Bairro</mat-label>
+                                <input matInput placeholder="Bairro do endereço" formControlName="bairro">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.bairro.invalid">
+                            <div *ngIf="el.controls.endereco.controls.bairro.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="cidade">
-                        <label *ngIf="!el.editar">{{el.value.endereco.cidade}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.cidade}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Cidade</mat-label>
+                                <input matInput placeholder="Cidade do endereço" formControlName="cidade">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.cidade.invalid">
+                            <div *ngIf="el.controls.endereco.controls.cidade.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="uf">
-                        <label *ngIf="!el.editar">{{el.value.endereco.uf}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.uf}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>UF</mat-label>
+                                <input matInput placeholder="UF do endereço" formControlName="uf">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.uf.invalid">
+                            <div *ngIf="el.controls.endereco.controls.uf.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td [formGroup]="el.controls.endereco">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="cep">
-                        <label *ngIf="!el.editar">{{el.value.endereco.cep}}</label>
+                        <mat-label *ngIf="!el.editar">{{el.value.endereco.cep}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>CEP</mat-label>
+                                <input matInput placeholder="CEP do endereço" formControlName="cep">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.endereco.controls.cep.invalid">
+                            <div *ngIf="el.controls.endereco.controls.cep.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        <a (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</a> |
-                        <a (click)="excluirEndereco(i);" *ngIf="!el.editar">excluir</a>
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm"
+                                (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</button>
+                            <button class="btn btn-primary btn-sm" (click)="excluirEndereco(i);"
+                                *ngIf="!el.editar">excluir</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" (click)="novoEndereco()">Adicionar</button>
+        <button class="btn btn-primary btn-sm" (click)="novoEndereco($event)">Adicionar</button>
     </div>
 
-    <button class="btn btn-info btn-block" type="submit">Enviar</button>
+    <button class="btn btn-success btn-block" type="submit">Enviar</button>
 </form>

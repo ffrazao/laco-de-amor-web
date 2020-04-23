@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { ListRoutingModule } from './list-routing.module';
 import { ListComponent } from './list.component';
@@ -9,8 +11,10 @@ import { ListComponent } from './list.component';
   declarations: [ListComponent],
   imports: [
     CommonModule,
-    MDBBootstrapModule,
     ListRoutingModule,
+    MatTableModule,
+    MatInputModule,
+    MatFormFieldModule,
   ]
 })
 export class ListModule { }

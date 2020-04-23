@@ -47,7 +47,6 @@ export class FormComponent implements OnInit {
       this.isCliente = !!this.entidade.cliente && !!this.entidade.cliente.id;
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this.criarFormulario(this.entidade);
-      console.log(this.frm);
     });
   }
 
@@ -189,7 +188,6 @@ export class FormComponent implements OnInit {
     this.isEnviado = true;
 
     if (this.frm.invalid) {
-      console.log(this.frm); // Process your form
       let msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
@@ -216,7 +214,8 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public novoEndereco() {
+  public novoEndereco(event) {
+    event.preventDefault();
     let reg = this.criarFormularioPessoaEndereco(new PessoaEndereco());
     reg['editar'] = true;
     this.enderecoList.push(reg);

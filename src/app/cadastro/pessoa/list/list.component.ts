@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-
-import { MdbTablePaginationComponent, MdbTableDirective } from 'angular-bootstrap-md';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+
 import { Pessoa } from '../pessoa';
 
 @Component({
@@ -9,15 +9,20 @@ import { Pessoa } from '../pessoa';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit, AfterViewInit {
+export class ListComponent implements OnInit {
 
-  @ViewChild(MdbTablePaginationComponent, { static: true }) mdbTablePagination: MdbTablePaginationComponent;
-  @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
+  // 'Nome', 'Vínculo', 'Tipo', 'CPF/CNPJ', 'E-mail'
+  headElements = [
+    'nome',
+    'vinculo',
+    'tipo',
+    'cpfCnpj',
+    'email',
+  ];
   elements: Pessoa[] = [];
-  previous: Pessoa[] = [];
-  headElements = ['Nome', 'Vínculo', 'Tipo', 'CPF/CNPJ', 'E-mail'];
+  dataSource = new MatTableDataSource(this.elements);
 
-  constructor(private cdRef: ChangeDetectorRef, private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.data.subscribe((info) => {
@@ -25,18 +30,13 @@ export class ListComponent implements OnInit, AfterViewInit {
       for (let i = 0; i < info.resolve.principal.length; i++) {
         this.elements.push(info.resolve.principal[i]);
       }
-      this.mdbTable.setDataSource(this.elements);
-      this.elements = this.mdbTable.getDataSource();
-      this.previous = this.mdbTable.getDataSource();
+      this.dataSource = new MatTableDataSource(this.elements);
     });
   }
 
-  ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(5);
-
-    this.mdbTablePagination.calculateFirstItemIndex();
-    this.mdbTablePagination.calculateLastItemIndex();
-    this.cdRef.detectChanges();
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   public exibeVinculo(reg) {

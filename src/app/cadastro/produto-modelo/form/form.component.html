@@ -1,49 +1,58 @@
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar($event)">
 
-    <p class="h5 mb-4">Formulário ({{acao}})</p>
+    <p class="h5 mb-4 text-left">Formulário ({{acao}})</p>
 
     <div class="form-group">
-        <label for="nome">Nome do Produto:</label>
-        <input type="text" class="form-control" id="nome" formControlName="nome">
-        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.nome.invalid">
-            <p *ngIf="frm.controls.nome.errors.required">
+        <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Nome do Produto" formControlName="nome">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.nome.invalid">
+            <div *ngIf="frm.controls.nome.errors.required">
                 Campo obrigatório!
-            </p>
+            </div>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="codigo">Código do Produto:</label>
-        <input type="text" class="form-control" id="codigo" formControlName="codigo">
-        <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.codigo.invalid">
-            <p *ngIf="frm.controls.codigo.errors.required">
+        <mat-form-field appearance="outline">
+            <mat-label>Código</mat-label>
+            <input matInput placeholder="Código do Produto" formControlName="codigo">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.codigo.invalid">
+            <div *ngIf="frm.controls.codigo.errors.required">
                 Campo obrigatório!
-            </p>
+            </div>
         </div>
     </div>
 
+
     <div class="form-group">
-        <label for="usr">Matéria Prima:</label>
-        <label class="form-control">
-            <input type="radio" name="materiaPrima" id="S" formControlName="materiaPrima" autocomplete="off" value="S">
-            Sim
-        </label>
-        <label class="form-control">
-            <input type="radio" name="materiaPrima" id="N" formControlName="materiaPrima" autocomplete="off" value="N">
-            Não
-        </label>
+        <mat-label>Matéria Prima:</mat-label>
+        <mat-radio-group formControlName="materiaPrima" aria-label="Selecione uma Opção">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action">
+                    <mat-radio-button value="S">Sim</mat-radio-button>
+                </li>
+                <li class="list-group-item list-group-item-action">
+                    <mat-radio-button value="N">Não</mat-radio-button>
+                </li>
+            </ul>
+        </mat-radio-group>
+
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.materiaPrima.invalid">
+            <div *ngIf="frm.controls.materiaPrima.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
     </div>
-    <div class="alert alert-danger" role="alert" *ngIf="isEnviado && frm.controls.materiaPrima.invalid">
-        <p *ngIf="frm.controls.materiaPrima.errors.required">
-            Campo obrigatório!
-        </p>
-    </div>
+
     <div class="form-group">
         <label for="foto">Foto:</label>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary m-2" (click)="carregarFoto($event)">Carregar</button>
-                <button class="btn btn-primary m-2" (click)="limparFoto($event)">Limpar</button>
+                <button type="button" class="btn btn-primary m-2" (click)="carregarFoto($event)">Carregar</button>
+                <button type="button" class="btn btn-primary m-2" (click)="limparFoto($event)">Limpar</button>
             </div>
         </div>
         <div class="row">
@@ -52,7 +61,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="form-group" formArrayName="produtoDescricaoList">
         <label for="produtoDescricao">Descrição(ões):</label>
         <table class="table">
@@ -65,50 +74,82 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let el of produtoDescricaoList.controls; index as i;" [formGroupName]="i">
-                    <td [formGroup]="el.controls.produtoDescricao">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="produtoAtributo">
-                        <label *ngIf="!el.editar">{{el.value.produtoDescricao.produtoAtributo}}</label>
-                        <div class="alert alert-danger" role="alert"
-                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.produtoAtributo.invalid">
-                            <p *ngIf="el.controls.produtoDescricao.controls.produtoAtributo.errors.required">
-                                Campo obrigatório!
-                            </p>
+                <tr *ngFor="let el of ordenado(produtoDescricaoList.controls); index as i;  first as isFirst; last as isLast"
+                    [formGroupName]="i">
+                    <td>
+                        <mat-label *ngIf="!el.editar">{{el.value.produtoAtributo.nome}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Atributo</mat-label>
+                                <input type="text" matInput placeholder="Atributo"
+                                    [formControl]="el.controls.produtoAtributo" aria-label="Number"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                    [displayWith]="displayFn">
+                                    <mat-option
+                                        *ngFor="let option of el.controls.produtoAtributo.$filteredOptions | async"
+                                        [value]="option">
+                                        {{option.nome}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
                         </div>
-                    </td>
-                    <td [formGroup]="el.controls.produtoDescricao">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="valor">
-                        <label *ngIf="!el.editar">{{el.value.produtoDescricao.valor}}</label>
-                        <div class="alert alert-danger" role="alert"
-                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.valor.invalid">
-                            <p *ngIf="el.controls.produtoDescricao.controls.valor.errors.required">
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.produtoAtributo.invalid">
+                            <div *ngIf="el.controls.produtoAtributo.errors.required">
                                 Campo obrigatório!
-                            </p>
-                        </div>
-                    </td>
-                    <td [formGroup]="el.controls.produtoDescricao">
-                        <input *ngIf="el.editar" class="form-control" type="text" formControlName="ordem">
-                        <label *ngIf="!el.editar">{{el.value.produtoDescricao.ordem}}</label>
-                        <div class="alert alert-danger" role="alert"
-                            *ngIf="isEnviado && el.controls.produtoDescricao.controls.ordem.invalid">
-                            <p *ngIf="el.controls.produtoDescricao.controls.ordem.errors.required">
-                                Campo obrigatório!
-                            </p>
+                            </div>
                         </div>
                     </td>
                     <td>
-                        <a (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</a> |
-                        <a (click)="excluirProdutoDescricao(i);" *ngIf="!el.editar">excluir</a>
+                        <mat-label *ngIf="!el.editar">{{el.value.valor}}</mat-label>
+                        <div class="form-group" *ngIf="el.editar">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Valor</mat-label>
+                                <input matInput placeholder="Valor" formControlName="valor">
+                            </mat-form-field>
+                        </div>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.valor.invalid">
+                            <div *ngIf="el.controls.valor.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" mat-icon-button *ngIf="!isFirst" (click)="sobe(i)">
+                            <mat-icon>keyboard_arrow_up</mat-icon>
+                        </button>
+                        <button type="button" mat-icon-button *ngIf="!isLast" (click)="desce(i)">
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                        </button>
+                        <div class="text-danger" *ngIf="isEnviado && el.controls.ordem.invalid">
+                            <div *ngIf="el.controls.ordem.errors.required">
+                                Campo obrigatório!
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-sm" *ngIf="el.editar"
+                                (click)="salvarProdutoDescricao(el)">salvar</button>
+                            <button type="button" class="btn btn-primary btn-sm" *ngIf="!el.editar && !produtoDescricaoEditando"
+                                (click)="editarProdutoDescricao(el)">editar</button>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="cancelarProdutoDescricao(i);"
+                                *ngIf="el.editar">cancelar</button>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="excluirProdutoDescricao(i);"
+                                *ngIf="!el.editar && !produtoDescricaoEditando">excluir</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" (click)="novoProdutoDescricao()">Adicionar</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="novoProdutoDescricao($event)" *ngIf="!produtoDescricaoEditando">Adicionar</button>
     </div>
-    
-    <!-- <p>vl /{{frm.value | json}}/</p>
+
+    <!-- 
+    <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p> -->
-    
-    <button class="btn btn-info btn-block" type="submit">Enviar</button>
+    <p>er /{{frm.errors | json}}/</p>
+    -->
+
+    <button type="submit" class="btn btn-success btn-block">Enviar</button>
 </form>

@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 
-import { MensagemService } from 'src/app/comum/servico/mensagem/mensagem.service';
+import { environment } from '../../../../environments/environment';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModelo } from '../produto-modelo';
 import { ProdutoModeloService } from '../produto-modelo.service';
 import { ProdutoDescricao } from '../produto-descricao';
 import { ProdutoAtributo } from '../produto-atributo';
-import { environment } from 'src/environments/environment';
-import { AnexarService } from 'src/app/comum/servico/anexar/anexar.service';
-import { AnexarTipo } from 'src/app/comum/servico/anexar/anexar-tipo';
+import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
+import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
 
 @Component({
   selector: 'app-form',
@@ -25,6 +27,15 @@ export class FormComponent implements OnInit {
   public id: number;
   public acao: string;
   public fotoLocal: any = environment.SEM_IMAGEM;
+
+  public produtoDescricaoEditando = false;
+
+  public $options: Observable<ProdutoAtributo[]> = of(
+    [
+      { id: 1, nome: 'Tamanho' },
+      { id: 2, nome: 'Cor' },
+      { id: 3, nome: 'Textura' },
+    ]);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,7 +77,6 @@ export class FormComponent implements OnInit {
         produtoDescricaoList: this.criarFormularioProdutoDescricaoList(entidade.produtoDescricaoList),
       }
     );
-    console.log(result);
 
     return result;
   }
@@ -89,7 +99,7 @@ export class FormComponent implements OnInit {
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
-        produtoAtributo: [this.criarFormularioProdutoAtributo(entidade.produtoAtributo), [Validators.required]],
+        produtoAtributo: this.criarFormularioProdutoAtributo(entidade.produtoAtributo),
         valor: [entidade.valor, [Validators.required]],
         ordem: [entidade.ordem, [Validators.required]],
       }
@@ -102,13 +112,35 @@ export class FormComponent implements OnInit {
     if (!entidade) {
       entidade = new ProdutoAtributo();
     }
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        nome: [entidade.nome, [Validators.required]],
-      }
+    let result = this.formBuilder.control(entidade, [Validators.required]);
+
+    result['$filteredOptions'] = result.valueChanges.pipe(
+      startWith(''),
+      switchMap(value => {
+        let r = this._filter(value);
+        return r;
+      })
     );
+
     return result;
+  }
+
+  private _filter(value: string | ProdutoAtributo) {
+    let filterValue = '';
+    if (value) {
+      filterValue = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
+      return this.$options.pipe(
+        map(atributos => atributos.filter(atributo => atributo.nome.toLowerCase().includes(filterValue)))
+      );
+    } else {
+      let result = new ProdutoAtributo();
+      result.nome = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
+      return this.$options;
+    }
+  }
+
+  public displayFn(produtoAtributo?: ProdutoAtributo): string {
+    return produtoAtributo ? produtoAtributo.nome : '';
   }
 
   public enviar(event) {
@@ -116,7 +148,6 @@ export class FormComponent implements OnInit {
     this.isEnviado = true;
 
     if (this.frm.invalid) {
-      console.log(this.frm);
       let msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
@@ -132,14 +163,75 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public novoProdutoDescricao() {
-    let reg = this.criarFormularioProdutoDescricao(new ProdutoDescricao());
-    reg['editar'] = true;
-    this.produtoDescricaoList.push(reg);
+  public ordenado(lista) {
+    lista = lista.sort((o1, o2) => {
+      let n1 = parseInt(o1 && o1.value && o1.value.ordem ? o1.value.ordem : 0) || 0;
+      let n2 = parseInt(o2 && o2.value && o2.value.ordem ? o2.value.ordem : 0) || 0;
+      return ((n1 > n2) ? 1 : ((n1 < n2) ? -1 : 0));
+    });
+    return lista;
   }
 
-  public excluirProdutoDescricao(reg) {
-    this.produtoDescricaoList.removeAt(reg);
+  public sobe(idx: number) {
+    let regAnterior = this.produtoDescricaoList.at(idx - 1);
+    let regAtual = this.produtoDescricaoList.at(idx);
+
+    let ordemAnterior = regAnterior.get('ordem').value;
+    let ordemAtual = regAtual.get('ordem').value;
+
+    regAnterior.get('ordem').setValue(ordemAtual);
+    regAtual.get('ordem').setValue(ordemAnterior);
+  }
+
+  public desce(idx) {
+    let regAtual = this.produtoDescricaoList.at(idx);
+    let regPosterior = this.produtoDescricaoList.at(idx + 1);
+
+    let ordemAtual = regAtual.get('ordem').value;
+    let ordemPosterior = regPosterior.get('ordem').value;
+
+    regAtual.get('ordem').setValue(ordemPosterior);
+    regPosterior.get('ordem').setValue(ordemAtual);
+  }
+
+  public novoProdutoDescricao(event) {
+    event.preventDefault();
+    let e = new ProdutoDescricao();
+    e.ordem = 1 + (this.produtoDescricaoList.value as []).length;
+    let reg = this.criarFormularioProdutoDescricao(e);
+    this.produtoDescricaoEditando = true;
+    reg['editar'] = true;
+    this.produtoDescricaoList.push(reg);
+    console.log(this.frm);
+  }
+
+  public salvarProdutoDescricao(reg) {
+    delete reg['anterior'];
+    reg['editar'] = false;
+    this.produtoDescricaoEditando = false;
+  }
+
+  public editarProdutoDescricao(reg) {
+    reg['anterior'] = reg.value;
+    reg['editar'] = true;
+    this.produtoDescricaoEditando = true;
+  }
+
+  public excluirProdutoDescricao(idx) {
+    this.produtoDescricaoList.removeAt(idx);
+    this.produtoDescricaoEditando = false;
+  }
+
+  public cancelarProdutoDescricao(reg) {
+    if (this.produtoDescricaoList.at(reg)['anterior']) {
+      let vlr = this.produtoDescricaoList.at(reg)['anterior'];
+      this.produtoDescricaoList.at(reg).setValue(vlr);
+      this.produtoDescricaoList.at(reg)['editar']=false;
+      delete this.produtoDescricaoList.at(reg)['anterior'];
+    } else {
+      this.produtoDescricaoList.removeAt(reg);
+    }
+    this.produtoDescricaoEditando = false;
   }
 
   public carregarFoto(event) {

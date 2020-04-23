@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ModalModule, MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 
 import { AnexarTipo as AnexarTipo } from './anexar-tipo';
 import { AnexarComponent } from './anexar.component';
@@ -10,30 +10,27 @@ import { AnexarComponent } from './anexar.component';
 })
 export class AnexarService {
 
-  private _modalRef: MDBModalRef;
-
   constructor(
-    private _modalService: MDBModalService) {
+    public dialog: MatDialog,
+  ) {
   }
 
-  public carregar(tipoAnexoList: AnexarTipo[], multiplo: boolean) {
+  public carregar(tipoAnexoList: AnexarTipo[], multiplo: boolean = false) {
     return new Observable((observer) => {
-      this._modalRef = this._modalService.show(AnexarComponent, {
-        backdrop: true,
-        keyboard: true,
-        show: false,
-        ignoreBackdropClick: true,
-        class: 'modal-lg',
-        containerClass: 'right',
-        animated: true,
+
+      const dialogRef = this.dialog.open(AnexarComponent, {
+        height: '400px',
+        width: '600px',
         data: {
           tipoAnexoList,
-          multiplo
-        },
+          multiplo,
+        }
       });
 
-      this._modalRef.content.resultado.subscribe((result: any) => { 
-        observer.next(result);
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          observer.next(result);
+        }
         observer.complete();
       });
     });
