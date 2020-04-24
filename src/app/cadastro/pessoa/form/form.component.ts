@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Pessoa } from '../pessoa';
-import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
 import { PessoaEndereco } from '../pessoa-endereco';
 import { Endereco } from '../../endereco/endereco';
 import { Parceiro } from '../../parceiro/parceiro';
 import { Fornecedor } from '../../fornecedor/fornecedor';
 import { Cliente } from '../../cliente/cliente';
-import { MensagemService } from 'src/app/comum/servico/mensagem/mensagem.service';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 
 @Component({
   selector: 'app-form',
@@ -28,12 +28,16 @@ export class FormComponent implements OnInit {
   public isFornecedor: boolean = false;
   public isCliente: boolean = false;
 
+  public enderecoEditando = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private servico: PessoaService,
     private router: Router,
-    private _mensagem: MensagemService) { }
+    private _mensagem: MensagemService,
+  ) {
+  }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -216,13 +220,40 @@ export class FormComponent implements OnInit {
 
   public novoEndereco(event) {
     event.preventDefault();
-    let reg = this.criarFormularioPessoaEndereco(new PessoaEndereco());
+    let e = new PessoaEndereco();
+    let reg = this.criarFormularioPessoaEndereco(e);
+    this.enderecoEditando = true;
     reg['editar'] = true;
     this.enderecoList.push(reg);
   }
 
-  public excluirEndereco(reg) {
-    this.enderecoList.removeAt(reg);
+  public salvarEndereco(reg) {
+    delete reg['anterior'];
+    reg['editar'] = false;
+    this.enderecoEditando = false;
+  }
+
+  public editarEndereco(reg) {
+    reg['anterior'] = reg.value;
+    reg['editar'] = true;
+    this.enderecoEditando = true;
+  }
+
+  public excluirEndereco(idx) {
+    this.enderecoList.removeAt(idx);
+    this.enderecoEditando = false;
+  }
+
+  public cancelarEndereco(reg) {
+    if (this.enderecoList.at(reg)['anterior']) {
+      let vlr = this.enderecoList.at(reg)['anterior'];
+      this.enderecoList.at(reg).setValue(vlr);
+      this.enderecoList.at(reg)['editar']=false;
+      delete this.enderecoList.at(reg)['anterior'];
+    } else {
+      this.enderecoList.removeAt(reg);
+    }
+    this.enderecoEditando = false;
   }
 
   public setParceiro() {

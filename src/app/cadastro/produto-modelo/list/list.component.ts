@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ProdutoModelo } from '../produto-modelo';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-list',
@@ -10,14 +11,17 @@ import { ProdutoModelo } from '../produto-modelo';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  // 'Nome', 'Código', 'Matéria Prima'
-  headElements = [
+
+  // 'Foto', 'Nome', 'Código', 'Matéria Prima'
+  public headElements = [
+    'foto',
     'nome',
     'codigo',
     'materiaPrima',
   ];
-  elements: ProdutoModelo[] = [];
-  dataSource = new MatTableDataSource(this.elements);
+  public elements: ProdutoModelo[] = [];
+  public dataSource = new MatTableDataSource(this.elements);
+  public SEM_IMAGEM = environment.SEM_IMAGEM;
 
   constructor(private route: ActivatedRoute) { }
 

@@ -1,4 +1,5 @@
 import { ProdutoDescricao } from './produto-descricao';
+import { ProdutoPreco } from './produto-preco';
 
 export class ProdutoModelo {
 
@@ -8,5 +9,6 @@ export class ProdutoModelo {
     public materiaPrima: string;
     public foto: any;
     public produtoDescricaoList: ProdutoDescricao[] = [];
+    public produtoPrecoList: ProdutoPreco[] = [];
 
 }

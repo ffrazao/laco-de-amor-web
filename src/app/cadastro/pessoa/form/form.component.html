@@ -252,17 +252,27 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-sm"
-                                (click)="el.editar=!el.editar;">{{el.editar?'salvar':'editar'}}</button>
-                            <button class="btn btn-primary btn-sm" (click)="excluirEndereco(i);"
-                                *ngIf="!el.editar">excluir</button>
+                            <button type="button" class="btn btn-primary btn-sm" *ngIf="el.editar"
+                                (click)="salvarEndereco(el)">salvar</button>
+                            <button type="button" class="btn btn-primary btn-sm" *ngIf="!el.editar && !enderecoEditando"
+                                (click)="editarEndereco(el)">editar</button>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="cancelarEndereco(i);"
+                                *ngIf="el.editar">cancelar</button>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="excluirEndereco(i);"
+                                *ngIf="!el.editar && !enderecoEditando">excluir</button>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-primary btn-sm" (click)="novoEndereco($event)">Adicionar</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="novoEndereco($event)" *ngIf="!enderecoEditando">Adicionar</button>
     </div>
 
-    <button class="btn btn-success btn-block" type="submit">Enviar</button>
+    <!-- 
+    <p>vl /{{frm.value | json}}/</p>
+    <p>st /{{frm.status}}/</p>
+    <p>er /{{frm.errors | json}}/</p>
+    -->
+
+    <button type="submit" class="btn btn-success btn-block">Enviar</button>
 </form>

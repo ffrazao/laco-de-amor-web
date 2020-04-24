@@ -9,7 +9,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
@@ -31,6 +31,7 @@ import { FormComponent } from './form.component';
     MatButtonModule,
     MatAutocompleteModule,
     MatIconModule,
+    MatTabsModule,
   ]
 })
 export class FormModule { }

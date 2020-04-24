@@ -9,6 +9,7 @@ import { MensagemService } from '../../../comum/servico/mensagem/mensagem.servic
 import { ProdutoModelo } from '../produto-modelo';
 import { ProdutoModeloService } from '../produto-modelo.service';
 import { ProdutoDescricao } from '../produto-descricao';
+import { ProdutoPreco } from '../produto-preco';
 import { ProdutoAtributo } from '../produto-atributo';
 import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
@@ -26,9 +27,10 @@ export class FormComponent implements OnInit {
   public entidade: ProdutoModelo;
   public id: number;
   public acao: string;
-  public fotoLocal: any = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = environment.SEM_IMAGEM;
 
   public produtoDescricaoEditando = false;
+  public produtoPrecoEditando = false;
 
   public $options: Observable<ProdutoAtributo[]> = of(
     [
@@ -62,6 +64,10 @@ export class FormComponent implements OnInit {
     return this.frm.get('produtoDescricaoList') as FormArray;
   }
 
+  get produtoPrecoList(): FormArray {
+    return this.frm.get('produtoPrecoList') as FormArray;
+  }
+
   criarFormulario(entidade: ProdutoModelo) {
     if (!entidade) {
       entidade = new ProdutoModelo();
@@ -75,6 +81,7 @@ export class FormComponent implements OnInit {
         materiaPrima: [entidade.materiaPrima, [Validators.required]],
         foto: [entidade.foto, []],
         produtoDescricaoList: this.criarFormularioProdutoDescricaoList(entidade.produtoDescricaoList),
+        produtoPrecoList: this.criarFormularioProdutoPrecoList(entidade.produtoPrecoList),
       }
     );
 
@@ -125,6 +132,33 @@ export class FormComponent implements OnInit {
     return result;
   }
 
+  criarFormularioProdutoPrecoList(lista: ProdutoPreco[]) {
+    let result = [];
+
+    if (lista && lista.length) {
+      for (let i = 0; i < lista.length; i++) {
+        result.push(this.criarFormularioProdutoPreco(lista[i]));
+      }
+    }
+    return this.formBuilder.array(result);
+  }
+
+  criarFormularioProdutoPreco(entidade: ProdutoPreco) {
+    if (!entidade) {
+      entidade = new ProdutoPreco();
+    }
+    let result = this.formBuilder.group(
+      {
+        id: [entidade.id, []],
+        vigencia: [entidade.vigencia, [Validators.required]],
+        valor: [entidade.valor, [Validators.required]],
+        destinacao: [entidade.destinacao, [Validators.required]],
+      }
+    );
+
+    return result;
+  }
+
   private _filter(value: string | ProdutoAtributo) {
     let filterValue = '';
     if (value) {
@@ -163,10 +197,19 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public ordenado(lista) {
+  public ordenadoProdutoDescricao(lista) {
     lista = lista.sort((o1, o2) => {
       let n1 = parseInt(o1 && o1.value && o1.value.ordem ? o1.value.ordem : 0) || 0;
       let n2 = parseInt(o2 && o2.value && o2.value.ordem ? o2.value.ordem : 0) || 0;
+      return ((n1 > n2) ? 1 : ((n1 < n2) ? -1 : 0));
+    });
+    return lista;
+  }
+
+  public ordenadoProdutoPreco(lista) {
+    lista = lista.sort((o1, o2) => {
+      let n1 = (o1 && o1.value && o1.value.vigencia ? o1.value.vigencia : 0) || 0;
+      let n2 = (o2 && o2.value && o2.value.vigencia ? o2.value.vigencia : 0) || 0;
       return ((n1 > n2) ? 1 : ((n1 < n2) ? -1 : 0));
     });
     return lista;
@@ -202,7 +245,6 @@ export class FormComponent implements OnInit {
     this.produtoDescricaoEditando = true;
     reg['editar'] = true;
     this.produtoDescricaoList.push(reg);
-    console.log(this.frm);
   }
 
   public salvarProdutoDescricao(reg) {
@@ -226,7 +268,7 @@ export class FormComponent implements OnInit {
     if (this.produtoDescricaoList.at(reg)['anterior']) {
       let vlr = this.produtoDescricaoList.at(reg)['anterior'];
       this.produtoDescricaoList.at(reg).setValue(vlr);
-      this.produtoDescricaoList.at(reg)['editar']=false;
+      this.produtoDescricaoList.at(reg)['editar'] = false;
       delete this.produtoDescricaoList.at(reg)['anterior'];
     } else {
       this.produtoDescricaoList.removeAt(reg);
@@ -234,26 +276,56 @@ export class FormComponent implements OnInit {
     this.produtoDescricaoEditando = false;
   }
 
+  public novoProdutoPreco(event) {
+    event.preventDefault();
+    let e = new ProdutoPreco();
+    e.ordem = 1 + (this.produtoPrecoList.value as []).length;
+    let reg = this.criarFormularioProdutoPreco(e);
+    this.produtoPrecoEditando = true;
+    reg['editar'] = true;
+    this.produtoPrecoList.push(reg);
+  }
+
+  public salvarProdutoPreco(reg) {
+    delete reg['anterior'];
+    reg['editar'] = false;
+    this.produtoPrecoEditando = false;
+  }
+
+  public editarProdutoPreco(reg) {
+    reg['anterior'] = reg.value;
+    reg['editar'] = true;
+    this.produtoPrecoEditando = true;
+  }
+
+  public excluirProdutoPreco(idx) {
+    this.produtoPrecoList.removeAt(idx);
+    this.produtoPrecoEditando = false;
+  }
+
+  public cancelarProdutoPreco(reg) {
+    if (this.produtoPrecoList.at(reg)['anterior']) {
+      let vlr = this.produtoPrecoList.at(reg)['anterior'];
+      this.produtoPrecoList.at(reg).setValue(vlr);
+      this.produtoPrecoList.at(reg)['editar'] = false;
+      delete this.produtoPrecoList.at(reg)['anterior'];
+    } else {
+      this.produtoPrecoList.removeAt(reg);
+    }
+    this.produtoPrecoEditando = false;
+  }
+
   public carregarFoto(event) {
     event.preventDefault();
     this._anexar.carregar([AnexarTipo.IMAGEM], false).subscribe((v) => {
       let foto = v['IMAGEM'][0];
       this.frm.get('foto').setValue(foto);
-      this.atualizarFoto();
     });
   }
 
   public limparFoto(event) {
     event.preventDefault();
     this.frm.get('foto').setValue(null);
-    this.atualizarFoto();
-  }
-
-  public atualizarFoto() {
-    this.fotoLocal = environment.SEM_IMAGEM;
-    if (this.frm && this.frm.get('foto') && this.frm.get('foto').value) {
-      this.fotoLocal = this.frm.get('foto').value;
-    }
   }
 
 }

@@ -7,6 +7,15 @@
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
 
+  <ng-container matColumnDef="foto">
+    <th mat-header-cell *matHeaderCellDef> Foto </th>
+    <td mat-cell *matCellDef="let el">
+      <a [routerLink]="[el.id]">
+        <img alt="Foto" id="foto" [src]="el.foto ? el.foto : SEM_IMAGEM" class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
+      </a>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="nome">
     <th mat-header-cell *matHeaderCellDef> Nome </th>
     <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.nome}}</a> </td>
