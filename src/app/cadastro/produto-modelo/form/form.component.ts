@@ -56,7 +56,6 @@ export class FormComponent implements OnInit {
       this.entidade = info['resolve']['principal'];
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this.criarFormulario(this.entidade);
-      this.atualizarFoto();
     });
   }
 
@@ -279,7 +278,6 @@ export class FormComponent implements OnInit {
   public novoProdutoPreco(event) {
     event.preventDefault();
     let e = new ProdutoPreco();
-    e.ordem = 1 + (this.produtoPrecoList.value as []).length;
     let reg = this.criarFormularioProdutoPreco(e);
     this.produtoPrecoEditando = true;
     reg['editar'] = true;

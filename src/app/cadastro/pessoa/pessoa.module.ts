@@ -15,7 +15,7 @@ import { FiltroResolve } from './filtro/filtro.resolve';
     CommonModule,
     PessoaRoutingModule
   ],
-  exports: [    
+  exports: [
   ],
   providers: [
     ListResolve,
@@ -23,5 +23,6 @@ import { FiltroResolve } from './filtro/filtro.resolve';
     FormNovoResolve,
     FiltroResolve
   ]
+
 })
 export class PessoaModule { }

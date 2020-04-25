@@ -5,9 +5,9 @@
             <button mat-menu-item>
                 <a [routerLink]="['/', 'cadastro', 'pessoa']">Pessoas</a>
             </button>
-            <button mat-menu-item>
+            <!-- <button mat-menu-item>
                 <a [routerLink]="['/', 'cadastro', 'usuario']">Usuário</a>
-            </button>
+            </button> -->
             <button mat-menu-item>
                 <a [routerLink]="['/', 'cadastro', 'produto-modelo']">Modelo de Produtos</a>
             </button>
@@ -16,7 +16,7 @@
         <button mat-button [matMenuTriggerFor]="acoesMenu">Ações</button>
         <mat-menu #acoesMenu="matMenu">
             <button mat-menu-item>
-                <a [routerLink]="['/', 'acao', 'cota']">Cotar</a>
+                <a [routerLink]="['/', 'acao', 'cotar']">Cotar</a>
             </button>
             <button mat-menu-item>
                 <a [routerLink]="['/', 'acao', 'comprar']">Comprar</a>

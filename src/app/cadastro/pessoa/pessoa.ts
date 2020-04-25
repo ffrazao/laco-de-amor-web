@@ -2,8 +2,9 @@ import { Parceiro } from '../parceiro/parceiro';
 import { Fornecedor } from '../fornecedor/fornecedor';
 import { Cliente } from '../cliente/cliente';
 import { PessoaEndereco } from './pessoa-endereco';
+import { EntidadeId } from '../../comum/entidade/entidade-id';
 
-export class Pessoa {
+export class Pessoa implements EntidadeId {
 
     public id: number;
     public nome: string;

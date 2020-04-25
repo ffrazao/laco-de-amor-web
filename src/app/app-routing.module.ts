@@ -7,6 +7,10 @@ const routes: Routes = [
   	loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule) 
   },
   {
+  	path: 'acao', 
+  	loadChildren: () => import('./acao/acao.module').then(m => m.AcaoModule) 
+  },
+  {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
   },

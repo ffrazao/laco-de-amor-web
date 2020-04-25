@@ -1,7 +1,8 @@
 import { ProdutoDescricao } from './produto-descricao';
 import { ProdutoPreco } from './produto-preco';
+import { EntidadeId } from '../../comum/entidade/entidade-id';
 
-export class ProdutoModelo {
+export class ProdutoModelo implements EntidadeId {
 
     public id: number;
     public nome: string;

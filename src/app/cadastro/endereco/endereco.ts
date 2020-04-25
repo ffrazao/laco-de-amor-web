@@ -1,4 +1,6 @@
-export class Endereco {
+import { EntidadeId } from '../../comum/entidade/entidade-id';
+
+export class Endereco implements EntidadeId {
 
     public id: number;
     public logradouro: string;

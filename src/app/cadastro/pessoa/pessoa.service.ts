@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Pessoa } from './pessoa';
-import { ServicoCrudService } from 'src/app/comum/servico/servico-crud.service';
 import { PessoaFiltro } from './pessoa-filtro';
+import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { PessoaFiltro } from './pessoa-filtro';
 export class PessoaService extends ServicoCrudService<Pessoa, PessoaFiltro> {
 
   constructor() {
-    super('pessoa');
+    super('cadastro/pessoa');
     this.lista.push({ id: 1, nome: 'Teste A', tipo: "PF", cpfCnpj: '123.456.789-11' } as Pessoa);
     this.lista.push({ id: 2, nome: 'Teste B', tipo: "PF", cpfCnpj: '111.111.111-11' } as Pessoa);
     this.lista.push({ id: 3, nome: 'Teste C', tipo: "PJ", cpfCnpj: '222.222.222-22' } as Pessoa);

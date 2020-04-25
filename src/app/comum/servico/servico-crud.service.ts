@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { findIndexById } from '../ferramenta/ferramenta';
 
 import { environment } from '../../../environments/environment';
+import { EntidadeId } from '../entidade/entidade-id';
 
-export abstract class ServicoCrudService<E, F> {
+export abstract class ServicoCrudService<E extends EntidadeId, F> {
 
   private _http: HttpClient;
   private _lista: E[] = [];

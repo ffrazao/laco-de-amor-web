@@ -27,7 +27,8 @@ export class ProdutoModeloService extends ServicoCrudService<ProdutoModelo, Prod
             valor: 'Lisa',
             ordem: 2
           } as ProdutoDescricao
-        ]
+        ],
+        produtoPrecoList: [],
       },
       {
         id: 2, nome: 'Pano 2', codigo: 'PN2', materiaPrima: 'S', foto: null,
@@ -50,7 +51,8 @@ export class ProdutoModeloService extends ServicoCrudService<ProdutoModelo, Prod
             valor: 'Bege',
             ordem: 3
           } as ProdutoDescricao
-        ]
+        ],
+        produtoPrecoList: [],
       },
       {
         id: 3, nome: 'Máscara Reta', codigo: 'MR1', materiaPrima: 'N', foto: null,
@@ -67,7 +69,8 @@ export class ProdutoModeloService extends ServicoCrudService<ProdutoModelo, Prod
             valor: 'Lisa',
             ordem: 2
           } as ProdutoDescricao
-        ]
+        ],
+        produtoPrecoList: [],
       },
       {
         id: 4, nome: 'Máscara Bico de Pato', codigo: 'MBP1', materiaPrima: 'N', 
@@ -85,7 +88,8 @@ export class ProdutoModeloService extends ServicoCrudService<ProdutoModelo, Prod
             valor: 'Escura',
             ordem: 2
           } as ProdutoDescricao
-        ]
+        ],
+        produtoPrecoList: [],
       },
     );
     this.filtro = new ProdutoModeloFiltro();

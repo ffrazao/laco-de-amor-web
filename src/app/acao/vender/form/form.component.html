@@ -1,0 +1,25 @@
+
+<form class="text-left" [formGroup]="frm" (ngSubmit)="enviar($event)">
+
+    <p class="h5 mb-4 text-left">Formulário ({{acao}})</p>
+
+    <div class="form-group">
+        <mat-form-field appearance="outline">
+            <mat-label>Id</mat-label>
+            <input matInput placeholder="Id" formControlName="id">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.id.invalid">
+            <div *ngIf="frm.controls.id.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+    <p>vl /{{frm.value | json}}/</p>
+    <p>st /{{frm.status}}/</p>
+    <p>er /{{frm.errors | json}}/</p>
+    -->
+
+    <button type="submit" class="btn btn-success btn-block">Enviar</button>
+</form>
