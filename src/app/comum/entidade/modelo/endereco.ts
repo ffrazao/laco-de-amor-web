@@ -1,4 +1,4 @@
-import { EntidadeId } from '../../comum/entidade/entidade-id';
+import { EntidadeId } from '../entidade-id';
 
 export class Endereco implements EntidadeId {
 

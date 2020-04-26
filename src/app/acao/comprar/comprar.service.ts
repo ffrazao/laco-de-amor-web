@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Comprar } from './comprar';
-import { ComprarFiltro } from './comprar-filtro';
+import { Comprar } from '../../comum/entidade/modelo/comprar';
+import { ComprarFiltro } from '../../comum/entidade/filtro/comprar-filtro';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 @Injectable({

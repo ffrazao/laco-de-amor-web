@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Pessoa } from '../pessoa';
+import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
 import { PessoaService } from '../pessoa.service';
-import { PessoaEndereco } from '../pessoa-endereco';
-import { Endereco } from '../../endereco/endereco';
-import { Parceiro } from '../../parceiro/parceiro';
-import { Fornecedor } from '../../fornecedor/fornecedor';
-import { Cliente } from '../../cliente/cliente';
+import { PessoaEndereco } from '../../../comum/entidade/modelo/pessoa-endereco';
+import { Endereco } from '../../../comum/entidade/modelo/endereco';
+import { Parceiro } from '../../../comum/entidade/modelo/parceiro';
+import { Fornecedor } from '../../../comum/entidade/modelo/fornecedor';
+import { Cliente } from '../../../comum/entidade/modelo/cliente';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 
 @Component({

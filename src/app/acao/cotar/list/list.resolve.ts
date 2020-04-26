@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Cotar } from '../cotar';
+import { Cotar } from '../../../comum/entidade/modelo/cotar';
 import { CotarService } from '../cotar.service';
 
 @Injectable()

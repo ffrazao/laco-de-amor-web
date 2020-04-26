@@ -1,6 +1,6 @@
 import { ProdutoDescricao } from './produto-descricao';
 import { ProdutoPreco } from './produto-preco';
-import { EntidadeId } from '../../comum/entidade/entidade-id';
+import { EntidadeId } from '../entidade-id';
 
 export class ProdutoModelo implements EntidadeId {
 
@@ -8,7 +8,7 @@ export class ProdutoModelo implements EntidadeId {
     public nome: string;
     public codigo: string;
     public materiaPrima: string;
-    public foto: any;
+    public foto: string;
     public produtoDescricaoList: ProdutoDescricao[] = [];
     public produtoPrecoList: ProdutoPreco[] = [];
 

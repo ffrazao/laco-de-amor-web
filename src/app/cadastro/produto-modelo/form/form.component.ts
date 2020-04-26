@@ -6,11 +6,11 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModelo } from '../produto-modelo';
+import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
 import { ProdutoModeloService } from '../produto-modelo.service';
-import { ProdutoDescricao } from '../produto-descricao';
-import { ProdutoPreco } from '../produto-preco';
-import { ProdutoAtributo } from '../produto-atributo';
+import { ProdutoDescricao } from '../../../comum/entidade/modelo/produto-descricao';
+import { ProdutoPreco } from '../../../comum/entidade/modelo/produto-preco';
+import { ProdutoAtributo } from '../../../comum/entidade/modelo/produto-atributo';
 import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
 

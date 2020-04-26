@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
-import { PessoaFiltro } from '../pessoa-filtro';
+import { PessoaFiltro } from '../../../comum/entidade/filtro/pessoa-filtro';
 
 @Component({
   selector: 'app-filtro',

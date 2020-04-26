@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProduzirService } from '../produzir.service';
-import { ProduzirFiltro } from '../produzir-filtro';
+import { ProduzirFiltro } from '../../../comum/entidade/filtro/produzir-filtro';
 
 @Component({
   selector: 'app-filtro',

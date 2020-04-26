@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Pessoa } from '../pessoa';
+import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
 
 @Component({
   selector: 'app-list',

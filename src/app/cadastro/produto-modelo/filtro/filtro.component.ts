@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProdutoModeloService } from '../produto-modelo.service';
-import { ProdutoModeloFiltro } from '../produto-modelo-filtro';
+import { ProdutoModeloFiltro } from '../../../comum/entidade/filtro/produto-modelo-filtro';
 
 @Component({
   selector: 'app-filtro',

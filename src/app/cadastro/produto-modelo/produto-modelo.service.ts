@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ServicoCrudService } from 'src/app/comum/servico/servico-crud.service';
-import { ProdutoModelo } from './produto-modelo';
-import { ProdutoModeloFiltro } from './produto-modelo-filtro';
-import { ProdutoDescricao } from './produto-descricao';
+import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
+import { ProdutoModeloFiltro } from '../../comum/entidade/filtro/produto-modelo-filtro';
+import { ProdutoModelo } from '../../comum/entidade/modelo/produto-modelo';
+import { ProdutoDescricao } from '../../comum/entidade/modelo/produto-descricao';
 
 @Injectable({
   providedIn: 'root'

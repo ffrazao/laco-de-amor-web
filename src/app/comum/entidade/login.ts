@@ -1,6 +1,6 @@
 export class Login {
 
-    public cpf: string;
+    public login: string;
     public senha: string;
     
 }

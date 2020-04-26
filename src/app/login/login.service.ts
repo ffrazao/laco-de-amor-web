@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { TokenService } from './token.service';
+import { TokenService } from '../comum/servico/token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class LoginService {
 
   constructor(private _http: HttpClient, private _tokenService: TokenService) { }
 
-  public login(cpf: string, senha: string) {
+  public login(login: string, senha: string) {
     const credentials = `Basic ${this.getClientCredentials()}`;
 
     return this._http.post(
@@ -25,7 +25,7 @@ export class LoginService {
         }),
         params: {
           'grant_type': 'password',
-          'username': cpf,
+          'username': login,
           'password': senha
         }
       }

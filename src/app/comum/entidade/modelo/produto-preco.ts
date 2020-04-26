@@ -1,5 +1,5 @@
 import { ProdutoModelo } from './produto-modelo';
-import { EntidadeId } from '../../comum/entidade/entidade-id';
+import { EntidadeId } from '../entidade-id';
 
 export class ProdutoPreco implements EntidadeId {
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Comprar } from '../comprar';
+import { Comprar } from '../../../comum/entidade/modelo/comprar';
 
 @Component({
   selector: 'app-list',

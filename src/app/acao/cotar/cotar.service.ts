@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Cotar } from './cotar';
-import { CotarFiltro } from './cotar-filtro';
+import { Cotar } from '../../comum/entidade/modelo/cotar';
+import { CotarFiltro } from '../../comum/entidade/filtro/cotar-filtro';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 @Injectable({

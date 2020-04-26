@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { Vender } from '../vender';
+import { Vender } from '../../../comum/entidade/modelo/vender';
 import { VenderService } from '../vender.service';
 
 @Component({

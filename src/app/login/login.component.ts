@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Login } from './login';
-import { LoginService } from '../comum/servico/login.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MensagemService } from '../comum/servico/mensagem/mensagem.service';
 import { Router } from '@angular/router';
+
+import { Login } from '../comum/entidade/login';
+import { LoginService } from './login.service';
+import { MensagemService } from '../comum/servico/mensagem/mensagem.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       entidade = new Login();
     }
     let result = this._fb.group({
-      cpf: [entidade.cpf, [Validators.required]],
+      login: [entidade.login, [Validators.required]],
       senha: [entidade.senha, [Validators.required]],
     });
     return result;
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
 
   public login() {
     let reg = this.frm.value as Login;
-    this._service.login(reg.cpf, reg.senha).subscribe((resp) => {
+    this._service.login(reg.login, reg.senha).subscribe((resp) => {
       console.log(resp);
       this._mensagem.sucesso('Login Efetuado!');
       this._router.navigate(['/']);

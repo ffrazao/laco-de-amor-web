@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Pessoa } from './pessoa';
-import { PessoaFiltro } from './pessoa-filtro';
+import { Pessoa } from '../../comum/entidade/modelo/pessoa';
+import { PessoaFiltro } from '../../comum/entidade/filtro/pessoa-filtro';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 @Injectable({

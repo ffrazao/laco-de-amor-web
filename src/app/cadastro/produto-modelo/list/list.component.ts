@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ProdutoModelo } from '../produto-modelo';
+import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
 import { environment } from '../../../../environments/environment';
 
 @Component({

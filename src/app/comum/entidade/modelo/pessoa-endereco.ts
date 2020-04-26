@@ -1,6 +1,6 @@
 import { Pessoa } from './pessoa'
-import { Endereco } from '../endereco/endereco';
-import { EntidadeId } from '../../comum/entidade/entidade-id';
+import { Endereco } from './endereco';
+import { EntidadeId } from '../entidade-id';
 
 export class PessoaEndereco implements EntidadeId {
 

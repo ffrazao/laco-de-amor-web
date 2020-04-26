@@ -4,8 +4,9 @@ import { findIndexById } from '../ferramenta/ferramenta';
 
 import { environment } from '../../../environments/environment';
 import { EntidadeId } from '../entidade/entidade-id';
+import { Filtro } from '../entidade/filtro/filtro';
 
-export abstract class ServicoCrudService<E extends EntidadeId, F> {
+export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro> {
 
   private _http: HttpClient;
   private _lista: E[] = [];
