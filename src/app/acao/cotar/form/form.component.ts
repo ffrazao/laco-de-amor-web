@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
 
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { Cotar } from '../../../comum/entidade/modelo/cotar';
@@ -9,6 +8,12 @@ import { CotarService } from '../cotar.service';
 import { EventoProduto } from '../../../comum/entidade/modelo/evento-produto';
 import { EventoPessoa } from '../../../comum/entidade/modelo/evento-pessoa';
 import { environment } from '../../../../environments/environment';
+import { ProdutoModelo } from 'src/app/comum/entidade/modelo/produto-modelo';
+import { ProdutoModeloService } from 'src/app/cadastro/produto-modelo/produto-modelo.service';
+import { Produto } from 'src/app/comum/entidade/modelo/produto';
+import { Pessoa } from 'src/app/comum/entidade/modelo/pessoa';
+import { PessoaService } from 'src/app/cadastro/pessoa/pessoa.service';
+import { EventoPessoaFuncao } from 'src/app/comum/entidade/modelo/evento-pessoa-funcao';
 
 @Component({
   selector: 'app-form',
@@ -25,18 +30,6 @@ export class FormComponent implements OnInit {
   public acao: string;
 
   public SEM_IMAGEM = environment.SEM_IMAGEM;
-  
-  headElementsEventoProduto = [
-    'foto', 'nome', 'codigo', 'acao',
-  ];
-  elementsEventoProduto: EventoProduto[] = [];
-  dataSourceEventoProduto = new MatTableDataSource(this.elementsEventoProduto);
-
-  headElementsEventoPessoa = [
-    'nome', 'tipo', 'cpfCnpj', 'acao',
-  ];
-  elementsEventoPessoa: EventoPessoa[] = [];
-  dataSourceEventoPessoa = new MatTableDataSource(this.elementsEventoPessoa);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +37,8 @@ export class FormComponent implements OnInit {
     private servico: CotarService,
     private router: Router,
     private _mensagem: MensagemService,
+    private produtoModeloService: ProdutoModeloService,
+    private pessoaService: PessoaService,
   ) {
   }
 
@@ -63,14 +58,8 @@ export class FormComponent implements OnInit {
     return this.frm.get('eventoProdutoList') as FormArray;
   }
 
-  applyFilterEventoProduto(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceEventoProduto.filter = filterValue.trim().toLowerCase();
-  }
-
-  applyFilterEventoPessoa(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceEventoPessoa.filter = filterValue.trim().toLowerCase();
+  get eventoPessoaList() {
+    return this.frm.get('eventoPessoaList') as FormArray;
   }
 
   criarFormulario(entidade: Cotar) {
@@ -88,8 +77,6 @@ export class FormComponent implements OnInit {
         eventoPessoaList: this.criarFormularioEventoPessoaList(entidade.eventoPessoaList),
       }
     );
-    this.dataSourceEventoProduto = new MatTableDataSource(entidade.eventoProdutoList);
-    this.dataSourceEventoPessoa = new MatTableDataSource(entidade.eventoPessoaList);
 
     return result;
   }
@@ -166,6 +153,124 @@ export class FormComponent implements OnInit {
       this.servico.update(this.id, this.entidade);
       this.router.navigate(['acao', 'cotar']);
     }
+  }
+
+  // GESTÃO DOS PRODUTOS A COTAR
+  public displayFnEventoProduto(produtoModelo?: ProdutoModelo): string {
+    return produtoModelo ? `${produtoModelo.nome} (${produtoModelo.codigo})` : '';
+  }
+
+  pesquisarEventoProduto = '';
+
+  $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
+    let result = [];
+    resolve(result);
+    return result;
+  });
+
+  public completarEventoProduto(event: KeyboardEvent) {
+    console.log(event.target['value'], this.pesquisarEventoProduto);
+    this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
+      let result = [];
+      if (typeof this.pesquisarEventoProduto === 'string') {
+        this.produtoModeloService.lista.forEach(val => {
+          let p = this.pesquisarEventoProduto.toLowerCase();
+          if (val.materiaPrima === 'S' &&
+            (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
+            result.push(Object.assign({}, val));
+          }
+        });
+      }
+      resolve(result);
+      return result;
+    })
+  }
+
+  public podeAdicionarEventoProduto() {
+    return typeof this.pesquisarEventoProduto === 'string';
+  }
+
+  public adicionarEventoProduto() {
+    let ep = new EventoProduto();
+    ep.produto = new Produto();
+    ep.produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
+    let id = ep.produto.produtoModelo.id;
+    let existe = false;
+    this.frm.get('eventoProdutoList').value.forEach(e => {
+      if (e.produto.produtoModelo.id === id) {
+        existe = true;
+      }
+    });
+    if (existe) {
+      this._mensagem.erro('Item já cadastrado!');
+    } else {
+      this.eventoProdutoList.push(this.criarFormularioEventoProduto(ep));
+    }
+    this.pesquisarEventoProduto = '';
+  }
+
+  public excluirEventoProduto(idx) {
+    this.eventoProdutoList.removeAt(idx);
+  }
+
+
+
+  // GESTÃO DAS PESSOAS A COTAR
+  public displayFnEventoPessoa(pessoa?: Pessoa): string {
+    return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
+  }
+
+  pesquisarEventoPessoa = '';
+
+  $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+    let result = [];
+    resolve(result);
+    return result;
+  });
+
+  public completarEventoPessoa(event: KeyboardEvent) {
+    console.log(event.target['value'], this.pesquisarEventoPessoa);
+    this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+      let result = [];
+      if (typeof this.pesquisarEventoPessoa === 'string') {
+        this.pessoaService.lista.forEach(val => {
+          let p = this.pesquisarEventoPessoa.toLowerCase();
+          if ((val.fornecedor && val.fornecedor.id) &&
+            (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+            result.push(Object.assign({}, val));
+          }
+        });
+      }
+      resolve(result);
+      return result;
+    })
+  }
+
+  public podeAdicionarEventoPessoa() {
+    return typeof this.pesquisarEventoPessoa === 'string';
+  }
+
+  public adicionarEventoPessoa() {
+    let ep = new EventoPessoa();
+    ep.eventoPessoaFuncao = new EventoPessoaFuncao(); ////////////////////////////////////////////////////////////
+    ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
+    let id = ep.pessoa.id;
+    let existe = false;
+    this.frm.get('eventoPessoaList').value.forEach(e => {
+      if (e.pessoa.id === id) {
+        existe = true;
+      }
+    });
+    if (existe) {
+      this._mensagem.erro('Item já cadastrado!');
+    } else {
+      this.eventoPessoaList.push(this.criarFormularioEventoPessoa(ep));
+    }
+    this.pesquisarEventoPessoa = '';
+  }
+
+  public excluirEventoPessoa(idx) {
+    this.eventoPessoaList.removeAt(idx);
   }
 
 }

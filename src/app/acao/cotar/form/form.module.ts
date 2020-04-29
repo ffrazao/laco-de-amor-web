@@ -7,10 +7,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
@@ -29,9 +28,9 @@ import { FormComponent } from './form.component';
     MatSelectModule,
     MatRadioModule,
     MatButtonModule,
-    MatTableModule,
     MatIconModule,
     MatTabsModule,
+    MatAutocompleteModule,
   ]
 })
 export class FormModule { }

@@ -15,8 +15,7 @@
     </div>
 
     <mat-tab-group animationDuration="0ms">
-        <mat-tab label="Relação Produto x Fornecedor">
-
+        <mat-tab label="Produtos">
             <div class="form-group">
                 <div class="container">
                     <div class="row">
@@ -26,83 +25,117 @@
                                     <label>Produtos</label>
                                 </div>
                                 <mat-form-field>
-                                    <mat-label>Filtro</mat-label>
-                                    <input matInput (keyup)="applyFilterEventoProduto($event)" placeholder="filtro">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Filtro</mat-label>
+                                        <input type="text" matInput placeholder="Pesquisar Produto"
+                                            [(ngModel)]="pesquisarEventoProduto" [ngModelOptions]="{standalone: true}"
+                                            [matAutocomplete]="autoEventoProduto"
+                                            (keyup)="completarEventoProduto($event)">
+                                        <mat-autocomplete autoActiveFirstOption #autoEventoProduto="matAutocomplete"
+                                            [displayWith]="displayFnEventoProduto">
+                                            <mat-option *ngFor="let option of $filteredOptionsEventoProduto | async"
+                                                [value]="option">
+                                                {{option.nome}} ({{option.codigo}})
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
                                 </mat-form-field>
-                                <button type="button" class="btn btn-primary btn-sm">Adicionar</button>
-                                <table mat-table [dataSource]="dataSourceEventoProduto" class="mat-elevation-z8"
-                                    style="width: 100%;">
-
-                                    <ng-container matColumnDef="foto">
-                                        <th mat-header-cell *matHeaderCellDef> Foto </th>
-                                        <td mat-cell *matCellDef="let el">
-                                            <img [src]="el.produto.produtoModelo.foto ? el.produto.produtoModelo.foto : SEM_IMAGEM"
-                                                class="rounded mx-auto d-block"
-                                                style="max-height: 100px; max-width: 100px;">
-                                        </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="nome">
-                                        <th mat-header-cell *matHeaderCellDef> Nome </th>
-                                        <td mat-cell *matCellDef="let el"> {{el.produto.produtoModelo.nome}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="codigo">
-                                        <th mat-header-cell *matHeaderCellDef> Código </th>
-                                        <td mat-cell *matCellDef="let el"> {{el.produto.produtoModelo.codigo}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="acao">
-                                        <th mat-header-cell *matHeaderCellDef> Ação </th>
-                                        <td mat-cell *matCellDef="let el"> <button type="button"
-                                                class="btn btn-primary btn-sm">Excluir</button> </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="headElementsEventoProduto"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: headElementsEventoProduto;"></tr>
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    [disabled]="podeAdicionarEventoProduto()"
+                                    (click)="adicionarEventoProduto()">Adicionar</button>
+                                <table class="table" *ngIf="frm.controls.eventoProdutoList.value.length">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Foto</th>
+                                            <th>Nome</th>
+                                            <th>Código</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let el of frm.controls.eventoProdutoList.value; index as i">
+                                            <td>
+                                                {{i+1}}
+                                            </td>
+                                            <td>
+                                                <img [src]="el.produto.produtoModelo.foto ? el.produto.produtoModelo.foto : SEM_IMAGEM"
+                                                    class="rounded mx-auto d-block"
+                                                    style="max-height: 100px; max-width: 100px;">
+                                            </td>
+                                            <td>
+                                                {{el.produto.produtoModelo.nome}}
+                                            </td>
+                                            <td>
+                                                {{el.produto.produtoModelo.codigo}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    (click)="excluirEventoProduto(i)">Excluir</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="col-1 align-middle text-center">
-                            <span class="align-middle text-center">X</span>
-                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Fornecedores">
+            <div class="form-group">
+                <div class="container">
+                    <div class="row">
                         <div class="col">
                             <div class="card">
                                 <div class="card-header">
                                     <label>Fornecedores</label>
                                 </div>
                                 <mat-form-field>
-                                    <mat-label>Filtro</mat-label>
-                                    <input matInput (keyup)="applyFilterEventoPessoa($event)" placeholder="filtro">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Filtro</mat-label>
+                                        <input type="text" matInput placeholder="Pesquisar Fornecedor"
+                                            [(ngModel)]="pesquisarEventoPessoa" [ngModelOptions]="{standalone: true}"
+                                            [matAutocomplete]="autoEventoPessoa"
+                                            (keyup)="completarEventoPessoa($event)">
+                                        <mat-autocomplete autoActiveFirstOption #autoEventoPessoa="matAutocomplete"
+                                            [displayWith]="displayFnEventoPessoa">
+                                            <mat-option *ngFor="let option of $filteredOptionsEventoPessoa | async"
+                                                [value]="option">
+                                                {{option.nome}} ({{option.cpfCnpj}})
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
                                 </mat-form-field>
-                                <button type="button" class="btn btn-primary btn-sm">Adicionar</button>
-
-                                <table mat-table [dataSource]="dataSourceEventoPessoa" class="mat-elevation-z8"
-                                    style="width: 100%;">
-
-                                    <ng-container matColumnDef="nome">
-                                        <th mat-header-cell *matHeaderCellDef> Nome </th>
-                                        <td mat-cell *matCellDef="let el"> {{el.pessoa.nome}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="tipo">
-                                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                                        <td mat-cell *matCellDef="let el"> {{el.pessoa.tipo}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="cpfCnpj">
-                                        <th mat-header-cell *matHeaderCellDef> CPF/CNPJ </th>
-                                        <td mat-cell *matCellDef="let el"> {{el.pessoa.cpfCnpj}} </td>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="acao">
-                                        <th mat-header-cell *matHeaderCellDef> Ação </th>
-                                        <td mat-cell *matCellDef="let el"> <button type="button"
-                                                class="btn btn-primary btn-sm">Excluir</button> </td>
-                                    </ng-container>
-
-                                    <tr mat-header-row *matHeaderRowDef="headElementsEventoPessoa"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: headElementsEventoPessoa;"></tr>
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    [disabled]="podeAdicionarEventoPessoa()"
+                                    (click)="adicionarEventoPessoa()">Adicionar</button>
+                                <table class="table" *ngIf="frm.controls.eventoPessoaList.value.length">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nome</th>
+                                            <th>CPF/CNPJ</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let el of frm.controls.eventoPessoaList.value; index as i">
+                                            <td>
+                                                {{i+1}}
+                                            </td>
+                                            <td>
+                                                {{el.pessoa.nome}}
+                                            </td>
+                                            <td>
+                                                {{el.pessoa.cpfCnpj}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    (click)="excluirEventoPessoa(i)">Excluir</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -111,22 +144,77 @@
             </div>
         </mat-tab>
         <mat-tab label="Cotação de Preços">
-            <table class="table table-striped table-bordered table-hover table-sm" [formGroup]="frm">
+            <table class="table table-striped table-bordered table-hover table-sm" [formGroup]="frm"
+                *ngFor="let f of frm.value.eventoPessoaList; index as i" formArrayName="eventoProdutoList">
                 <thead>
                     <tr>
-                        <td>Produto</td>
-                        <td>Quantidade</td>
-                        <td>Unidade</td>
-                        <td>Preço Unitário</td>
-                        <td>Preço Total</td>
+                        <th class="m-0" colspan="7">
+                            <h3><b>Cotação {{i + 1}}.</b></h3>
+                        </th>
                     </tr>
                 </thead>
-                <tbody *ngFor="let f of frm.value.eventoPessoaList; index as i" formArrayName="eventoProdutoList">
+                <tbody>
                     <tr class="table-primary">
-                        <td colspan="5">Fornecedor: <b>{{f.pessoa.nome}}</b>, {{f.pessoa.tipo}}, {{f.pessoa.cpfCnpj}}
+                        <td class="m-0 text-right">
+                            Fornecedor:
+                        </td>
+                        <td class="m-0" colspan="6">
+                            <b>{{f.pessoa.nome}}</b>, {{f.pessoa.tipo}}, {{f.pessoa.cpfCnpj}}
                         </td>
                     </tr>
-                    <tr *ngFor="let p of eventoProdutoList.controls; index as i" [formGroupName]="i">
+                    <tr class="table-primary">
+                        <td class="m-0 text-right">
+                            E-mail:
+                        </td>
+                        <td class="m-0" colspan="6">
+                            <a href="mailto:{{f.pessoa.email}}">{{f.pessoa.email}}</a>
+                        </td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td class="m-0 text-right">
+                            Contato 1:
+                        </td>
+                        <td class="m-0" colspan="6">
+                            {{f.pessoa.contato1}}
+                        </td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td class="m-0 text-right">
+                            Contato 2:
+                        </td>
+                        <td class="m-0" colspan="6">
+                            {{f.pessoa.contato2}}
+                        </td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td class="m-0 text-right">
+                            Contato 3:
+                        </td>
+                        <td class="m-0" colspan="6">
+                            {{f.pessoa.contato3}}
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Foto</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Unidade</th>
+                        <th>Preço Unitário</th>
+                        <th>Preço Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of eventoProdutoList.controls; index as j" [formGroupName]="j">
+                        <td>
+                            {{j+1}}
+                        </td>
+                        <td>
+                            <img [src]="p.value.produto.produtoModelo.foto ? p.value.produto.produtoModelo.foto : SEM_IMAGEM"
+                                class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
+                        </td>
                         <td>{{p.value.produto.produtoModelo.nome}} ({{p.value.produto.produtoModelo.codigo}})</td>
                         <td>
                             <div class="form-group">
@@ -183,6 +271,13 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="text-right" colspan="6">Total da cotação {{i + 1}} do fornecedor {{f.pessoa.nome}}
+                        </th>
+                        <th>0,00</th>
+                    </tr>
+                </tfoot>
             </table>
         </mat-tab>
     </mat-tab-group>

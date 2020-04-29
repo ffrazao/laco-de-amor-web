@@ -10,8 +10,8 @@ export class PessoaService extends ServicoCrudService<Pessoa, PessoaFiltro> {
 
   constructor() {
     super('cadastro/pessoa');
-    this.lista.push({ id: 1, nome: 'Teste A', tipo: "PF", cpfCnpj: '123.456.789-11' } as Pessoa);
-    this.lista.push({ id: 2, nome: 'Teste B', tipo: "PF", cpfCnpj: '111.111.111-11' } as Pessoa);
+    this.lista.push({ id: 1, nome: 'Teste A', tipo: "PF", cpfCnpj: '123.456.789-11', email: 'teste1@t.com', contato1: '(61) 1234-1234', contato2: '(61) 2234-1234', contato3: '(61) 3234-1234', fornecedor: { id: 1 } } as Pessoa);
+    this.lista.push({ id: 2, nome: 'Teste B', tipo: "PF", cpfCnpj: '111.111.111-11', email: 'teste2@t.com', contato1: '(61) 99999-1234', fornecedor: { id: 2 } } as Pessoa);
     this.lista.push({ id: 3, nome: 'Teste C', tipo: "PJ", cpfCnpj: '222.222.222-22' } as Pessoa);
     this.lista.push(
       {
