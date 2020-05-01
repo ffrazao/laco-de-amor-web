@@ -7,15 +7,21 @@ import { ListResolve } from './list/list.resolve';
 import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
+import { ProdutoModeloService } from './produto-modelo.service';
+import { ProdutoModeloFormService } from './produto-modelo-form.service';
+import { ProdutoAtributoModule } from '../produto-atributo/produto-atributo.module';
 
 
 @NgModule({
   declarations: [ProdutoModeloComponent],
   imports: [
     CommonModule,
-    ProdutoModeloRoutingModule
+    ProdutoModeloRoutingModule,
+    ProdutoAtributoModule,
   ],
   providers: [
+    ProdutoModeloService,
+    ProdutoModeloFormService,
     ListResolve,
     FormResolve,
     FormNovoResolve,

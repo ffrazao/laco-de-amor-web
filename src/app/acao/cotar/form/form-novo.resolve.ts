@@ -6,32 +6,30 @@ import { Observable } from 'rxjs';
 
 import { CotarService } from '../cotar.service';
 import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
-import { EventoTipo } from '../../../comum/entidade/modelo/evento-tipo';
+import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
+import { hojeStr } from '../../../comum/ferramenta/ferramenta';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
     constructor(
-        private servico: CotarService,
-        private unidadeMedidaService: UnidadeMedidaService) {
+        private _service: CotarService,
+        private _unidadeMedidaService: UnidadeMedidaService,
+        private _eventoTipoService: EventoTipoService,
+    ) {
     }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this.servico.novo();
-        let data = new Date();
-        entidade.data = ("0" + data.getDate()).substr(-2) + "/"
-            + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear();
+        let entidade = this._service.novo();
 
-        entidade.eventoTipo = new EventoTipo();
-        entidade.eventoTipo.id = 1;
-        entidade.eventoTipo.nome = 'Cotar';
-        entidade.eventoTipo.codigo = 'COTAR';
+        entidade.data = hojeStr();        
+        entidade.eventoTipo = this._eventoTipoService.restore(1);
 
-        return { 
-            principal: entidade, 
-            acao: "Novo", 
-            apoio: [this.unidadeMedidaService.lista] 
+        return {
+            principal: entidade,
+            acao: "Novo",
+            apoio: [this._unidadeMedidaService.lista]
         };
     }
 

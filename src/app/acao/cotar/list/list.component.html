@@ -5,9 +5,9 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="filtro">
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
 
-  <ng-container matColumnDef="data">
+  <ng-container matColumnDef="data" sticky>
     <th mat-header-cell *matHeaderCellDef> Data </th>
     <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.data}}</a> </td>
   </ng-container>
@@ -16,7 +16,8 @@
     <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
     <td mat-cell *matCellDef="let el">
       <mat-list>
-        <mat-list-item *ngFor="let e of el.eventoProdutoList"><b>{{e.produto.produtoModelo.nome}}</b> ({{e.produto.produtoModelo.codigo}})</mat-list-item>
+        <mat-list-item *ngFor="let e of el.eventoProdutoList"><b>{{e.produto.produtoModelo.nome}}</b>
+          ({{e.produto.produtoModelo.codigo}})</mat-list-item>
       </mat-list>
     </td>
   </ng-container>
@@ -25,7 +26,8 @@
     <th mat-header-cell *matHeaderCellDef> Fornecedor(es) </th>
     <td mat-cell *matCellDef="let el">
       <mat-list>
-        <mat-list-item *ngFor="let e of el.eventoPessoaList"><b>{{e.pessoa.nome}}</b> ({{e.pessoa.cpfCnpj}})</mat-list-item>
+        <mat-list-item *ngFor="let e of el.eventoPessoaList"><b>{{e.pessoa.nome}}</b> ({{e.pessoa.cpfCnpj}})
+        </mat-list-item>
       </mat-list>
     </td>
   </ng-container>
@@ -45,7 +47,10 @@
     <td mat-cell *matCellDef="let el" class="text-right"> {{maiorCotacao(el) | currency:'BRL':true}} </td>
   </ng-container>
 
-  , '', 'mediaPreco', 'maiorPreco'
-  <tr mat-header-row *matHeaderRowDef="headElements"></tr>
+  <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
-</table>
+</mat-table>
+
+<!-- 
+  /{{elements | json}}/ 
+-->

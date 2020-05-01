@@ -7,6 +7,8 @@ import { ListResolve } from './list/list.resolve';
 import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
+import { PessoaService } from './pessoa.service';
+import { PessoaFormService } from './pessoa-form.service';
 
 
 @NgModule({
@@ -18,10 +20,12 @@ import { FiltroResolve } from './filtro/filtro.resolve';
   exports: [
   ],
   providers: [
+    PessoaService,
+    PessoaFormService,
     ListResolve,
     FormResolve,
     FormNovoResolve,
-    FiltroResolve
+    FiltroResolve,
   ]
 
 })

@@ -57,7 +57,13 @@ export function deepCopy(obj) {
 }
 
 export function isNumber(value: string | number): boolean {
-   return ((value != null) &&
-           (value !== '') &&
-           !isNaN(Number(value.toString())));
+    return ((value != null) &&
+        (value !== '') &&
+        !isNaN(Number(value.toString())));
 }
+
+export function hojeStr() {
+    let data = new Date();
+    return ("0" + data.getDate()).substr(-2) + "/"
+        + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear();
+} 

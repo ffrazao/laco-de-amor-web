@@ -4,7 +4,6 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Cotar } from '../../../comum/entidade/modelo/cotar';
 import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 import { CotarService } from '../cotar.service';
 
@@ -12,18 +11,18 @@ import { CotarService } from '../cotar.service';
 export class FormResolve implements Resolve<any> {
 
     constructor(
-        private servico: CotarService,
-        private unidadeMedidaService: UnidadeMedidaService,
+        private _service: CotarService,
+        private _unidadeMedidaService: UnidadeMedidaService,
     ) {
     }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this.servico.restore(route.params['id']);
+        let entidade = this._service.restore(route.params['id']);
         return {
             principal: entidade,
             acao: 'Visualizar',
-            apoio: [this.unidadeMedidaService.lista],
+            apoio: [this._unidadeMedidaService.lista],
         };
     }
 

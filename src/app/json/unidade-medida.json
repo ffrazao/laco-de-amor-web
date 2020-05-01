@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "nome": "Metro",
+        "codigo": "METRO",
+        "base": "S",
+        "valorBase": 1,
+        "pai": null
+    }
+]

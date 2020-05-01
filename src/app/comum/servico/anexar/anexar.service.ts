@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 import { AnexarTipo as AnexarTipo } from './anexar-tipo';
 import { AnexarComponent } from './anexar.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AnexarService {
 
   constructor(

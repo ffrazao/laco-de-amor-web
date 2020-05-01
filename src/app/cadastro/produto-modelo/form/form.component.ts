@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
-import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
 import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloFormService } from '../produto-modelo-form.service';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
+import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
+import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
 import { ProdutoDescricao } from '../../../comum/entidade/modelo/produto-descricao';
 import { ProdutoPreco } from '../../../comum/entidade/modelo/produto-preco';
 import { ProdutoAtributo } from '../../../comum/entidade/modelo/produto-atributo';
-import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
 
 @Component({
@@ -21,7 +21,7 @@ import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
 })
 export class FormComponent implements OnInit {
 
-  public frm = this.criarFormulario(new ProdutoModelo());
+  public frm = this._formService.criarFormulario(new ProdutoModelo());
 
   public isEnviado = false;
   public entidade: ProdutoModelo;
@@ -32,20 +32,15 @@ export class FormComponent implements OnInit {
   public produtoDescricaoEditando = false;
   public produtoPrecoEditando = false;
 
-  public $options: Observable<ProdutoAtributo[]> = of(
-    [
-      { id: 1, nome: 'Tamanho' },
-      { id: 2, nome: 'Cor' },
-      { id: 3, nome: 'Textura' },
-    ]);
-
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private servico: ProdutoModeloService,
-    private router: Router,
+    private _service: ProdutoModeloService,
+    private _formService: ProdutoModeloFormService,
     private _mensagem: MensagemService,
-    private _anexar: AnexarService) { }
+    private _anexar: AnexarService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+  }
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -55,7 +50,7 @@ export class FormComponent implements OnInit {
     this.route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this.criarFormulario(this.entidade);
+      this.frm = this._formService.criarFormulario(this.entidade);
     });
   }
 
@@ -65,111 +60,6 @@ export class FormComponent implements OnInit {
 
   get produtoPrecoList(): FormArray {
     return this.frm.get('produtoPrecoList') as FormArray;
-  }
-
-  criarFormulario(entidade: ProdutoModelo) {
-    if (!entidade) {
-      entidade = new ProdutoModelo();
-    }
-
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        nome: [entidade.nome, [Validators.required]],
-        codigo: [entidade.codigo, []],
-        materiaPrima: [entidade.materiaPrima, [Validators.required]],
-        foto: [entidade.foto, []],
-        produtoDescricaoList: this.criarFormularioProdutoDescricaoList(entidade.produtoDescricaoList),
-        produtoPrecoList: this.criarFormularioProdutoPrecoList(entidade.produtoPrecoList),
-      }
-    );
-
-    return result;
-  }
-
-  criarFormularioProdutoDescricaoList(lista: ProdutoDescricao[]) {
-    let result = [];
-
-    if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioProdutoDescricao(lista[i]));
-      }
-    }
-    return this.formBuilder.array(result);
-  }
-
-  criarFormularioProdutoDescricao(entidade: ProdutoDescricao) {
-    if (!entidade) {
-      entidade = new ProdutoDescricao();
-    }
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        produtoAtributo: this.criarFormularioProdutoAtributo(entidade.produtoAtributo),
-        valor: [entidade.valor, [Validators.required]],
-        ordem: [entidade.ordem, [Validators.required]],
-      }
-    );
-
-    return result;
-  }
-
-  criarFormularioProdutoAtributo(entidade: ProdutoAtributo) {
-    if (!entidade) {
-      entidade = new ProdutoAtributo();
-    }
-    let result = this.formBuilder.control(entidade, [Validators.required]);
-
-    result['$filteredOptions'] = result.valueChanges.pipe(
-      startWith(''),
-      switchMap(value => {
-        let r = this._filter(value);
-        return r;
-      })
-    );
-
-    return result;
-  }
-
-  criarFormularioProdutoPrecoList(lista: ProdutoPreco[]) {
-    let result = [];
-
-    if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioProdutoPreco(lista[i]));
-      }
-    }
-    return this.formBuilder.array(result);
-  }
-
-  criarFormularioProdutoPreco(entidade: ProdutoPreco) {
-    if (!entidade) {
-      entidade = new ProdutoPreco();
-    }
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        vigencia: [entidade.vigencia, [Validators.required]],
-        valor: [entidade.valor, [Validators.required]],
-        destinacao: [entidade.destinacao, [Validators.required]],
-      }
-    );
-
-    return result;
-  }
-
-  private _filter(value: string | ProdutoAtributo) {
-    let filterValue = '';
-    if (value) {
-      filterValue = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
-      return this.$options.pipe(
-        map(atributos => atributos.filter(atributo => atributo.nome.toLowerCase().includes(filterValue)))
-      );
-    } else {
-      let result = new ProdutoAtributo();
-      result.nome = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
-      return this.$options;
-    }
   }
 
   public displayFn(produtoAtributo?: ProdutoAtributo): string {
@@ -188,10 +78,11 @@ export class FormComponent implements OnInit {
 
     this.entidade = this.frm.value;
     if ('Novo' === this.acao) {
-      this.servico.create(this.entidade);
+      this._service.create(this.entidade);
+      this._service.lista.push(this.entidade);
       this.router.navigate(['cadastro', 'produto-modelo', this.entidade.id]);
     } else {
-      this.servico.update(this.id, this.entidade);
+      this._service.update(this.id, this.entidade);
       this.router.navigate(['cadastro', 'produto-modelo']);
     }
   }
@@ -240,7 +131,7 @@ export class FormComponent implements OnInit {
     event.preventDefault();
     let e = new ProdutoDescricao();
     e.ordem = 1 + (this.produtoDescricaoList.value as []).length;
-    let reg = this.criarFormularioProdutoDescricao(e);
+    let reg = this._formService.criarFormularioProdutoDescricao(e);
     this.produtoDescricaoEditando = true;
     reg['editar'] = true;
     this.produtoDescricaoList.push(reg);
@@ -278,7 +169,7 @@ export class FormComponent implements OnInit {
   public novoProdutoPreco(event) {
     event.preventDefault();
     let e = new ProdutoPreco();
-    let reg = this.criarFormularioProdutoPreco(e);
+    let reg = this._formService.criarFormularioProdutoPreco(e);
     this.produtoPrecoEditando = true;
     reg['editar'] = true;
     this.produtoPrecoList.push(reg);

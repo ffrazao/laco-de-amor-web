@@ -3,9 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmeComponent } from './confirme.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MensagemService {
 
   constructor(

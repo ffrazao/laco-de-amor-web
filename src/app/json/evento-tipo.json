@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "nome": "Cotar",
+        "codigo": "COTAR"
+    },
+    {
+        "id": 2,
+        "nome": "Comprar",
+        "codigo": "COMPRAR"
+    },
+    {
+        "id": 3,
+        "nome": "Produzir",
+        "codigo": "PRODUZIR"
+    },
+    {
+        "id": 4,
+        "nome": "Vender",
+        "codigo": "VENDER"
+    }
+]

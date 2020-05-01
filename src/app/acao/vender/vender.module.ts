@@ -7,6 +7,8 @@ import { ListResolve } from './list/list.resolve';
 import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
+import { VenderService } from './vender.service';
+import { VenderFormService } from './vender-form.service';
 
 
 @NgModule({
@@ -16,6 +18,8 @@ import { FiltroResolve } from './filtro/filtro.resolve';
     VenderRoutingModule
   ],
   providers: [
+    VenderService,
+    VenderFormService,
     ListResolve,
     FormResolve,
     FormNovoResolve,

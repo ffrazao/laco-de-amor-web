@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
-import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { CotarService } from '../cotar.service';
+import { CotarFormService } from '../cotar-form.service';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
 import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
 import { Cotar } from '../../../comum/entidade/modelo/cotar';
@@ -24,7 +25,7 @@ import { isNumber } from '../../../comum/ferramenta/ferramenta';
 })
 export class FormComponent implements OnInit {
 
-  public frm = this.criarFormulario(new Cotar());
+  public frm = this._serviceFormService.criarFormulario(new Cotar());
 
   public isEnviado = false;
   public entidade: Cotar;
@@ -38,25 +39,25 @@ export class FormComponent implements OnInit {
   public selecionaTab = 0;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private servico: CotarService,
-    private router: Router,
+    private _service: CotarService,
+    private _serviceFormService: CotarFormService,
+    private _route: ActivatedRoute,
+    private _router: Router,
     private _mensagem: MensagemService,
-    private produtoModeloService: ProdutoModeloService,
-    private pessoaService: PessoaService,
+    private _produtoModeloService: ProdutoModeloService,
+    private _pessoaService: PessoaService,
   ) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(p => {
+    this._route.params.subscribe(p => {
       this.id = p.id;
     });
 
-    this.route.data.subscribe((info) => {
+    this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this.criarFormulario(this.entidade);
+      this.frm = this._serviceFormService.criarFormulario(this.entidade);
 
       this.unidadeMedidaList = info['resolve']['apoio'][0];
     });
@@ -68,112 +69,6 @@ export class FormComponent implements OnInit {
 
   get eventoPessoaList() {
     return this.frm.get('eventoPessoaList') as FormArray;
-  }
-
-  criarFormulario(entidade: Cotar) {
-    if (!entidade) {
-      entidade = new Cotar();
-    }
-
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        data: [entidade.data, [Validators.required]],
-        eventoTipo: [entidade.eventoTipo, [Validators.required]],
-        pai: [entidade.pai, []],
-        eventoProdutoList: this.criarFormularioEventoProdutoList(entidade.eventoProdutoList),
-        eventoPessoaList: this.criarFormularioEventoPessoaList(entidade.eventoPessoaList),
-      }
-    );
-
-    return result;
-  }
-
-  public criarFormularioEventoProdutoList(lista: EventoProduto[]): FormArray {
-    let result = [];
-
-    if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioEventoProduto(lista[i]));
-      }
-    }
-    return this.formBuilder.array(result);
-  }
-
-  public criarFormularioEventoPessoaList(lista: EventoPessoa[]): FormArray {
-    let result = [];
-
-    if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioEventoPessoa(lista[i]));
-      }
-    }
-    return this.formBuilder.array(result);
-  }
-
-  public criarFormularioEventoProduto(entidade: EventoProduto, cotacao: boolean = false): FormGroup {
-    if (!entidade) {
-      entidade = new EventoProduto();
-    }
-    if (!entidade.unidadeMedida && this.unidadeMedidaList.length === 1) {
-      entidade.unidadeMedida = this.unidadeMedidaList[0];
-    }
-
-    let obrigatorio = cotacao ? [Validators.required] : [];
-
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        produto: [entidade.produto, [Validators.required]],
-        quantidade: [entidade.quantidade, [Validators.required]],
-        unidadeMedida: [entidade.unidadeMedida, [Validators.required]],
-        valorUnitario: [entidade.valorUnitario, obrigatorio],
-        valorTotal: [entidade.valorTotal, obrigatorio],
-        eventoPessoa: [entidade.eventoPessoa, []],
-      }
-    );
-
-    if (cotacao) {
-      result.valueChanges.subscribe(v => {
-        if (v.quantidade && v.valorUnitario) {
-          result.get('valorTotal').setValue(v.quantidade * v.valorUnitario, { emitEvent: false });
-        }
-      });
-    }
-    return result;
-  }
-
-  public criarFormularioEventoPessoa(entidade: EventoPessoa): FormGroup {
-    if (!entidade) {
-      entidade = new EventoPessoa();
-    }
-    let result = this.formBuilder.group(
-      {
-        id: [entidade.id, []],
-        pessoa: [entidade.pessoa, [Validators.required]],
-        eventoPessoaFuncao: [entidade.eventoPessoaFuncao, [Validators.required]],
-        eventoProdutoList: this.criarFormularioEventoProdutoList(entidade.eventoProdutoList),
-        eventoProdutoListTotal: [this.calculaOrcamento(entidade.eventoProdutoList), []],
-      }
-    );
-
-    result.valueChanges.subscribe(v => {
-      result.controls.eventoProdutoListTotal.setValue(this.calculaOrcamento(v.eventoProdutoList), { emitEvent: false });
-    });
-
-    return result;
-  }
-
-  private calculaOrcamento(lista: EventoProduto[]) {
-    let total = 0;
-    if (lista && lista.length) {
-      lista.forEach(vv => {
-        if (isNumber(vv.valorTotal)) {
-          total += vv.valorTotal;
-        }
-      });
-    }
-    return total;
   }
 
   public enviar(event) {
@@ -188,11 +83,11 @@ export class FormComponent implements OnInit {
 
     this.entidade = this.frm.value;
     if ('Novo' === this.acao) {
-      this.servico.create(this.entidade);
-      this.router.navigate(['acao', 'cotar', this.entidade.id]);
+      this._service.create(this.entidade);
+      this._router.navigate(['acao', 'cotar', this.entidade.id]);
     } else {
-      this.servico.update(this.id, this.entidade);
-      this.router.navigate(['acao', 'cotar']);
+      this._service.update(this.id, this.entidade);
+      this._router.navigate(['acao', 'cotar']);
     }
   }
 
@@ -220,7 +115,7 @@ export class FormComponent implements OnInit {
       this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
         let result = [];
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
-          this.produtoModeloService.lista.forEach(val => {
+          this._produtoModeloService.lista.forEach(val => {
             let p = this.pesquisarEventoProduto.toLowerCase();
             if (val.materiaPrima === 'S' &&
               (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
@@ -242,6 +137,9 @@ export class FormComponent implements OnInit {
     let ep = new EventoProduto();
     ep.produto = new Produto();
     ep.produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
+    if (!ep.unidadeMedida && this.unidadeMedidaList.length === 1) {
+      ep.unidadeMedida = this.unidadeMedidaList[0];
+    }
     let id = ep.produto.produtoModelo.id;
     let existe = false;
     this.eventoProdutoList.value.forEach(e => {
@@ -252,7 +150,7 @@ export class FormComponent implements OnInit {
     if (existe) {
       this._mensagem.erro('Item já cadastrado!');
     } else {
-      this.eventoProdutoList.push(this.criarFormularioEventoProduto(ep));
+      this.eventoProdutoList.push(this._serviceFormService.criarFormularioEventoProduto(ep));
     }
     this.pesquisarEventoProduto = '';
   }
@@ -260,8 +158,6 @@ export class FormComponent implements OnInit {
   public excluirEventoProduto(idx) {
     this.eventoProdutoList.removeAt(idx);
   }
-
-
 
   // GESTÃO DAS PESSOAS A COTAR
   public displayFnEventoPessoa(pessoa?: Pessoa): string {
@@ -287,7 +183,7 @@ export class FormComponent implements OnInit {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
         let result = [];
         if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
-          this.pessoaService.lista.forEach(val => {
+          this._pessoaService.lista.forEach(val => {
             let p = this.pesquisarEventoPessoa.toLowerCase();
             if ((val.fornecedor && val.fornecedor.id) &&
               (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
@@ -319,7 +215,7 @@ export class FormComponent implements OnInit {
     if (existe) {
       this._mensagem.erro('Item já cadastrado!');
     } else {
-      this.eventoPessoaList.push(this.criarFormularioEventoPessoa(ep));
+      this.eventoPessoaList.push(this._serviceFormService.criarFormularioEventoPessoa(ep));
     }
     this.pesquisarEventoPessoa = '';
   }
@@ -350,7 +246,7 @@ export class FormComponent implements OnInit {
       this.eventoPessoaList.controls.forEach(element => {
         ((element as FormGroup).controls.eventoProdutoList as FormArray).clear();
         this.eventoProdutoList.value.forEach(ep => {
-          ((element as FormGroup).controls.eventoProdutoList as FormArray).push(this.criarFormularioEventoProduto(ep, true));
+          ((element as FormGroup).controls.eventoProdutoList as FormArray).push(this._serviceFormService.criarFormularioEventoProduto(ep, true));
         });
         (element as FormGroup).controls.eventoProdutoList.updateValueAndValidity();
       });

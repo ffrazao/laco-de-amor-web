@@ -5,9 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { TokenService } from '../comum/servico/token.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LoginService {
 
   constructor(private _http: HttpClient, private _tokenService: TokenService) { }

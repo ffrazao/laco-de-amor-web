@@ -4,17 +4,14 @@ import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 import { EventoTipo } from '../../comum/entidade/modelo/evento-tipo';
 import { Filtro } from '../../comum/entidade/filtro/filtro';
 
-@Injectable({
-  providedIn: 'root'
-})
+import json from '../../json/evento-tipo.json';
+
+@Injectable()
 export class EventoTipoService extends ServicoCrudService<EventoTipo, Filtro> {
 
   constructor() {
     super('cadastro/evento-tipo');
-    this.lista.push({ id: 1, nome: 'Cotar', codigo: 'COTAR' });
-    this.lista.push({ id: 2, nome: 'Comprar', codigo: 'COMPRAR' });
-    this.lista.push({ id: 3, nome: 'Produzir', codigo: 'PRODUZIR' });
-    this.lista.push({ id: 4, nome: 'Vender', codigo: 'VENDER' });
+    json.forEach(v => this.lista.push(v));
 
     this.filtro = new Filtro();
   }
