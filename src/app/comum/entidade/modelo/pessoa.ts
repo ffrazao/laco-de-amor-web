@@ -8,9 +8,9 @@ export class Pessoa implements EntidadeId {
 
     public id: number;
     public nome: string;
-    public parceiro: Parceiro;
-    public fornecedor: Fornecedor;
     public cliente: Cliente;
+    public fornecedor: Fornecedor;
+    public parceiro: Parceiro;
     public tipo: string;
     public cpfCnpj: string;
     public email: string;

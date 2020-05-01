@@ -14,7 +14,7 @@ import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

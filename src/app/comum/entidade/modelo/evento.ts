@@ -9,7 +9,7 @@ export class Evento implements EntidadeId {
     public eventoTipo: EventoTipo;
     public data: string;
     public pai: Evento;
-    public eventoProdutoList: EventoProduto[];
     public eventoPessoaList: EventoPessoa[];
+    public eventoProdutoList: EventoProduto[];
 
 }

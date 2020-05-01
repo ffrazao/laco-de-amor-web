@@ -13,6 +13,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
+import { PipeModule } from 'src/app/comum/pipe/pipe.module';
 
 @NgModule({
   declarations: [FormComponent],
@@ -31,6 +32,8 @@ import { FormComponent } from './form.component';
     MatIconModule,
     MatTabsModule,
     MatAutocompleteModule,
+    
+    PipeModule,
   ]
 })
 export class FormModule { }

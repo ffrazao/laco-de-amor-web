@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <mat-tab-group animationDuration="0ms">
+    <mat-tab-group animationDuration="2ms" [(selectedIndex)]="selecionaTab">
         <mat-tab label="Produtos">
             <div class="form-group">
                 <div class="container">
@@ -43,31 +43,68 @@
                                 <button type="button" class="btn btn-primary btn-sm"
                                     [disabled]="podeAdicionarEventoProduto()"
                                     (click)="adicionarEventoProduto()">Adicionar</button>
-                                <table class="table" *ngIf="frm.controls.eventoProdutoList.value.length">
+                                <table class="table" *ngIf="eventoProdutoList.value.length">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Foto</th>
                                             <th>Nome</th>
                                             <th>Código</th>
+                                            <th>Quantidade</th>
+                                            <th>Unidade de Medida</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr *ngFor="let el of frm.controls.eventoProdutoList.value; index as i">
+                                    <tbody formArrayName="eventoProdutoList">
+                                        <tr *ngFor="let el of eventoProdutoList.controls | callback: filtrarCotacaoGenerica; index as i"
+                                            [formGroupName]="i">
                                             <td>
                                                 {{i+1}}
                                             </td>
                                             <td>
-                                                <img [src]="el.produto.produtoModelo.foto ? el.produto.produtoModelo.foto : SEM_IMAGEM"
+                                                <img [src]="el.value.produto.produtoModelo.foto ? el.value.produto.produtoModelo.foto : SEM_IMAGEM"
                                                     class="rounded mx-auto d-block"
                                                     style="max-height: 100px; max-width: 100px;">
                                             </td>
                                             <td>
-                                                {{el.produto.produtoModelo.nome}}
+                                                {{el.value.produto.produtoModelo.nome}}
                                             </td>
                                             <td>
-                                                {{el.produto.produtoModelo.codigo}}
+                                                {{el.value.produto.produtoModelo.codigo}}
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Quantidade</mat-label>
+                                                        <input matInput type="number" placeholder="Quantidade"
+                                                            class="text-right" formControlName="quantidade">
+                                                    </mat-form-field>
+                                                    <div class="text-danger"
+                                                        *ngIf="isEnviado && el.controls.quantidade.invalid">
+                                                        <div *ngIf="el.controls.quantidade.errors.required">
+                                                            Campo obrigatório!
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Unidade de Medida</mat-label>
+                                                        <mat-select formControlName="unidadeMedida">
+                                                            <mat-option *ngFor="let option of unidadeMedidaList"
+                                                                [value]="option">
+                                                                {{option.nome}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                    <div class="text-danger"
+                                                        *ngIf="isEnviado && el.controls.unidadeMedida.invalid">
+                                                        <div *ngIf="el.controls.unidadeMedida.errors.required">
+                                                            Campo obrigatório!
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm"
@@ -82,7 +119,7 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="Fornecedores">
+        <mat-tab label="Fornecedores" *ngIf="eventoProdutoList.length">
             <div class="form-group">
                 <div class="container">
                     <div class="row">
@@ -110,7 +147,7 @@
                                 <button type="button" class="btn btn-primary btn-sm"
                                     [disabled]="podeAdicionarEventoPessoa()"
                                     (click)="adicionarEventoPessoa()">Adicionar</button>
-                                <table class="table" *ngIf="frm.controls.eventoPessoaList.value.length">
+                                <table class="table" *ngIf="eventoPessoaList.value.length">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -119,16 +156,17 @@
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr *ngFor="let el of frm.controls.eventoPessoaList.value; index as i">
+                                    <tbody formArrayName="eventoPessoaList">
+                                        <tr *ngFor="let el of eventoPessoaList.controls; index as i"
+                                            [formGroupName]="i">
                                             <td>
                                                 {{i+1}}
                                             </td>
                                             <td>
-                                                {{el.pessoa.nome}}
+                                                {{el.value.pessoa.nome}}
                                             </td>
                                             <td>
-                                                {{el.pessoa.cpfCnpj}}
+                                                {{el.value.pessoa.cpfCnpj}}
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm"
@@ -143,149 +181,161 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="Cotação de Preços">
-            <table class="table table-striped table-bordered table-hover table-sm" [formGroup]="frm"
-                *ngFor="let f of frm.value.eventoPessoaList; index as i" formArrayName="eventoProdutoList">
-                <thead>
-                    <tr>
-                        <th class="m-0" colspan="7">
-                            <h3><b>Cotação {{i + 1}}.</b></h3>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="table-primary">
-                        <td class="m-0 text-right">
-                            Fornecedor:
-                        </td>
-                        <td class="m-0" colspan="6">
-                            <b>{{f.pessoa.nome}}</b>, {{f.pessoa.tipo}}, {{f.pessoa.cpfCnpj}}
-                        </td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td class="m-0 text-right">
-                            E-mail:
-                        </td>
-                        <td class="m-0" colspan="6">
-                            <a href="mailto:{{f.pessoa.email}}">{{f.pessoa.email}}</a>
-                        </td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td class="m-0 text-right">
-                            Contato 1:
-                        </td>
-                        <td class="m-0" colspan="6">
-                            {{f.pessoa.contato1}}
-                        </td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td class="m-0 text-right">
-                            Contato 2:
-                        </td>
-                        <td class="m-0" colspan="6">
-                            {{f.pessoa.contato2}}
-                        </td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td class="m-0 text-right">
-                            Contato 3:
-                        </td>
-                        <td class="m-0" colspan="6">
-                            {{f.pessoa.contato3}}
-                        </td>
-                    </tr>
-                </tbody>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Foto</th>
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Unidade</th>
-                        <th>Preço Unitário</th>
-                        <th>Preço Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let p of eventoProdutoList.controls; index as j" [formGroupName]="j">
-                        <td>
-                            {{j+1}}
-                        </td>
-                        <td>
-                            <img [src]="p.value.produto.produtoModelo.foto ? p.value.produto.produtoModelo.foto : SEM_IMAGEM"
-                                class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
-                        </td>
-                        <td>{{p.value.produto.produtoModelo.nome}} ({{p.value.produto.produtoModelo.codigo}})</td>
-                        <td>
-                            <div class="form-group">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Quantidade</mat-label>
-                                    <input matInput placeholder="Quantidade" formControlName="quantidade">
-                                </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && p.controls.quantidade.invalid">
-                                    <div *ngIf="p.controls.quantidade.errors.required">
-                                        Campo obrigatório!
+        <mat-tab label="Cotação de Preços" formArrayName="eventoPessoaList" *ngIf="exibirAbaCotacaoPreco()">
+            <button type="button" class="btn btn-primary btn-sm m-5 center" (click)="gerarPlanilhaCotacao()"
+                *ngIf="eventoProdutoList.controls.length && eventoPessoaList.controls.length">Gerar Planilha de
+                Cotação</button>
+            <div *ngIf="exibirCotacaoPreco()">
+                <table class="table table-striped table-bordered table-hover table-sm"
+                    *ngFor="let el of eventoPessoaList.controls; index as i" [formGroupName]="i">
+                    <thead>
+                        <tr>
+                            <th class="m-0" colspan="7">
+                                <h3><b>Cotação {{i + 1}}.</b></h3>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-primary">
+                            <td class="m-0 text-right">
+                                Fornecedor:
+                            </td>
+                            <td class="m-0" colspan="6">
+                                <b>{{el.value.pessoa.nome}}</b>, {{el.value.pessoa.tipo}}, {{el.value.pessoa.cpfCnpj}}
+                            </td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td class="m-0 text-right">
+                                E-mail:
+                            </td>
+                            <td class="m-0" colspan="6">
+                                <a href="mailto:{{el.value.pessoa.email}}">{{el.value.pessoa.email}}</a>
+                            </td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td class="m-0 text-right">
+                                Contato 1:
+                            </td>
+                            <td class="m-0" colspan="6">
+                                {{el.value.pessoa.contato1}}
+                            </td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td class="m-0 text-right">
+                                Contato 2:
+                            </td>
+                            <td class="m-0" colspan="6">
+                                {{el.value.pessoa.contato2}}
+                            </td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td class="m-0 text-right">
+                                Contato 3:
+                            </td>
+                            <td class="m-0" colspan="6">
+                                {{el.value.pessoa.contato3}}
+                            </td>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Foto</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Unidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Preço Total</th>
+                        </tr>
+                    </thead>
+                    <tbody formArrayName="eventoProdutoList">
+                        <tr *ngFor="let p of el.controls.eventoProdutoList.controls; index as j" [formGroupName]="j">
+                            <td>
+                                {{j+1}}
+                            </td>
+                            <td>
+                                <img [src]="p.value.produto.produtoModelo.foto ? p.value.produto.produtoModelo.foto : SEM_IMAGEM"
+                                    class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
+                            </td>
+                            <td>{{p.value.produto.produtoModelo.nome}} ({{p.value.produto.produtoModelo.codigo}})</td>
+                            <td>
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Quantidade</mat-label>
+                                        <input matInput type="number" placeholder="Quantidade" class="text-right"
+                                            formControlName="quantidade" readonly="true">
+                                    </mat-form-field>
+                                    <div class="text-danger" *ngIf="isEnviado && p.controls.quantidade.invalid">
+                                        <div *ngIf="p.controls.quantidade.errors.required">
+                                            Campo obrigatório!
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Unidade de Medida</mat-label>
-                                    <input matInput placeholder="Unidade de Medida" formControlName="unidadeMedida">
-                                </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && p.controls.unidadeMedida.invalid">
-                                    <div *ngIf="p.controls.unidadeMedida.errors.required">
-                                        Campo obrigatório!
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Unidade de Medida</mat-label>
+                                        <mat-select formControlName="unidadeMedida" readonly="true">
+                                            <mat-option *ngFor="let option of unidadeMedidaList" [value]="option">
+                                                {{option.nome}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div class="text-danger" *ngIf="isEnviado && p.controls.unidadeMedida.invalid">
+                                        <div *ngIf="p.controls.unidadeMedida.errors.required">
+                                            Campo obrigatório!
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Valor Unitário</mat-label>
-                                    <input matInput placeholder="Valor Unitário" formControlName="valorUnitario">
-                                </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && p.controls.valorUnitario.invalid">
-                                    <div *ngIf="p.controls.valorUnitario.errors.required">
-                                        Campo obrigatório!
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Valor Unitário</mat-label>
+                                        <input matInput type="number" placeholder="Valor Unitário" class="text-right"
+                                            formControlName="valorUnitario">
+                                    </mat-form-field>
+                                    <div class="text-danger" *ngIf="isEnviado && p.controls.valorUnitario.invalid">
+                                        <div *ngIf="p.controls.valorUnitario.errors.required">
+                                            Campo obrigatório!
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Valor Total</mat-label>
-                                    <input matInput placeholder="Valor Total" formControlName="valorTotal">
-                                </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && p.controls.valorTotal.invalid">
-                                    <div *ngIf="p.controls.valorTotal.errors.required">
-                                        Campo obrigatório!
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Valor Total</mat-label>
+                                        <input matInput type="number" placeholder="Valor Total" class="text-right"
+                                            formControlName="valorTotal" readonly="true">
+                                    </mat-form-field>
+                                    <div class="text-danger" *ngIf="isEnviado && p.controls.valorTotal.invalid">
+                                        <div *ngIf="p.controls.valorTotal.errors.required">
+                                            Campo obrigatório!
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th class="text-right" colspan="6">Total da cotação {{i + 1}} do fornecedor {{f.pessoa.nome}}
-                        </th>
-                        <th>0,00</th>
-                    </tr>
-                </tfoot>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th class="text-right" colspan="6">Total da cotação {{i + 1}} do fornecedor
+                                {{el.value.pessoa.nome}}
+                            </th>
+                            <th class="text-right">{{el.value.eventoProdutoListTotal | currency:'BRL':true}}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </mat-tab>
     </mat-tab-group>
 
     <!-- 
-        <p>vl /{{frm.value | json}}/</p>
-        <p>st /{{frm.status}}/</p>
-        <p>er /{{frm.errors | json}}/</p>
+    <p>vl /{{frm.value | json}}/</p>
+    <p>st /{{frm.status}}/</p>
+    <p>er /{{frm.errors | json}}/</p>
     -->
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>

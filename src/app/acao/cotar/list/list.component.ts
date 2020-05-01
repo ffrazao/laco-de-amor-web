@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { Cotar } from '../../../comum/entidade/modelo/cotar';
+import { EventoProduto } from 'src/app/comum/entidade/modelo/evento-produto';
 
 @Component({
   selector: 'app-list',
@@ -13,7 +14,7 @@ export class ListComponent implements OnInit {
 
   // 'Id'
   headElements = [
-    'id',
+    'data', 'eventoProdutoList', 'eventoPessoaList', 'menorPreco', 'mediaPreco', 'maiorPreco'
   ];
   elements: Cotar[] = [];
   dataSource = new MatTableDataSource(this.elements);
@@ -35,12 +36,54 @@ export class ListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public exibeVinculo(reg) {
-    let vinc =
-      (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? reg.parceiro.funcao : 'Não informado') + ') ' : '') +
-      (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
-      (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
-    return vinc ? vinc : 'Sem vínculo';
+  menorCotacao(c: Cotar) {
+    return this.calcular(c).menor;
   }
 
+  mediaCotacao(c: Cotar) {
+    return this.calcular(c).media;
+  }
+
+  maiorCotacao(c: Cotar) {
+    return this.calcular(c).maior;
+  }
+
+  calcular(c: Cotar): ResultadoCotacao {
+    let menor = 0;
+    let media = 0;
+    let maior = 0;
+    if (c.eventoPessoaList && c.eventoPessoaList.length) {
+      let totalGeral = 0;
+      for (let i = 0; i < c.eventoPessoaList.length; i++) {
+        let total = 0;
+        if (c.eventoPessoaList[i].eventoProdutoList && c.eventoPessoaList[i].eventoProdutoList.length) {
+          for (let j = 0; j < c.eventoPessoaList[i].eventoProdutoList.length; j++) {
+            let p: EventoProduto = c.eventoPessoaList[i].eventoProdutoList[j];
+            total += p.quantidade * p.valorUnitario;
+          }
+        }
+        if (i === 0) {
+          menor = total;
+          maior = total;
+        } else {
+          menor = menor < total ? menor: total;
+          maior = total > maior ? total : maior;
+        }
+        totalGeral += total;
+      }
+      media = totalGeral / c.eventoPessoaList.length;
+    }
+    return {
+      menor,
+      media,
+      maior,
+    };
+  }
+
+}
+
+class ResultadoCotacao {
+  menor: number = 0;
+  media: number = 0;
+  maior: number = 0;
 }

@@ -55,3 +55,9 @@ export function deepCopy(obj) {
 
     throw new Error("Impossível copiar objeto! Tipo não suportado.");
 }
+
+export function isNumber(value: string | number): boolean {
+   return ((value != null) &&
+           (value !== '') &&
+           !isNaN(Number(value.toString())));
+}

@@ -2,18 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { environment } from '../../../../environments/environment';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { Cotar } from '../../../comum/entidade/modelo/cotar';
 import { CotarService } from '../cotar.service';
+import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
+import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
+import { Cotar } from '../../../comum/entidade/modelo/cotar';
 import { EventoProduto } from '../../../comum/entidade/modelo/evento-produto';
 import { EventoPessoa } from '../../../comum/entidade/modelo/evento-pessoa';
-import { environment } from '../../../../environments/environment';
-import { ProdutoModelo } from 'src/app/comum/entidade/modelo/produto-modelo';
-import { ProdutoModeloService } from 'src/app/cadastro/produto-modelo/produto-modelo.service';
-import { Produto } from 'src/app/comum/entidade/modelo/produto';
-import { Pessoa } from 'src/app/comum/entidade/modelo/pessoa';
-import { PessoaService } from 'src/app/cadastro/pessoa/pessoa.service';
-import { EventoPessoaFuncao } from 'src/app/comum/entidade/modelo/evento-pessoa-funcao';
+import { EventoPessoaFuncao } from '../../../comum/entidade/modelo/evento-pessoa-funcao';
+import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
+import { Produto } from '../../../comum/entidade/modelo/produto';
+import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
+import { UnidadeMedida } from '../../../comum/entidade/modelo/unidade-medida';
+import { isNumber } from '../../../comum/ferramenta/ferramenta';
 
 @Component({
   selector: 'app-form',
@@ -30,6 +32,10 @@ export class FormComponent implements OnInit {
   public acao: string;
 
   public SEM_IMAGEM = environment.SEM_IMAGEM;
+
+  public unidadeMedidaList: UnidadeMedida[];
+
+  public selecionaTab = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,6 +57,8 @@ export class FormComponent implements OnInit {
       this.entidade = info['resolve']['principal'];
       this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this.criarFormulario(this.entidade);
+
+      this.unidadeMedidaList = info['resolve']['apoio'][0];
     });
   }
 
@@ -103,21 +111,35 @@ export class FormComponent implements OnInit {
     return this.formBuilder.array(result);
   }
 
-  public criarFormularioEventoProduto(entidade: EventoProduto): FormGroup {
+  public criarFormularioEventoProduto(entidade: EventoProduto, cotacao: boolean = false): FormGroup {
     if (!entidade) {
       entidade = new EventoProduto();
     }
+    if (!entidade.unidadeMedida && this.unidadeMedidaList.length === 1) {
+      entidade.unidadeMedida = this.unidadeMedidaList[0];
+    }
+
+    let obrigatorio = cotacao ? [Validators.required] : [];
+
     let result = this.formBuilder.group(
       {
         id: [entidade.id, []],
         produto: [entidade.produto, [Validators.required]],
         quantidade: [entidade.quantidade, [Validators.required]],
         unidadeMedida: [entidade.unidadeMedida, [Validators.required]],
-        valorUnitario: [entidade.valorUnitario, [Validators.required]],
-        valorTotal: [entidade.valorTotal, [Validators.required]],
-        pessoa: [entidade.pessoa, []],
+        valorUnitario: [entidade.valorUnitario, obrigatorio],
+        valorTotal: [entidade.valorTotal, obrigatorio],
+        eventoPessoa: [entidade.eventoPessoa, []],
       }
     );
+
+    if (cotacao) {
+      result.valueChanges.subscribe(v => {
+        if (v.quantidade && v.valorUnitario) {
+          result.get('valorTotal').setValue(v.quantidade * v.valorUnitario, { emitEvent: false });
+        }
+      });
+    }
     return result;
   }
 
@@ -130,9 +152,28 @@ export class FormComponent implements OnInit {
         id: [entidade.id, []],
         pessoa: [entidade.pessoa, [Validators.required]],
         eventoPessoaFuncao: [entidade.eventoPessoaFuncao, [Validators.required]],
+        eventoProdutoList: this.criarFormularioEventoProdutoList(entidade.eventoProdutoList),
+        eventoProdutoListTotal: [this.calculaOrcamento(entidade.eventoProdutoList), []],
       }
     );
+
+    result.valueChanges.subscribe(v => {
+      result.controls.eventoProdutoListTotal.setValue(this.calculaOrcamento(v.eventoProdutoList), { emitEvent: false });
+    });
+
     return result;
+  }
+
+  private calculaOrcamento(lista: EventoProduto[]) {
+    let total = 0;
+    if (lista && lista.length) {
+      lista.forEach(vv => {
+        if (isNumber(vv.valorTotal)) {
+          total += vv.valorTotal;
+        }
+      });
+    }
+    return total;
   }
 
   public enviar(event) {
@@ -169,21 +210,28 @@ export class FormComponent implements OnInit {
   });
 
   public completarEventoProduto(event: KeyboardEvent) {
-    console.log(event.target['value'], this.pesquisarEventoProduto);
-    this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
-      let result = [];
-      if (typeof this.pesquisarEventoProduto === 'string') {
-        this.produtoModeloService.lista.forEach(val => {
-          let p = this.pesquisarEventoProduto.toLowerCase();
-          if (val.materiaPrima === 'S' &&
-            (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
-            result.push(Object.assign({}, val));
-          }
-        });
-      }
-      resolve(result);
-      return result;
-    })
+    if (
+      !(
+        (event.key === "ArrowUp") ||
+        (event.key === "ArrowDown") ||
+        (event.key === "ArrowRight") ||
+        (event.key === "ArrowLeft"))
+    ) {
+      this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
+        let result = [];
+        if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
+          this.produtoModeloService.lista.forEach(val => {
+            let p = this.pesquisarEventoProduto.toLowerCase();
+            if (val.materiaPrima === 'S' &&
+              (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
+              result.push(Object.assign({}, val));
+            }
+          });
+        }
+        resolve(result);
+        return result;
+      })
+    }
   }
 
   public podeAdicionarEventoProduto() {
@@ -196,7 +244,7 @@ export class FormComponent implements OnInit {
     ep.produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
     let id = ep.produto.produtoModelo.id;
     let existe = false;
-    this.frm.get('eventoProdutoList').value.forEach(e => {
+    this.eventoProdutoList.value.forEach(e => {
       if (e.produto.produtoModelo.id === id) {
         existe = true;
       }
@@ -229,21 +277,28 @@ export class FormComponent implements OnInit {
   });
 
   public completarEventoPessoa(event: KeyboardEvent) {
-    console.log(event.target['value'], this.pesquisarEventoPessoa);
-    this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
-      let result = [];
-      if (typeof this.pesquisarEventoPessoa === 'string') {
-        this.pessoaService.lista.forEach(val => {
-          let p = this.pesquisarEventoPessoa.toLowerCase();
-          if ((val.fornecedor && val.fornecedor.id) &&
-            (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
-            result.push(Object.assign({}, val));
-          }
-        });
-      }
-      resolve(result);
-      return result;
-    })
+    if (
+      !(
+        (event.key === "ArrowUp") ||
+        (event.key === "ArrowDown") ||
+        (event.key === "ArrowRight") ||
+        (event.key === "ArrowLeft"))
+    ) {
+      this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+        let result = [];
+        if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
+          this.pessoaService.lista.forEach(val => {
+            let p = this.pesquisarEventoPessoa.toLowerCase();
+            if ((val.fornecedor && val.fornecedor.id) &&
+              (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+              result.push(Object.assign({}, val));
+            }
+          });
+        }
+        resolve(result);
+        return result;
+      })
+    }
   }
 
   public podeAdicionarEventoPessoa() {
@@ -256,7 +311,7 @@ export class FormComponent implements OnInit {
     ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
     let id = ep.pessoa.id;
     let existe = false;
-    this.frm.get('eventoPessoaList').value.forEach(e => {
+    this.eventoPessoaList.value.forEach(e => {
       if (e.pessoa.id === id) {
         existe = true;
       }
@@ -271,6 +326,47 @@ export class FormComponent implements OnInit {
 
   public excluirEventoPessoa(idx) {
     this.eventoPessoaList.removeAt(idx);
+  }
+
+  public filtrarCotacaoGenerica(eventoProduto: EventoProduto) {
+    return !eventoProduto.eventoPessoa;
+  }
+
+  public filtrarCotacaoDefinida(eventoProduto: EventoProduto) {
+    return eventoProduto.eventoPessoa;
+  }
+
+  public async gerarPlanilhaCotacao() {
+    let gerarPlanilha = await this._mensagem.confirme('Confirme a geração da planilha');
+    if (gerarPlanilha) {
+      let ep = this.eventoProdutoList.value;
+      for (let i = 0; i < ep.length; i++) {
+        if (!isNumber(ep[i].quantidade) || ep[i].quantidade < 0.0000001) {
+          this._mensagem.erro('Há produto(s) sem a quantidade a orçar definida');
+          this.selecionaTab = 0;
+          return;
+        }
+      }
+      this.eventoPessoaList.controls.forEach(element => {
+        ((element as FormGroup).controls.eventoProdutoList as FormArray).clear();
+        this.eventoProdutoList.value.forEach(ep => {
+          ((element as FormGroup).controls.eventoProdutoList as FormArray).push(this.criarFormularioEventoProduto(ep, true));
+        });
+        (element as FormGroup).controls.eventoProdutoList.updateValueAndValidity();
+      });
+    }
+  }
+
+  public exibirAbaCotacaoPreco() {
+    let e: Cotar = this.frm.value;
+    return e && e.eventoPessoaList && e.eventoPessoaList.length &&
+      e.eventoProdutoList && e.eventoProdutoList.length;
+  }
+
+  public exibirCotacaoPreco() {
+    let e: Cotar = this.frm.value;
+    return e && e.eventoPessoaList && e.eventoPessoaList.length &&
+      e.eventoPessoaList[0].eventoProdutoList && e.eventoPessoaList[0].eventoProdutoList.length;
   }
 
 }

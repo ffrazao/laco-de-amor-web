@@ -1,4 +1,3 @@
-import { Pessoa } from './pessoa';
 import { EntidadeId } from '../entidade-id';
 
 export class Fornecedor implements EntidadeId {

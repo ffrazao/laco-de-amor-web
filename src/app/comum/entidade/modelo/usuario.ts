@@ -5,9 +5,10 @@ import { Confirmacao } from '../../dominio/confirmacao';
 export class Usuario implements EntidadeId {
 
     public id: number;
-    public pessoa: Pessoa;
     public login: string;
     public senha: string;
+    public perfil: string;
+    public pessoa: Pessoa;
     public ativo: Confirmacao;
 
 }

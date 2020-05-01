@@ -5,12 +5,16 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { CotarService } from '../cotar.service';
-import { EventoTipo } from 'src/app/comum/entidade/modelo/evento-tipo';
+import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { EventoTipo } from '../../../comum/entidade/modelo/evento-tipo';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
-    constructor(private servico: CotarService) { }
+    constructor(
+        private servico: CotarService,
+        private unidadeMedidaService: UnidadeMedidaService) {
+    }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
@@ -24,7 +28,11 @@ export class FormNovoResolve implements Resolve<any> {
         entidade.eventoTipo.nome = 'Cotar';
         entidade.eventoTipo.codigo = 'COTAR';
 
-        return { principal: entidade, acao: "Novo" };
+        return { 
+            principal: entidade, 
+            acao: "Novo", 
+            apoio: [this.unidadeMedidaService.lista] 
+        };
     }
 
 }

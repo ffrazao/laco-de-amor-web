@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+
 
 import { ListRoutingModule } from './list-routing.module';
 import { ListComponent } from './list.component';
@@ -15,6 +17,7 @@ import { ListComponent } from './list.component';
     MatTableModule,
     MatInputModule,
     MatFormFieldModule,
+    MatListModule,
   ]
 })
 export class ListModule { }
