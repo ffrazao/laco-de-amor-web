@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { CotarService } from '../cotar.service';
 import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
-import { hojeStr } from '../../../comum/ferramenta/ferramenta';
+import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {

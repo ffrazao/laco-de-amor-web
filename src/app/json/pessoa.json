@@ -84,5 +84,52 @@
                 }
             }
         ]
+    },
+    {
+        "id": 5,
+        "nome": "Teste E",
+        "tipo": "PJ",
+        "cpfCnpj": "08.193.863/0001-34",
+        "email": "teste_e@t.com",
+        "contato1": "(61) 98510-2938",
+        "fornecedor": {
+            "id": 5
+        }
+    },
+    {
+        "id": 6,
+        "nome": "Teste F",
+        "tipo": "PJ",
+        "cpfCnpj": "77.015.793/0001-47",
+        "email": "sebastianacatarinaandreiaoliveira-77@brasildakar.com.br",
+        "contato1": "(61) 99281-3175",
+        "fornecedor": {
+            "id": 6
+        }, 
+        "cliente": {
+            "id": 6
+        }
+    },
+    {
+        "id": 7,
+        "nome": "Teste G",
+        "tipo": "PJ",
+        "cpfCnpj": "27.517.774/0001-40",
+        "email": "tanialeticiarodrigues_@adherminer.com.br",
+        "contato1": "(61) 2703-1361",
+        "fornecedor": {
+            "id": 7
+        }
+    },
+    {
+        "id": 8,
+        "nome": "Teste H",
+        "tipo": "PJ",
+        "cpfCnpj": "13.295.221/0001-86",
+        "email": "gabriellyemanuellylunarezende_@i9pneus.com.br",
+        "contato1": "(61) 3511-0462",
+        "fornecedor": {
+            "id": 8
+        }
     }
 ]

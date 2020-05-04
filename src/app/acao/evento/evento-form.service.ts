@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 
 import { EventoProduto } from '../../comum/entidade/modelo/evento-produto';
 import { EventoPessoa } from '../../comum/entidade/modelo/evento-pessoa';
-import { isNumber } from '../../comum/ferramenta/ferramenta';
+import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
 import { Evento } from 'src/app/comum/entidade/modelo/evento';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class EventoFormService {
   ) {
   }
 
-  criarFormulario(entidade: Evento) {
+  public criarFormulario(entidade: Evento): FormGroup {
     if (!entidade) {
       entidade = new Evento();
     }
@@ -27,10 +27,15 @@ export class EventoFormService {
         pai: [entidade.pai, []],
         eventoProdutoList: this.criarFormularioEventoProdutoList(entidade.eventoProdutoList),
         eventoPessoaList: this.criarFormularioEventoPessoaList(entidade.eventoPessoaList),
+        eventoProdutoListTotal: [this.calculaOrcamento(entidade.eventoProdutoList), []],
       }
     );
     result.controls.eventoProdutoList.setValidators([Validators.required]);
     result.controls.eventoPessoaList.setValidators([Validators.required]);
+
+    result.valueChanges.subscribe(v => {
+      result.controls.eventoProdutoListTotal.setValue(this.calculaOrcamento(v.eventoProdutoList), { emitEvent: false });
+    });
 
     return result;
   }
@@ -107,7 +112,7 @@ export class EventoFormService {
     return result;
   }
 
-  private calculaOrcamento(lista: EventoProduto[]) {
+  private calculaOrcamento(lista: EventoProduto[]): number {
     let total = 0;
     if (lista && lista.length) {
       lista.forEach(vv => {

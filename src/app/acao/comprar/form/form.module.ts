@@ -15,6 +15,7 @@ import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
 import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-medida.module';
 import { PipeModule } from 'src/app/comum/pipe/pipe.module';
+import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
 @NgModule({
   declarations: [FormComponent],
@@ -36,6 +37,7 @@ import { PipeModule } from 'src/app/comum/pipe/pipe.module';
 
     PipeModule,
     UnidadeMedidaModule,
+    EventoPessoaFuncaoModule,
   ]
 })
 export class FormModule { }

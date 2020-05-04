@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "nome": "Fornecedor",
+        "codigo": "FORNECEDOR"
+    },
+    {
+        "id": 2,
+        "nome": "Parceiro",
+        "codigo": "PARCEIRO"
+    },
+    {
+        "id": 3,
+        "nome": "Cliente",
+        "codigo": "CLIENTE"
+    }
+]

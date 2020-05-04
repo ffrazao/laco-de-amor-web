@@ -16,7 +16,9 @@ import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
 import { Produto } from '../../../comum/entidade/modelo/produto';
 import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
 import { UnidadeMedida } from '../../../comum/entidade/modelo/unidade-medida';
-import { isNumber } from '../../../comum/ferramenta/ferramenta';
+import { isNumber } from '../../../comum/ferramenta/ferramenta-comum';
+import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { unidadeMedidaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
   selector: 'app-form',
@@ -46,6 +48,7 @@ export class FormComponent implements OnInit {
     private _mensagem: MensagemService,
     private _produtoModeloService: ProdutoModeloService,
     private _pessoaService: PessoaService,
+    private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
   ) {
   }
 
@@ -203,7 +206,7 @@ export class FormComponent implements OnInit {
 
   public adicionarEventoPessoa() {
     let ep = new EventoPessoa();
-    ep.eventoPessoaFuncao = new EventoPessoaFuncao(); ////////////////////////////////////////////////////////////
+    ep.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[0];
     ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
     let id = ep.pessoa.id;
     let existe = false;
@@ -233,8 +236,8 @@ export class FormComponent implements OnInit {
   }
 
   public async gerarPlanilhaCotacao() {
-    let gerarPlanilha = await this._mensagem.confirme('Confirme a geração da planilha');
-    if (gerarPlanilha) {
+    if ((this.frm.value.eventoPessoaList.length && !this.frm.value.eventoPessoaList[0].eventoProdutoList.length)
+      || await this._mensagem.confirme('Confirme a geração da planilha')) {
       let ep = this.eventoProdutoList.value;
       for (let i = 0; i < ep.length; i++) {
         if (!isNumber(ep[i].quantidade) || ep[i].quantidade < 0.0000001) {
@@ -263,6 +266,10 @@ export class FormComponent implements OnInit {
     let e: Cotar = this.frm.value;
     return e && e.eventoPessoaList && e.eventoPessoaList.length &&
       e.eventoPessoaList[0].eventoProdutoList && e.eventoPessoaList[0].eventoProdutoList.length;
+  }
+
+  public unidadeMedidaListComparar(f1: UnidadeMedida, f2: UnidadeMedida) {
+    return unidadeMedidaListComparar(f1, f2);
   }
 
 }

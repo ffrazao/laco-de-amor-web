@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 
-import { findIndexById } from '../ferramenta/ferramenta';
+import { findIndexById } from '../ferramenta/ferramenta-comum';
 
 import { environment } from '../../../environments/environment';
 import { EntidadeId } from '../entidade/entidade-id';

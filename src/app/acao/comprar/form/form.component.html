@@ -4,13 +4,15 @@
 
     <mat-form-field appearance="outline">
         <mat-label>Cotação</mat-label>
-        <mat-select [ngModel]="cotacao" [ngModelOptions]="{standalone: true}">
+        <mat-select [(ngModel)]="cotacao" [ngModelOptions]="{standalone: true}" [compareWith]="cotacaoListComparar">
             <mat-option *ngFor="let option of cotacaoList" [value]="option">
                 {{option.data}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <button type="button" class="btn btn-primary btn-sm m-4">Utilizar</button>
+    <button type="button" class="btn btn-primary btn-sm m-4" [disabled]="!cotacao" (click)="utilizarCotacao(cotacao)">
+        Utilizar
+    </button>
 
     <div class="form-group">
         <mat-form-field appearance="outline">
@@ -23,7 +25,6 @@
             </div>
         </div>
     </div>
-
     <div class="form-group">
         <div class="container">
             <div class="row">
@@ -50,8 +51,9 @@
                                 </mat-form-field>
                             </mat-form-field>
                             <button type="button" class="btn btn-primary btn-sm m-4"
-                                [disabled]="podeAdicionarEventoProduto()"
-                                (click)="adicionarEventoProduto()">Adicionar</button>
+                                [disabled]="podeAdicionarEventoProduto()" (click)="adicionarEventoProduto()">
+                                Adicionar
+                            </button>
                         </div>
                         <div class="table-responsive">
                             <table class="table" *ngIf="eventoProdutoList.value.length">
@@ -87,7 +89,58 @@
                                             {{el.value.produto.produtoModelo.codigo}}
                                         </td>
                                         <td>
-                                            Select Fornecedor
+                                            <div class="form-group">
+                                                <mat-form-field appearance="outline"
+                                                    *ngIf="!(el.controls.eventoPessoa.value && !el.controls.eventoPessoa?.value?.pessoa?.id)">
+                                                    <mat-label>Fornecedor</mat-label>
+                                                    <mat-select formControlName="eventoPessoa"
+                                                        [compareWith]="eventoPessoaListComparar"
+                                                        (selectionChange)="eventoPessoaListChange($event, el)">
+                                                        <mat-option *ngFor="let option of frm.value.eventoPessoaList"
+                                                            [value]="option">
+                                                            {{option.pessoa.nome}}
+                                                        </mat-option>
+                                                        <mat-option [value]="{pessoa: {}}">
+                                                            Outro
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+
+                                                <div class="form-group"
+                                                    *ngIf="el.controls.eventoPessoa.value && !el.controls.eventoPessoa?.value?.pessoa?.id">
+                                                    <mat-form-field>
+                                                        <mat-form-field appearance="outline">
+                                                            <mat-label>Filtro</mat-label>
+                                                            <input type="text" matInput
+                                                                placeholder="Pesquisar Fornecedor"
+                                                                [(ngModel)]="pesquisarEventoPessoa"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [matAutocomplete]="autoEventoPessoa"
+                                                                (keyup)="completarEventoPessoa($event)">
+                                                            <mat-autocomplete autoActiveFirstOption
+                                                                #autoEventoPessoa="matAutocomplete"
+                                                                [displayWith]="displayFnEventoPessoa">
+                                                                <mat-option
+                                                                    *ngFor="let option of $filteredOptionsEventoPessoa | async"
+                                                                    [value]="option">
+                                                                    {{option.nome}} ({{option.cpfCnpj}})
+                                                                </mat-option>
+                                                            </mat-autocomplete>
+                                                        </mat-form-field>
+                                                    </mat-form-field>
+                                                    <button type="button" class="btn btn-primary btn-sm m-4"
+                                                        [disabled]="podeAdicionarEventoPessoa()"
+                                                        (click)="adicionarEventoPessoa(el)">
+                                                        Adicionar
+                                                    </button>
+                                                </div>
+                                                <div class="text-danger"
+                                                    *ngIf="isEnviado && el.controls.eventoPessoa.invalid">
+                                                    <div *ngIf="el.controls.eventoPessoa.errors?.required">
+                                                        Campo obrigatório!
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="form-group">
@@ -108,7 +161,8 @@
                                             <div class="form-group">
                                                 <mat-form-field appearance="outline">
                                                     <mat-label>Unidade de Medida</mat-label>
-                                                    <mat-select formControlName="unidadeMedida">
+                                                    <mat-select formControlName="unidadeMedida"
+                                                        [compareWith]="unidadeMedidaListComparar">
                                                         <mat-option *ngFor="let option of unidadeMedidaList"
                                                             [value]="option">
                                                             {{option.nome}}
@@ -123,8 +177,6 @@
                                                 </div>
                                             </div>
                                         </td>
-
-
                                         <td>
                                             <div class="form-group">
                                                 <mat-form-field appearance="outline">
@@ -155,15 +207,19 @@
                                                 </div>
                                             </div>
                                         </td>
-
-
-
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm"
                                                 (click)="excluirEventoProduto(i)">Excluir</button>
                                         </td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th class="text-right" colspan="9">Valor Total da Compra</th>
+                                        <th class="text-right">
+                                            {{frm.value.eventoProdutoListTotal | currency:'BRL':true}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                         <div class="text-danger" *ngIf="isEnviado && frm.controls.eventoProdutoList.invalid">
@@ -177,10 +233,12 @@
         </div>
     </div>
 
+    <!-- 
     <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
     <p>er /{{frm.errors | json}}/</p>
-    <!-- 
+    <p>cotacao /{{cotacao?.eventoPessoaList[0]?.eventoProdutoList | json}}/</p>
+    <p>pai /{{frm.value?.pai?.eventoPessoaList[0]?.eventoProdutoList | json}}/</p>
     -->
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>

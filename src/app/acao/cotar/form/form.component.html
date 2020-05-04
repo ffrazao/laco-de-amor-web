@@ -96,7 +96,8 @@
                                                     <div class="form-group">
                                                         <mat-form-field appearance="outline">
                                                             <mat-label>Unidade de Medida</mat-label>
-                                                            <mat-select formControlName="unidadeMedida">
+                                                            <mat-select formControlName="unidadeMedida"
+                                                                [compareWith]="unidadeMedidaListComparar">
                                                                 <mat-option *ngFor="let option of unidadeMedidaList"
                                                                     [value]="option">
                                                                     {{option.nome}}
@@ -302,7 +303,8 @@
                                     <div class="form-group">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Unidade de Medida</mat-label>
-                                            <mat-select formControlName="unidadeMedida" readonly="true">
+                                            <mat-select formControlName="unidadeMedida" readonly="true"
+                                                [compareWith]="unidadeMedidaListComparar">
                                                 <mat-option *ngFor="let option of unidadeMedidaList" [value]="option">
                                                     {{option.nome}}
                                                 </mat-option>

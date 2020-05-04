@@ -125,7 +125,11 @@
 						"id": 1
 					}
 				},
-				"eventoPessoaFuncao": {},
+				"eventoPessoaFuncao": {
+					"id": 1,
+					"nome": "Fornecedor",
+					"codigo": "FORNECEDOR"
+				},
 				"eventoProdutoList": [
 					{
 						"id": null,
@@ -242,7 +246,11 @@
 						"id": 2
 					}
 				},
-				"eventoPessoaFuncao": {},
+				"eventoPessoaFuncao": {
+					"id": 1,
+					"nome": "Fornecedor",
+					"codigo": "FORNECEDOR"
+				},
 				"eventoProdutoList": [
 					{
 						"id": null,

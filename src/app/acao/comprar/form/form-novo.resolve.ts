@@ -8,7 +8,7 @@ import { ComprarService } from '../comprar.service';
 import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 import { CotarService } from '../../cotar/cotar.service';
 import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
-import { hojeStr } from '../../../comum/ferramenta/ferramenta';
+import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {

@@ -11,6 +11,7 @@ import { ComprarService } from './comprar.service';
 import { ComprarFormService } from './comprar-form.service';
 import { UnidadeMedidaModule } from 'src/app/cadastro/unidade-medida/unidade-medida.module';
 import { CotarModule } from '../cotar/cotar.module';
+import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { CotarModule } from '../cotar/cotar.module';
     ComprarRoutingModule,
     CotarModule,
     UnidadeMedidaModule,
+    EventoPessoaFuncaoModule,
   ],
   providers: [
     ComprarService,
