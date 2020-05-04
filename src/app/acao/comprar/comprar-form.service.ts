@@ -18,13 +18,14 @@ export class ComprarFormService extends EventoFormService {
 
   public criarFormulario(entidade: Comprar): FormGroup {
     let result = super.criarFormulario(entidade as Evento);
-    result.controls.eventoPessoaList.setValidators([]);
+    result.controls.eventoPessoaList.clearValidators();
+    result.controls.eventoPessoaList.updateValueAndValidity();
     return result;
   }
 
   public criarFormularioEventoProduto(entidade: EventoProduto, cotacao: boolean = false): FormGroup {
     let result = super.criarFormularioEventoProduto(entidade, true);
-    result.controls.eventoPessoa.setValidators(Validators.required);
+    result.controls.eventoPessoa.setValidators([Validators.required]);
     return result;
   }
 
