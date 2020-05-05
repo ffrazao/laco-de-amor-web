@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ComprarComponent implements OnInit {
 
   formulario = {
-    nome: 'Comprar Produtos',
+    nome: 'Comprar Matéria-Prima',
   };
 
   constructor() { }

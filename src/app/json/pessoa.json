@@ -94,6 +94,10 @@
         "contato1": "(61) 98510-2938",
         "fornecedor": {
             "id": 5
+        },
+        "parceiro": {
+            "id": 5,
+            "funcao": "Costureiro(a)"
         }
     },
     {
@@ -119,6 +123,10 @@
         "contato1": "(61) 2703-1361",
         "fornecedor": {
             "id": 7
+        },
+        "parceiro": {
+            "id": 7,
+            "funcao": "Costureiro(a)"
         }
     },
     {
@@ -130,6 +138,10 @@
         "contato1": "(61) 3511-0462",
         "fornecedor": {
             "id": 8
+        },
+        "parceiro": {
+            "id": 8,
+            "funcao": "Entregador(a)"
         }
     }
 ]
