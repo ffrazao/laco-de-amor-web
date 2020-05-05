@@ -5,16 +5,34 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ProduzirService } from '../produzir.service';
+import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
+import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
-    constructor(private servico: ProduzirService) { }
+    constructor(
+        private _service: ProduzirService,
+        private _unidadeMedidaService: UnidadeMedidaService,
+        private _eventoTipoService: EventoTipoService,
+    ) {
+    }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this.servico.novo();
-        return {principal: entidade, acao: "Novo"};
+        let entidade = this._service.novo();
+
+        entidade.data = hojeStr();        
+        entidade.eventoTipo = this._eventoTipoService.restore(2);
+
+        return {
+            principal: entidade,
+            acao: "Novo",
+            apoio: [
+                this._unidadeMedidaService.lista,
+            ],
+        };
     }
 
 }

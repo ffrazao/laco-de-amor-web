@@ -1,8 +1,16 @@
 [
     {
         "id": 1,
-        "nome": "Metro",
+        "nome": "Metro(s)",
         "codigo": "METRO",
+        "base": "S",
+        "valorBase": 1,
+        "pai": null
+    },
+    {
+        "id": 2,
+        "nome": "Unidade(s)",
+        "codigo": "UNIDADE",
         "base": "S",
         "valorBase": 1,
         "pai": null

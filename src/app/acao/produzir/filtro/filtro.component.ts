@@ -40,7 +40,7 @@ export class FiltroComponent implements OnInit {
     this.entidade = this.frm.value;
     this.servico.filtro = this.entidade;
     
-    this.router.navigate(['acao', 'produzir']);
+    this.router.navigate(['acao', 'Produzir']);
   }
 
 }

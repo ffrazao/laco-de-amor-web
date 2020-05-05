@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { Produzir } from '../../../comum/entidade/modelo/produzir';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-list',
@@ -13,10 +14,12 @@ export class ListComponent implements OnInit {
 
   // 'Id'
   headElements = [
-    'id',
+    'data', 'eventoProdutoList'
   ];
   elements: Produzir[] = [];
   dataSource = new MatTableDataSource(this.elements);
+
+  public SEM_IMAGEM = environment.SEM_IMAGEM;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -35,12 +38,8 @@ export class ListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public exibeVinculo(reg) {
-    let vinc =
-      (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? reg.parceiro.funcao : 'Não informado') + ') ' : '') +
-      (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
-      (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
-    return vinc ? vinc : 'Sem vínculo';
+  public maximoLinhas(l, t) {
+    return l < t;
   }
 
 }
