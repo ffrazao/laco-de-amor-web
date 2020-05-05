@@ -20,7 +20,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { Fornecedor } from 'src/app/comum/entidade/modelo/fornecedor';
 import { Pessoa } from 'src/app/comum/entidade/modelo/pessoa';
 import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
-import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
   selector: 'app-form',
@@ -95,6 +95,10 @@ export class FormComponent implements OnInit {
 
   public eventoPessoaListComparar(o1: EventoPessoa, o2: EventoPessoa) {
     return eventoPessoaListComparar(o1, o2);
+  }
+
+  public eventoProdutoListComparar(o1: EventoProduto, o2: EventoProduto) {
+    return eventoProdutoListComparar(o1, o2);
   }
 
   public unidadeMedidaListComparar(o1: UnidadeMedida, o2: UnidadeMedida) {

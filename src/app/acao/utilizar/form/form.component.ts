@@ -17,7 +17,7 @@ import { Produto } from '../../../comum/entidade/modelo/produto';
 import { UnidadeMedida } from '../../../comum/entidade/modelo/unidade-medida';
 import { Pessoa } from 'src/app/comum/entidade/modelo/pessoa';
 import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
-import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
   selector: 'app-form',
@@ -36,7 +36,7 @@ export class FormComponent implements OnInit {
   public SEM_IMAGEM = environment.SEM_IMAGEM;
 
   public unidadeMedidaList: UnidadeMedida[] = [];
-  public eventoProdutoEditando = false; 
+  public eventoProdutoEditando = false;
 
   constructor(
     private _service: UtilizarService,
@@ -118,7 +118,7 @@ export class FormComponent implements OnInit {
     if (this.eventoProdutoList.at(reg)['anterior']) {
       let vlr = this.eventoProdutoList.at(reg)['anterior'];
       this.eventoProdutoList.at(reg).setValue(vlr);
-      this.eventoProdutoList.at(reg)['editar']=false;
+      this.eventoProdutoList.at(reg)['editar'] = false;
       delete this.eventoProdutoList.at(reg)['anterior'];
     } else {
       this.eventoProdutoList.removeAt(reg);
@@ -148,10 +148,14 @@ export class FormComponent implements OnInit {
 
 
 
-  
+
 
   public eventoPessoaListComparar(o1: EventoPessoa, o2: EventoPessoa) {
     return eventoPessoaListComparar(o1, o2);
+  }
+
+  public eventoProdutoListComparar(o1: EventoProduto, o2: EventoProduto) {
+    return eventoProdutoListComparar(o1, o2);
   }
 
   public unidadeMedidaListComparar(o1: UnidadeMedida, o2: UnidadeMedida) {
@@ -201,26 +205,27 @@ export class FormComponent implements OnInit {
     return typeof this.pesquisarEventoProduto === 'string';
   }
 
-  public adicionarEventoProduto() {
-    let ep = new EventoProduto();
-    ep.produto = new Produto();
-    ep.produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
-    if (!ep.unidadeMedida && this.unidadeMedidaList.length === 1) {
-      ep.unidadeMedida = this.unidadeMedidaList[0];
-    }
-    let id = ep.produto.produtoModelo.id;
+  public adicionarEventoProduto(fg: FormGroup) {
+
+    let produto = new Produto();
+    produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
+
+    let id = produto.produtoModelo.id;
     let existe = false;
-    this.eventoProdutoList.value.forEach(e => {
-      if (e.produto.produtoModelo.id === id) {
-        existe = true;
-      }
-    });
+    if (this.frm['produtoList']) {
+      this.frm['produtoList'].forEach(e => {
+        if (e.produtoModelo && e.produtoModelo.id === id) {
+          existe = true;
+        }
+      });
+    }
     if (existe) {
       this._mensagem.erro('Item já cadastrado!');
     } else {
-      this.eventoProdutoList.push(this._formService.criarFormularioEventoProduto(ep));
+      this._formService.adicionaProdutoList(this.frm, produto);
     }
     this.pesquisarEventoProduto = '';
+    fg['produto'].setValue(produto);
   }
 
   public filtrarCotacaoGenerica(eventoProduto: EventoProduto) {
