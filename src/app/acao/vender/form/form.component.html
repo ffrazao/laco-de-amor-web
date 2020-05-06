@@ -5,11 +5,11 @@
 
     <div class="form-group">
         <mat-form-field appearance="outline">
-            <mat-label>Id</mat-label>
-            <input matInput placeholder="Id" formControlName="id">
+            <mat-label>Data</mat-label>
+            <input matInput placeholder="Data Cotação" formControlName="data">
         </mat-form-field>
-        <div class="text-danger" *ngIf="isEnviado && frm.controls.id.invalid">
-            <div *ngIf="frm.controls.id.errors.required">
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.data.invalid">
+            <div *ngIf="frm.controls.data.errors?.required">
                 Campo obrigatório!
             </div>
         </div>

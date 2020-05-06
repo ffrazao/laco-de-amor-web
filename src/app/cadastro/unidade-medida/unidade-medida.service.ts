@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
-import { UnidadeMedida } from '../../comum/entidade/modelo/unidade-medida';
-import { Filtro } from '../../comum/entidade/filtro/filtro';
+import { UnidadeMedida } from '../../comum/modelo/entidade/unidade-medida';
+import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 import json from '../../json/unidade-medida.json';
 

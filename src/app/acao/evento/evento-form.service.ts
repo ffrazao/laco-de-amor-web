@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 
-import { EventoProduto } from '../../comum/entidade/modelo/evento-produto';
-import { EventoPessoa } from '../../comum/entidade/modelo/evento-pessoa';
+import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
+import { EventoPessoa } from '../../comum/modelo/entidade/evento-pessoa';
 import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
-import { Evento } from 'src/app/comum/entidade/modelo/evento';
+import { Evento } from '../../comum/modelo/entidade/evento';
 
 @Injectable()
 export class EventoFormService {

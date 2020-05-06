@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { CotarService } from '../cotar.service';
-import { CotarFiltro } from '../../../comum/entidade/filtro/cotar-filtro';
+import { CotarFiltro } from '../../../comum/modelo/filtro/cotar-filtro';
 
 @Component({
   selector: 'app-filtro',

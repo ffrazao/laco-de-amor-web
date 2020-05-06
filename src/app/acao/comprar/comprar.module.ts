@@ -9,7 +9,7 @@ import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
 import { ComprarService } from './comprar.service';
 import { ComprarFormService } from './comprar-form.service';
-import { UnidadeMedidaModule } from 'src/app/cadastro/unidade-medida/unidade-medida.module';
+import { UnidadeMedidaModule } from '../../cadastro/unidade-medida/unidade-medida.module';
 import { CotarModule } from '../cotar/cotar.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
 

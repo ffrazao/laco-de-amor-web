@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Comprar } from '../../../comum/entidade/modelo/comprar';
-import { environment } from '../../../../environments/environment';
+import { constante } from '../../../comum/constante';
+import { Comprar } from '../../../comum/modelo/entidade/comprar';
 
 @Component({
   selector: 'app-list',
@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
   elements: Comprar[] = [];
   dataSource = new MatTableDataSource(this.elements);
 
-  public SEM_IMAGEM = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   constructor(private route: ActivatedRoute) { }
 

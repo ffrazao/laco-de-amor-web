@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
-import { ProdutoModelo } from '../../comum/entidade/modelo/produto-modelo';
-import { ProdutoDescricao } from '../../comum/entidade/modelo/produto-descricao';
-import { ProdutoAtributo } from '../../comum/entidade/modelo/produto-atributo';
-import { ProdutoPreco } from '../../comum/entidade/modelo/produto-preco';
+import { ProdutoModelo } from '../../comum/modelo/entidade/produto-modelo';
+import { ProdutoDescricao } from '../../comum/modelo/entidade/produto-descricao';
+import { ProdutoAtributo } from '../../comum/modelo/entidade/produto-atributo';
+import { ProdutoPreco } from '../../comum/modelo/entidade/produto-preco';
 import { Observable, of } from 'rxjs';
 import { ProdutoAtributoService } from '../produto-atributo/produto-atributo.service';
 

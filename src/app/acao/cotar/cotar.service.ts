@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { Cotar } from '../../comum/entidade/modelo/cotar';
-import { CotarFiltro } from '../../comum/entidade/filtro/cotar-filtro';
+import { Cotar } from '../../comum/modelo/entidade/cotar';
+import { CotarFiltro } from '../../comum/modelo/filtro/cotar-filtro';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
-import { EventoProduto } from '../../comum/entidade/modelo/evento-produto';
-import { Filtro } from '../../comum/entidade/filtro/filtro';
+import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
+import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 import json from '../../json/cotar.json';
 

@@ -13,8 +13,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
-import { PipeModule } from 'src/app/comum/pipe/pipe.module';
-import { UnidadeMedidaModule } from 'src/app/cadastro/unidade-medida/unidade-medida.module';
+import { PipeModule } from '../../../comum/pipe/pipe.module';
+import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-medida.module';
 
 @NgModule({
   declarations: [FormComponent],

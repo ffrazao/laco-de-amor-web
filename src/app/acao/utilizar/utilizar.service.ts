@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Utilizar } from '../../comum/entidade/modelo/utilizar';
-import { UtilizarFiltro } from '../../comum/entidade/filtro/utilizar-filtro';
+import { Utilizar } from '../../comum/modelo/entidade/utilizar';
+import { UtilizarFiltro } from '../../comum/modelo/filtro/utilizar-filtro';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 import json from '../../json/utilizar.json';
-import { Filtro } from 'src/app/comum/entidade/filtro/filtro';
+import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 
 @Injectable()

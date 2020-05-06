@@ -1,5 +1,5 @@
 import { EntidadeId } from '../entidade-id';
-import { Confirmacao } from '../../dominio/confirmacao';
+import { Confirmacao } from '../dominio/confirmacao';
 
 export class UnidadeMedida implements EntidadeId {
 

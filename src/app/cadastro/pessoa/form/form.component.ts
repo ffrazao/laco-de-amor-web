@@ -5,11 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
 import { PessoaFormService } from '../pessoa-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
-import { Parceiro } from '../../../comum/entidade/modelo/parceiro';
-import { Fornecedor } from '../../../comum/entidade/modelo/fornecedor';
-import { Cliente } from '../../../comum/entidade/modelo/cliente';
-import { PessoaEndereco } from '../../../comum/entidade/modelo/pessoa-endereco';
+import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
+import { Parceiro } from '../../../comum/modelo/entidade/parceiro';
+import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
+import { Cliente } from '../../../comum/modelo/entidade/cliente';
+import { PessoaEndereco } from '../../../comum/modelo/entidade/pessoa-endereco';
 
 @Component({
   selector: 'app-form',

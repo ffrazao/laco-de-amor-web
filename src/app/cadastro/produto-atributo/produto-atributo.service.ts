@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
-import { ProdutoAtributo } from '../../comum/entidade/modelo/produto-atributo';
-import { Filtro } from '../../comum/entidade/filtro/filtro';
+import { ProdutoAtributo } from '../../comum/modelo/entidade/produto-atributo';
+import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 import json from '../../json/produto-atributo.json';
 

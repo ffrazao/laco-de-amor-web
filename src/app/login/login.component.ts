@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Login } from '../comum/entidade/login';
+import { Login } from '../comum/modelo/login';
 import { LoginService } from './login.service';
 import { MensagemService } from '../comum/servico/mensagem/mensagem.service';
 

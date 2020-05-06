@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 
-import { EventoPessoaFuncao } from '../../comum/entidade/modelo/evento-pessoa-funcao';
+import { EventoPessoaFuncao } from '../../comum/modelo/entidade/evento-pessoa-funcao';
 
 @Injectable()
 export class EventoPessoaFuncaoFormService {

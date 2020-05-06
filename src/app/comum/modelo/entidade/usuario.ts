@@ -1,6 +1,6 @@
 import { EntidadeId } from '../entidade-id';
 import { Pessoa } from './pessoa';
-import { Confirmacao } from '../../dominio/confirmacao';
+import { Confirmacao } from '../dominio/confirmacao';
 
 export class Usuario implements EntidadeId {
 

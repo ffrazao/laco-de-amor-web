@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
-import { environment } from '../../../../environments/environment';
+import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
+import { constante } from '../../../comum/constante';
 
 @Component({
   selector: 'app-list',
@@ -21,7 +21,7 @@ export class ListComponent implements OnInit {
   ];
   public elements: ProdutoModelo[] = [];
   public dataSource = new MatTableDataSource(this.elements);
-  public SEM_IMAGEM = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   constructor(private route: ActivatedRoute) { }
 

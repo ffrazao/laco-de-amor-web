@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { Pessoa } from '../../comum/entidade/modelo/pessoa';
-import { Parceiro } from 'src/app/comum/entidade/modelo/parceiro';
-import { Fornecedor } from 'src/app/comum/entidade/modelo/fornecedor';
-import { Cliente } from 'src/app/comum/entidade/modelo/cliente';
-import { PessoaEndereco } from 'src/app/comum/entidade/modelo/pessoa-endereco';
-import { Endereco } from 'src/app/comum/entidade/modelo/endereco';
+import { Pessoa } from '../../comum/modelo/entidade/pessoa';
+import { Parceiro } from '../../comum/modelo/entidade/parceiro';
+import { Fornecedor } from '../../comum/modelo/entidade/fornecedor';
+import { Cliente } from '../../comum/modelo/entidade/cliente';
+import { PessoaEndereco } from '../../comum/modelo/entidade/pessoa-endereco';
+import { Endereco } from '../../comum/modelo/entidade/endereco';
 
 @Injectable()
 export class PessoaFormService {

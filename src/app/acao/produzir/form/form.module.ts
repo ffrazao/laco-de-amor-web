@@ -14,7 +14,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
 import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-medida.module';
-import { PipeModule } from 'src/app/comum/pipe/pipe.module';
+import { PipeModule } from '../../../comum/pipe/pipe.module';
 import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
 @NgModule({

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventoFormService } from '../evento/evento-form.service';
-import { EventoProduto } from 'src/app/comum/entidade/modelo/evento-produto';
-import { Utilizar } from 'src/app/comum/entidade/modelo/utilizar';
-import { Evento } from 'src/app/comum/entidade/modelo/evento';
-import { Produto } from 'src/app/comum/entidade/modelo/produto';
+import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
+import { Utilizar } from '../../comum/modelo/entidade/utilizar';
+import { Evento } from '../../comum/modelo/entidade/evento';
+import { Produto } from '../../comum/modelo/entidade/produto';
 
 @Injectable()
 export class UtilizarFormService extends EventoFormService {

@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Utilizar } from '../../../comum/entidade/modelo/utilizar';
+import { Utilizar } from '../../../comum/modelo/entidade/utilizar';
 import { UtilizarService } from '../utilizar.service';
 
 @Injectable()

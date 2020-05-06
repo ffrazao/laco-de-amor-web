@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComprarService } from '../comprar.service';
-import { ComprarFiltro } from '../../../comum/entidade/filtro/comprar-filtro';
+import { ComprarFiltro } from '../../../comum/modelo/filtro/comprar-filtro';
 
 @Component({
   selector: 'app-filtro',

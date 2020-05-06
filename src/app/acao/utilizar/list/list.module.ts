@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { ListRoutingModule } from './list-routing.module';
 import { ListComponent } from './list.component';
-import { PipeModule } from 'src/app/comum/pipe/pipe.module';
+import { PipeModule } from '../../../comum/pipe/pipe.module';
 
 @NgModule({
   declarations: [ListComponent],

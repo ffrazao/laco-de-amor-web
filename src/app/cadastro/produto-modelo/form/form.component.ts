@@ -3,16 +3,16 @@ import { FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
-import { environment } from '../../../../environments/environment';
 import { ProdutoModeloService } from '../produto-modelo.service';
 import { ProdutoModeloFormService } from '../produto-modelo-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
-import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
-import { ProdutoDescricao } from '../../../comum/entidade/modelo/produto-descricao';
-import { ProdutoPreco } from '../../../comum/entidade/modelo/produto-preco';
-import { ProdutoAtributo } from '../../../comum/entidade/modelo/produto-atributo';
+import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
+import { ProdutoDescricao } from '../../../comum/modelo/entidade/produto-descricao';
+import { ProdutoPreco } from '../../../comum/modelo/entidade/produto-preco';
+import { ProdutoAtributo } from '../../../comum/modelo/entidade/produto-atributo';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
+import { constante } from 'src/app/comum/constante';
 
 @Component({
   selector: 'app-form',
@@ -27,7 +27,7 @@ export class FormComponent implements OnInit {
   public entidade: ProdutoModelo;
   public id: number;
   public acao: string;
-  public SEM_IMAGEM = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public produtoDescricaoEditando = false;
   public produtoPrecoEditando = false;

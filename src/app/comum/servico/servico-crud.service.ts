@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { findIndexById } from '../ferramenta/ferramenta-comum';
 
 import { environment } from '../../../environments/environment';
-import { EntidadeId } from '../entidade/entidade-id';
-import { Filtro } from '../entidade/filtro/filtro';
+import { EntidadeId } from '../modelo/entidade-id';
+import { Filtro } from '../modelo/filtro/filtro';
 
 export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro> {
 

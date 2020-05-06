@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
-import { EventoPessoaFuncao } from '../../comum/entidade/modelo/evento-pessoa-funcao';
-import { Filtro } from '../../comum/entidade/filtro/filtro';
+import { EventoPessoaFuncao } from '../../comum/modelo/entidade/evento-pessoa-funcao';
+import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 import json from '../../json/evento-pessoa-funcao.json';
 

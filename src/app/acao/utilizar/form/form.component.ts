@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { environment } from '../../../../environments/environment';
+import { constante } from '../../../comum/constante';
 import { UtilizarService } from '../utilizar.service';
 import { UtilizarFormService } from '../utilizar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
 import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
-import { Utilizar } from '../../../comum/entidade/modelo/utilizar';
-import { EventoProduto } from '../../../comum/entidade/modelo/evento-produto';
-import { EventoPessoa } from '../../../comum/entidade/modelo/evento-pessoa';
-import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
-import { Produto } from '../../../comum/entidade/modelo/produto';
-import { UnidadeMedida } from '../../../comum/entidade/modelo/unidade-medida';
-import { Pessoa } from 'src/app/comum/entidade/modelo/pessoa';
+import { Utilizar } from '../../../comum/modelo/entidade/utilizar';
+import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
+import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
+import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
+import { Produto } from '../../../comum/modelo/entidade/produto';
+import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
+import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
@@ -33,7 +32,7 @@ export class FormComponent implements OnInit {
   public id: number;
   public acao: string;
 
-  public SEM_IMAGEM = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public unidadeMedidaList: UnidadeMedida[] = [];
   public eventoProdutoEditando = false;

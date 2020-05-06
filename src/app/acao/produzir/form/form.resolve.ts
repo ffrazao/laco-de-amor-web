@@ -5,7 +5,7 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ProduzirService } from '../produzir.service';
-import { UnidadeMedidaService } from 'src/app/cadastro/unidade-medida/unidade-medida.service';
+import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 
 @Injectable()
 export class FormResolve implements Resolve<any> {

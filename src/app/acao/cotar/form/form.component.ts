@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { environment } from '../../../../environments/environment';
+import { constante } from '../../../comum/constante';
 import { CotarService } from '../cotar.service';
 import { CotarFormService } from '../cotar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
 import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
-import { Cotar } from '../../../comum/entidade/modelo/cotar';
-import { EventoProduto } from '../../../comum/entidade/modelo/evento-produto';
-import { EventoPessoa } from '../../../comum/entidade/modelo/evento-pessoa';
-import { EventoPessoaFuncao } from '../../../comum/entidade/modelo/evento-pessoa-funcao';
-import { ProdutoModelo } from '../../../comum/entidade/modelo/produto-modelo';
-import { Produto } from '../../../comum/entidade/modelo/produto';
-import { Pessoa } from '../../../comum/entidade/modelo/pessoa';
-import { UnidadeMedida } from '../../../comum/entidade/modelo/unidade-medida';
+import { Cotar } from '../../../comum/modelo/entidade/cotar';
+import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
+import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
+import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
+import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
+import { Produto } from '../../../comum/modelo/entidade/produto';
+import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
+import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { isNumber } from '../../../comum/ferramenta/ferramenta-comum';
 import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { unidadeMedidaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
@@ -34,7 +34,7 @@ export class FormComponent implements OnInit {
   public id: number;
   public acao: string;
 
-  public SEM_IMAGEM = environment.SEM_IMAGEM;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public unidadeMedidaList: UnidadeMedida[];
 

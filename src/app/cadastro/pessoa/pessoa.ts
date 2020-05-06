@@ -1,8 +1,8 @@
-import { Parceiro } from '../../comum/entidade/modelo/parceiro';
-import { Fornecedor } from '../../comum/entidade/modelo/fornecedor';
-import { Cliente } from '../../comum/entidade/modelo/cliente';
-import { PessoaEndereco } from '../../comum/entidade/modelo/pessoa-endereco';
-import { EntidadeId } from '../../comum/entidade/entidade-id';
+import { Parceiro } from '../../comum/modelo/entidade/parceiro';
+import { Fornecedor } from '../../comum/modelo/entidade/fornecedor';
+import { Cliente } from '../../comum/modelo/entidade/cliente';
+import { PessoaEndereco } from '../../comum/modelo/entidade/pessoa-endereco';
+import { EntidadeId } from '../../comum/modelo/entidade-id';
 
 export class Pessoa implements EntidadeId {
 

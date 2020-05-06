@@ -4,9 +4,9 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Comprar } from '../../../comum/entidade/modelo/comprar';
+import { Comprar } from '../../../comum/modelo/entidade/comprar';
 import { ComprarService } from '../comprar.service';
-import { UnidadeMedidaService } from 'src/app/cadastro/unidade-medida/unidade-medida.service';
+import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 import { CotarService } from '../../cotar/cotar.service';
 
 @Injectable()

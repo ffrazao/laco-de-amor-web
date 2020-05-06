@@ -4,21 +4,27 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Vender } from '../../../comum/entidade/modelo/vender';
 import { VenderService } from '../vender.service';
+import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 
 @Injectable()
 export class FormResolve implements Resolve<any> {
 
-    constructor(private servico: VenderService) { }
+    constructor(
+        private _service: VenderService,
+        private _unidadeMedidaService: UnidadeMedidaService,
+        ) { }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this.servico.restore(route.params['id']);
-        return {
-            principal: entidade,
-            acao: 'Visualizar'
-        };
-    }
+            let entidade = this._service.restore(route.params['id']);
+            return {
+                principal: entidade,
+                acao: 'Visualizar',
+                apoio: [
+                    this._unidadeMedidaService.lista,
+                    ],
+            };
+        }
 
 }

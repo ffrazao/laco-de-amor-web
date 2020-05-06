@@ -1,7 +1,7 @@
-import { EventoPessoa } from '../entidade/modelo/evento-pessoa';
-import { UnidadeMedida } from '../entidade/modelo/unidade-medida';
-import { Cotar } from '../entidade/modelo/cotar';
-import { EventoProduto } from '../entidade/modelo/evento-produto';
+import { EventoPessoa } from '../modelo/entidade/evento-pessoa';
+import { UnidadeMedida } from '../modelo/entidade/unidade-medida';
+import { Cotar } from '../modelo/entidade/cotar';
+import { EventoProduto } from '../modelo/entidade/evento-produto';
 
 export function eventoPessoaListComparar(o1: EventoPessoa, o2: EventoPessoa) {
     let result = o1 && o2 && o1.pessoa && o2.pessoa ? o1.pessoa.id === o2.pessoa.id : o1 === o2;

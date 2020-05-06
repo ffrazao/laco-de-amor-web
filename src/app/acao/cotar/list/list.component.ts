@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Cotar } from '../../../comum/entidade/modelo/cotar';
+import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { CotarService } from '../cotar.service';
 
 @Component({
