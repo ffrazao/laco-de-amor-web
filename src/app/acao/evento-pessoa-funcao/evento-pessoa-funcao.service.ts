@@ -6,7 +6,7 @@ import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 import json from '../../json/evento-pessoa-funcao.json';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class EventoPessoaFuncaoService extends ServicoCrudService<EventoPessoaFuncao, Filtro> {
 
   constructor() {

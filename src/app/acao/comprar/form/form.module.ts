@@ -17,6 +17,7 @@ import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-me
 import { PipeModule } from '../../../comum/pipe/pipe.module';
 import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
+
 @NgModule({
   declarations: [FormComponent],
   imports: [

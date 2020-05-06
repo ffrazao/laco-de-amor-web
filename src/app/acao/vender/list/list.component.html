@@ -7,11 +7,69 @@
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
 
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef> Id </th>
-    <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.id}}</a> </td>
+  <ng-container matColumnDef="data" sticky>
+    <th mat-header-cell *matHeaderCellDef> Data </th>
+    <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.data}}</a> </td>
+  </ng-container>
+
+  <ng-container matColumnDef="nome" sticky>
+    <th mat-header-cell *matHeaderCellDef> Cliente </th>
+    <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.nome}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="cpfCnpj" sticky>
+    <th mat-header-cell *matHeaderCellDef> CPF/CNPJ </th>
+    <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.cpfCnpj}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="eventoProdutoList">
+    <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
+    <td mat-cell *matCellDef="let el">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nome</th>
+            <th>Código</th>
+            <th>Quantidade</th>
+            <th>Unidade de Medida</th>
+            <th>Valor Unitário</th>
+            <th>Valor Total</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let e of el.eventoProdutoList; let i = index">
+          <tr *ngIf="i<3">
+            <td>
+              <img [src]="e.produto.produtoModelo.foto ? e.produto.produtoModelo.foto : SEM_IMAGEM"
+                class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
+            </td>
+            <td>{{e.produto.produtoModelo.nome}}</td>
+            <td>{{e.produto.produtoModelo.codigo}}</td>
+            <td class="text-right">{{e.quantidade}}</td>
+            <td>{{e.unidadeMedida.nome}}</td>
+            <td class="text-right">{{e.valorUnitario | currency:'BRL':true}}</td>
+            <td class="text-right">{{e.valorTotal | currency:'BRL':true}}</td>
+          </tr>
+          <tr *ngIf="i>=3">
+            <td colspan="7" class="text-center">
+              <a [routerLink]="[el.id]">. . .</a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th class="text-right" colspan="8">Total da Venda:</th>
+            <th class="text-right">{{el.eventoProdutoListTotal | currency:'BRL':true}}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
 </mat-table>
+
+<!-- 
+/{{elements | json}}/ 
+-->

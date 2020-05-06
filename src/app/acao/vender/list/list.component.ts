@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { constante } from '../../../comum/constante';
 import { Vender } from '../../../comum/modelo/entidade/vender';
 
 @Component({
@@ -13,10 +14,12 @@ export class ListComponent implements OnInit {
 
   // 'Id'
   headElements = [
-    'id',
+    'data', 'nome', 'cpfCnpj', 'eventoProdutoList'
   ];
   elements: Vender[] = [];
   dataSource = new MatTableDataSource(this.elements);
+
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -35,12 +38,8 @@ export class ListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public exibeVinculo(reg) {
-    let vinc =
-      (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? reg.parceiro.funcao : 'Não informado') + ') ' : '') +
-      (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
-      (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
-    return vinc ? vinc : 'Sem vínculo';
+  public maximoLinhas(l, t) {
+    return l < t;
   }
 
 }

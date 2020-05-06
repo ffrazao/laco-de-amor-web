@@ -107,12 +107,54 @@
         "cpfCnpj": "77.015.793/0001-47",
         "email": "sebastianacatarinaandreiaoliveira-77@brasildakar.com.br",
         "contato1": "(61) 99281-3175",
+        "contato2": "(61) 3221-0171",
         "fornecedor": {
             "id": 6
-        }, 
+        },
         "cliente": {
             "id": 6
-        }
+        },
+        "enderecoList": [
+            {
+                "id": 21,
+                "endereco": {
+                    "id": 32,
+                    "logradouro": "Quadra SHIGS 713 Bloco M",
+                    "complemento": "apartamento",
+                    "numero": "110",
+                    "bairro": "Asa Sul",
+                    "cidade": "Brasília",
+                    "uf": "DF",
+                    "cep": "70380-713"
+                }
+            },
+            {
+                "id": 22,
+                "endereco": {
+                    "id": 33,
+                    "logradouro": "Quadra QI 9 Bloco B",
+                    "complemento": "casa",
+                    "numero": "13",
+                    "bairro": "Guará I",
+                    "cidade": "Brasília",
+                    "uf": "DF",
+                    "cep": "71020-628"
+                }
+            },
+            {
+                "id": 23,
+                "endereco": {
+                    "id": 34,
+                    "logradouro": "Quadra QNA 17",
+                    "complemento": "casa",
+                    "numero": "18",
+                    "bairro": "Taguatinga Norte (Taguatinga)",
+                    "cidade": "Brasília",
+                    "uf": "DF",
+                    "cep": "72110-170"
+                }
+            }
+        ]
     },
     {
         "id": 7,

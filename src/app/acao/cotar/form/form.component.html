@@ -274,7 +274,7 @@
                             </tr>
                         </thead>
                         <tbody formArrayName="eventoProdutoList">
-                            <tr *ngFor="let p of el.controls.eventoProdutoList.controls; index as j"
+                            <tr *ngFor="let p of el['controls'].eventoProdutoList.controls; index as j"
                                 [formGroupName]="j">
                                 <td>
                                     {{j+1}}

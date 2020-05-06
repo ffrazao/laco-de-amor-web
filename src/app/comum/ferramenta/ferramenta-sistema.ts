@@ -1,3 +1,5 @@
+import { Endereco } from './../modelo/entidade/endereco';
+import { Pessoa } from './../../cadastro/pessoa/pessoa';
 import { EventoPessoa } from '../modelo/entidade/evento-pessoa';
 import { UnidadeMedida } from '../modelo/entidade/unidade-medida';
 import { Cotar } from '../modelo/entidade/cotar';
@@ -19,6 +21,16 @@ export function unidadeMedidaListComparar(o1: UnidadeMedida, o2: UnidadeMedida) 
 }
 
 export function cotacaoListComparar(o1: Cotar, o2: Cotar) {
+    let result = o1 && o2 ? o1.id === o2.id : o1 === o2;
+    return result;
+}
+
+export function pessoaListComparar(o1: Pessoa, o2: Pessoa) {
+    let result = o1 && o2 ? o1.id === o2.id : o1 === o2;
+    return result;
+}
+
+export function enderecoListComparar(o1: Endereco, o2: Endereco) {
     let result = o1 && o2 ? o1.id === o2.id : o1 === o2;
     return result;
 }

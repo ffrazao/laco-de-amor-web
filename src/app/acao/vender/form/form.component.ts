@@ -1,3 +1,4 @@
+import { Endereco } from './../../../comum/modelo/entidade/endereco';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +17,7 @@ import { Produto } from '../../../comum/modelo/entidade/produto';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
-import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar, pessoaListComparar, enderecoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
   selector: 'app-form',
@@ -62,6 +63,10 @@ export class FormComponent implements OnInit {
     });
   }
 
+  get eventoPessoaList() {
+    return this.frm.get('eventoPessoaList') as FormArray;
+  }
+
   get eventoProdutoList() {
     return this.frm.get('eventoProdutoList') as FormArray;
   }
@@ -70,7 +75,7 @@ export class FormComponent implements OnInit {
     event.preventDefault();
     this.isEnviado = true;
 
-    console.log(this.frm.value);
+    console.log(this.frm);
 
     if (this.frm.invalid) {
       let msg = 'Dados inválidos!';
@@ -125,13 +130,6 @@ export class FormComponent implements OnInit {
     this.eventoProdutoEditando = false;
   }
 
-
-
-
-
-
-
-
   public eventoPessoaListComparar(o1: EventoPessoa, o2: EventoPessoa) {
     return eventoPessoaListComparar(o1, o2);
   }
@@ -144,6 +142,13 @@ export class FormComponent implements OnInit {
     return unidadeMedidaListComparar(o1, o2);
   }
 
+  public pessoaListComparar(o1: Pessoa, o2: Pessoa) {
+    return pessoaListComparar(o1, o2);
+  }
+
+  public enderecoListComparar(o1: Endereco, o2: Endereco) {
+    return enderecoListComparar(o1, o2);
+  }
 
   // GESTÃO DOS PRODUTOS A COTAR
   public displayFnEventoProduto(produtoModelo?: ProdutoModelo): string {
@@ -171,7 +176,7 @@ export class FormComponent implements OnInit {
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
           this._produtoModeloService.lista.forEach(val => {
             let p = this.pesquisarEventoProduto.toLowerCase();
-            if (val.materiaPrima === 'N' &&
+            if (val.materiaPrima === 'S' &&
               (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
               result.push(Object.assign({}, val));
             }
@@ -204,7 +209,7 @@ export class FormComponent implements OnInit {
     if (existe) {
       this._mensagem.erro('Item já cadastrado!');
     } else {
-      //this._formService.adicionaProdutoList(this.frm, produto);
+      this._formService.adicionaProdutoList(this.frm, produto);
     }
     this.pesquisarEventoProduto = '';
     fg['produto'].setValue(produto);
@@ -236,10 +241,19 @@ export class FormComponent implements OnInit {
     ) {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
         let result = [];
-        if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
+        // if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
+        //   this._pessoaService.lista.forEach(val => {
+        //     let p = this.pesquisarEventoPessoa.toLowerCase();
+        //     if ((val.cliente && val.cliente.id) &&
+        //       (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+        //       result.push(Object.assign({}, val));
+        //     }
+        //   });
+        // }
+        if (typeof this.frm.value.eventoPessoaList[0].pessoa === 'string' && this.frm.value.eventoPessoaList[0].pessoa.length) {
           this._pessoaService.lista.forEach(val => {
-            let p = this.pesquisarEventoPessoa.toLowerCase();
-            if ((val.parceiro && val.parceiro.id && val.parceiro.funcao === 'Costureiro(a)') &&
+            let p = this.frm.value.eventoPessoaList[0].pessoa.toLowerCase();
+            if ((val.cliente && val.cliente.id) &&
               (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
               result.push(Object.assign({}, val));
             }
@@ -247,7 +261,7 @@ export class FormComponent implements OnInit {
         }
         resolve(result);
         return result;
-      })
+      });
     }
   }
 

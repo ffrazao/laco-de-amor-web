@@ -1,3 +1,5 @@
+import { EventoPessoaFuncaoService } from './../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { EventoPessoa } from './../../../comum/modelo/entidade/evento-pessoa';
 import { Injectable } from "@angular/core";
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
@@ -16,6 +18,7 @@ export class FormNovoResolve implements Resolve<any> {
         private _service: VenderService,
         private _unidadeMedidaService: UnidadeMedidaService,
         private _eventoTipoService: EventoTipoService,
+        private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
     ) {
     }
 
@@ -23,8 +26,12 @@ export class FormNovoResolve implements Resolve<any> {
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
         let entidade = this._service.novo();
 
-        entidade.data = hojeStr();        
+        entidade.data = hojeStr();
         entidade.eventoTipo = this._eventoTipoService.restore(2);
+        let eventoPessoa = new EventoPessoa();
+        eventoPessoa.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[2];
+        entidade.eventoPessoaList = [];
+        entidade.eventoPessoaList.push(eventoPessoa);
 
         return {
             principal: entidade,

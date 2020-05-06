@@ -5,7 +5,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Data</mat-label>
-            <input matInput placeholder="Data Cotação" formControlName="data">
+            <input matInput placeholder="Data de Produção" formControlName="data">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.data.invalid">
             <div *ngIf="frm.controls.data.errors?.required">

@@ -10,6 +10,6 @@ export class EventoPessoa implements EntidadeId {
     public evento: Evento;
     public pessoa: Pessoa;
     public eventoPessoaFuncao: EventoPessoaFuncao;
-    public eventoProdutoList: EventoProduto[];
+    public eventoProdutoList: EventoProduto[] = [];
 
 }
