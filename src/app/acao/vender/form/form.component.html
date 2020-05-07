@@ -164,7 +164,7 @@
                             </div>
                         </td>
                         <td>
-                            <mat-label *ngIf="!el['editar']">{{el?.value?.valorUnitario}}</mat-label>
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.valorUnitario | currency:'BRL':true}}</mat-label>
                             <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Valor Unitário</mat-label>
@@ -179,7 +179,7 @@
                             </div>
                         </td>
                         <td>
-                            <mat-label *ngIf="!el['editar']">{{el?.value?.valorTotal}}</mat-label>
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.valorTotal | currency:'BRL':true}}</mat-label>
                             <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Valor Total</mat-label>

@@ -209,7 +209,9 @@
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm"
-                                                (click)="excluirEventoProduto(i)">Excluir</button>
+                                                (click)="excluirEventoProduto(i)">
+                                                Excluir
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -217,7 +219,8 @@
                                     <tr>
                                         <th class="text-right" colspan="9">Valor Total da Compra</th>
                                         <th class="text-right">
-                                            {{frm.value.eventoProdutoListTotal | currency:'BRL':true}}</th>
+                                            {{frm.value.eventoProdutoListTotal | currency:'BRL':true}}
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>
