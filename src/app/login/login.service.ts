@@ -11,27 +11,34 @@ export class LoginService {
   constructor(private _http: HttpClient, private _tokenService: TokenService) { }
 
   public login(login: string, senha: string) {
-    const credentials = `Basic ${this.getClientCredentials()}`;
+    let credentials = `Basic ${this.getClientCredentials()}`;
+    credentials = 'Basic bGFjby1kZS1hbW9yOmxhY28tZGUtYW1vcg==';
+
+    const formData: any = new FormData();
+    // formData.append('grant_type', 'password');
+    formData.append('username', login);
+    formData.append('password', senha);
+    formData.append('scope', 'read write');
 
     return this._http.post(
-      environment.AUTHORIZATION_SERVER + '/oauth/token', {},
+      environment.AUTHORIZATION_SERVER + `/oauth/token?grant_type=password&username=${login}&password=${senha}&scope=read write`, {
+        // grant_type: 'password',
+        username: login,
+        password: senha,
+        scope: 'read write'
+      },
       {
         observe: 'response',
         headers: new HttpHeaders({
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': credentials
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          Authorization: credentials,
         }),
-        params: {
-          'grant_type': 'password',
-          'username': login,
-          'password': senha
-        }
       }
     ).pipe(tap(resposta => {
-      let resp = resposta.body;
-      let token = resp['access_token'];
+      const resp = resposta.body;
+      const token = resp['access_token'];
       if (!token) {
-        let msg = 'Problemas ao autenticar o usuário!';
+        const msg = 'Problemas ao autenticar o usuário!';
         throw new Error(msg);
       }
       this._tokenService.setToken(token);
@@ -46,7 +53,8 @@ export class LoginService {
         .subscribe((resposta) => {
           //this._usuarioService.login((resposta.body as Usuario));
         }, err => alert('Erro get usuario ' + JSON.stringify(err)));*/
-    }))
+    }));
+
   }
 
   public logout() {
