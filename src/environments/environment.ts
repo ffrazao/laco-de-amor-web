@@ -7,8 +7,8 @@ export const environment = {
   ambiente: 'local',
   REST_API_URL: 'http://localhost:8080',
   AUTHORIZATION_SERVER: 'http://localhost:8080',
-  CLIENT_ID: 'laco_de_amor_web',
-  CLIENT_SECRET: 'laco_de_amor_web',
+  CLIENT_ID: 'laco-de-amor',
+  CLIENT_SECRET: 'laco-de-amor',
 };
 
 /*

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button mat-button [matMenuTriggerFor]="cadastroMenu">Cadastro</button>
+        <button mat-button [matMenuTriggerFor]="cadastroMenu" *ngIf="estaLogado">Cadastro</button>
         <mat-menu #cadastroMenu="matMenu">
             <button mat-menu-item>
                 <a [routerLink]="['/', 'cadastro', 'pessoa']">Pessoas</a>
@@ -13,7 +13,7 @@
             </button>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="acoesMenu">Ações</button>
+        <button mat-button [matMenuTriggerFor]="acoesMenu" *ngIf="estaLogado">Ações</button>
         <mat-menu #acoesMenu="matMenu">
             <button mat-menu-item>
                 <a [routerLink]="['/', 'acao', 'cotar']">Cotar Matéria-Prima</a>
@@ -35,11 +35,11 @@
         <button mat-button [matMenuTriggerFor]="sistemaMenu"><i class="fas fa-user"></i><span
                 class="caret"></span>Sistema</button>
         <mat-menu #sistemaMenu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="!estaLogado">
                 <a [routerLink]="['/', 'login']">Efetuar login (Entrar)</a>
             </button>
-            <button mat-menu-item>
-                <a [routerLink]="['/', 'logout']">Efetuar logout (Sair)</a>
+            <button mat-menu-item *ngIf="estaLogado">
+                <a (click)='logout()'>Efetuar logout (Sair)</a>
             </button>
         </mat-menu>
     </mat-toolbar-row>
