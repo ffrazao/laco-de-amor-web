@@ -19,6 +19,8 @@ export class LoginComponent implements OnInit {
   public isEnviado = false;
   public entidade: Login;
 
+  public escondeSenha = true;
+
   constructor(
     private _service: LoginService,
     private _formService: LoginFormService,
@@ -44,8 +46,7 @@ export class LoginComponent implements OnInit {
     }
 
     const reg = this.frm.value as Login;
-    this._service.login(reg.login, reg.senha).subscribe((resp) => {
-      console.log(resp);
+    this._service.login(reg).subscribe((resp) => {
       this._mensagem.sucesso('Login Efetuado!');
       this._router.navigate(['/']);
     }, (err) => {

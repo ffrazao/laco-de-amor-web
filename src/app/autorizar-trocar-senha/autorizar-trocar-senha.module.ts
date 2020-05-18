@@ -8,17 +8,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { RecuperarSenhaRoutingModule } from './recuperar-senha-routing.module';
-import { RecuperarSenhaComponent } from './recuperar-senha.component';
-import { RecuperarSenhaService } from './recuperar-senha.service';
-import { RecuperarSenhaFormService } from './recuperar-senha-form.service';
-
+import { AutorizarTrocarSenhaRoutingModule } from './autorizar-trocar-senha-routing.module';
+import { AutorizarTrocarSenhaComponent } from './autorizar-trocar-senha.component';
+import { AutorizarTrocarSenhaService } from './autorizar-trocar-senha.service';
+import { AutorizarTrocarSenhaFormService } from './autorizar-trocar-senha-form.service';
 
 @NgModule({
-  declarations: [RecuperarSenhaComponent],
+  declarations: [AutorizarTrocarSenhaComponent],
   imports: [
     CommonModule,
-    RecuperarSenhaRoutingModule,
+    AutorizarTrocarSenhaRoutingModule,
     ReactiveFormsModule,
 
     MatInputModule,
@@ -29,8 +28,8 @@ import { RecuperarSenhaFormService } from './recuperar-senha-form.service';
     MatButtonModule,
   ],
   providers: [
-    RecuperarSenhaService,
-    RecuperarSenhaFormService,
+    AutorizarTrocarSenhaService,
+    AutorizarTrocarSenhaFormService,
   ]
 })
-export class RecuperarSenhaModule { }
+export class AutorizarTrocarSenhaModule { }

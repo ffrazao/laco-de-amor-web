@@ -21,7 +21,8 @@
                         <div class="form-group">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <mat-label>Senha</mat-label>
-                                <input matInput placeholder="Senha de Acesso" formControlName="senha">
+                                <input matInput [type]="escondeSenha ? 'password' : 'text'" placeholder="Senha de Acesso" formControlName="senha">
+                                <mat-icon matSuffix (click)="escondeSenha = !escondeSenha">{{escondeSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </mat-form-field>
                             <div class="text-danger" *ngIf="isEnviado && frm.controls.senha.invalid">
                                 <div *ngIf="frm.controls.senha.errors.required">
@@ -32,24 +33,6 @@
 
                         <hr class="my-4">
                         <button type="submit" class="btn btn-success btn-block">Enviar</button>
-<!--
-                        <div class="form-label-group">
-                            <label for="login">Login*</label>
-                            <input type="text" id="login" class="form-control" placeholder="Login" autofocus
-                                formControlName="login">
-                        </div>
-
-                        <div class="form-label-group">
-                            <label for="senha">Senha*</label>
-                            <input type="password" id="senha" class="form-control" placeholder="Senha"
-                                formControlName="senha">
-                        </div>
-
-                        <hr class="my-4">
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" [disabled]="frm.invalid">
-                            Entrar
-                        </button>
--->
 
                         <hr class="my-4">
                         <div class="custom-control mb-3">

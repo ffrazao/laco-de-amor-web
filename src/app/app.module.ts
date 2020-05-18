@@ -11,6 +11,9 @@ import { MenuModule } from './comum/componente/menu/menu.module';
 import { RodapeModule } from './comum/componente/rodape/rodape.module';
 import { AnexarModule } from './comum/servico/anexar/anexar.module';
 import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
+import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
+import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
+import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,6 @@ import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
     ReactiveFormsModule,
     HttpClientModule,
     ToastrModule,
-    
     AppRoutingModule,
     MenuModule,
     RodapeModule,
@@ -35,6 +37,9 @@ import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
   entryComponents: [
   ],
   providers: [
+    AuthGuardService,
+    AutorizarTrocarSenhaResolve,
+    TrocarSenhaResolve,
   ],
   bootstrap: [AppComponent]
 })

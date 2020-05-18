@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
+import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
+import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
 
 const routes: Routes = [
   {
-  	path: 'cadastro', 
-  	loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule) 
+    path: 'cadastro',
+    loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule),
+    canActivate: [AuthGuardService]
   },
   {
-  	path: 'acao', 
-  	loadChildren: () => import('./acao/acao.module').then(m => m.AcaoModule) 
+    path: 'acao',
+    loadChildren: () => import('./acao/acao.module').then(m => m.AcaoModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'login',
@@ -19,12 +24,18 @@ const routes: Routes = [
     loadChildren: () => import('./recuperar-senha/recuperar-senha.module').then(m => m.RecuperarSenhaModule)
   },
   {
-    path: 'trocar-senha',
-    loadChildren: () => import('./trocar-senha/trocar-senha.module').then(m => m.TrocarSenhaModule)
+    path: 'autorizar-trocar-senha/:email',
+    loadChildren: () => import('./autorizar-trocar-senha/autorizar-trocar-senha.module').then(m => m.AutorizarTrocarSenhaModule),
+    resolve: { resolve: AutorizarTrocarSenhaResolve },
   },
   {
-  	path: '', 
-  	loadChildren: () => import('./comum/componente/casa/casa.module').then(m => m.CasaModule) 
+    path: 'trocar-senha/:email/:token',
+    loadChildren: () => import('./trocar-senha/trocar-senha.module').then(m => m.TrocarSenhaModule),
+    resolve: { resolve: TrocarSenhaResolve },
+  },
+  {
+    path: '',
+    loadChildren: () => import('./comum/componente/casa/casa.module').then(m => m.CasaModule)
   },
 ];
 

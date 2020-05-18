@@ -3,20 +3,25 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Recuperar Senha</h5>
+                    <h5 class="card-title text-center">Autorizar Trocar Senha</h5>
                     <form class="form-signin" [formGroup]="frm" (ngSubmit)="enviar($event)">
 
                         <div class="form-group">
+                            <mat-label>E-mail</mat-label>
+                            <div class="form-control">
+                                <b>{{frm.value.email}}</b>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <mat-label>E-mail</mat-label>
-                                <input matInput placeholder="Digite seu e-mail" formControlName="email">
+                                <mat-label>Token</mat-label>
+                                <input matInput placeholder="Digite o token enviado ao seu e-mail"
+                                    formControlName="token">
                             </mat-form-field>
-                            <div class="text-danger" *ngIf="isEnviado && frm.controls.email.invalid">
-                                <div *ngIf="frm.controls.email.errors.required">
+                            <div class="text-danger" *ngIf="isEnviado && frm.controls.token.invalid">
+                                <div *ngIf="frm.controls.token.errors.required">
                                     Campo obrigatório!
-                                </div>
-                                <div *ngIf="frm.controls.email.errors.email">
-                                    Valor inválido!
                                 </div>
                             </div>
                         </div>

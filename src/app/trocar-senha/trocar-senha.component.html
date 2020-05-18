@@ -1,36 +1,57 @@
 <div class="container">
-    <form>
-        <div class="row">
-            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                <div class="card card-signin my-5">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Trocar Senha</h5>
-                        <form class="form-signin">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Trocar Senha</h5>
+                    <form class="form-signin" [formGroup]="frm" (ngSubmit)="enviar($event)">
 
-                            <div class="form-label-group">
-                                <label for="email">E-mail</label>
-                                <input type="text" id="email" class="form-control"
-                                    placeholder="E-mail" required>
+                        <div class="form-group">
+                            <mat-label>E-mail</mat-label>
+                            <div class="form-control">
+                                <b>{{frm.value.email}}</b>
                             </div>
+                        </div>
 
-                            <div class="form-label-group">
-                                <label for="senha">Senha</label>
-                                <input type="password" id="senha" class="form-control" placeholder="Senha" required>
+                        <div class="form-group">
+                            <mat-label>Token</mat-label>
+                            <div class="form-control">
+                                <b>{{frm.value.token}}</b>
                             </div>
+                        </div>
 
-                            <div class="form-label-group">
-                                <label for="repetirSenha">Repetir Senha</label>
-                                <input type="password" id="repetirSenha" class="form-control" placeholder="Repetir Senha" required>
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-label>Nova Senha</mat-label>
+                                <input matInput [type]="escondeSenha ? 'password' : 'text'" placeholder="Digite nova senha" formControlName="senha">
+                                <mat-icon matSuffix (click)="escondeSenha = !escondeSenha">{{escondeSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </mat-form-field>
+                            <div class="text-danger" *ngIf="isEnviado && frm.controls.senha.invalid">
+                                <div *ngIf="frm.controls.senha.errors.required">
+                                    Campo obrigatório!
+                                </div>
                             </div>
+                        </div>
 
-                            <hr class="my-4">
-                            <button class="btn btn-lg btn-primary btn-block text-uppercase"
-                                type="submit">Enviar</button>
-                            <hr class="my-4">
-                        </form>
-                    </div>
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-label>Nova Senha (repetir)</mat-label>
+                                <input matInput [type]="escondeSenha ? 'password' : 'text'" placeholder="Repita a nova senha" formControlName="senhaRepetir">
+                                <mat-icon matSuffix (click)="escondeSenha = !escondeSenha">{{escondeSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </mat-form-field>
+                            <div class="text-danger" *ngIf="isEnviado && frm.controls.senhaRepetir.invalid">
+                                <div *ngIf="frm.controls.senhaRepetir.errors.required">
+                                    Campo obrigatório!
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <button type="submit" class="btn btn-success btn-block">Enviar</button>
+
+                    </form>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>

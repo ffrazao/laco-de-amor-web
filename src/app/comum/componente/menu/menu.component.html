@@ -32,8 +32,11 @@
             </button>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="sistemaMenu"><i class="fas fa-user"></i><span
-                class="caret"></span>Sistema</button>
+        <span class="flexExpand"></span>
+
+        <button mat-icon-button [matMenuTriggerFor]="sistemaMenu"><i class="fas fa-user"></i><span class="caret"></span>
+            <mat-icon>perm_identity</mat-icon>
+        </button>
         <mat-menu #sistemaMenu="matMenu">
             <button mat-menu-item *ngIf="!estaLogado">
                 <a [routerLink]="['/', 'login']">Efetuar login (Entrar)</a>
