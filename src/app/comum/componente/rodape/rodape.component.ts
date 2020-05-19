@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RodapeComponent implements OnInit {
 
+  ano: string;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.ano = `${(new Date()).getFullYear()}`;
   }
 
 }

@@ -21,9 +21,18 @@ export class TrocarSenhaFormService {
         email: [entidade.email, [Validators.required, Validators.email]],
         token: [entidade.token, [Validators.required]],
         senha: [entidade.senha, [Validators.required]],
-        senhaRepetir: [entidade.senhaRepetir, [Validators.required]],
+        senhaRepetir: [entidade.senhaRepetir, []],
       }
     );
+
+    // invalidar formulario caso as senhas não coincidam
+    result.valueChanges.subscribe(field => {
+      if (field.senha !== field.senhaRepetir) {
+        result.controls.senhaRepetir.setErrors({ senhaNaoCoincidente: true });
+      } else {
+        result.controls.senhaRepetir.setErrors(null);
+      }
+    });
 
     return result;
   }

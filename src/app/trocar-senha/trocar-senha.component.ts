@@ -51,7 +51,7 @@ export class TrocarSenhaComponent implements OnInit {
     const reg = this.frm.value as TrocarSenha;
     this._service.trocarSenha(reg).subscribe((resp) => {
       this._mensagem.sucesso('Senha alterada com sucesso!');
-      this._router.navigate(['/']);
+      this._router.navigate(['/', 'login']);
     }, (err) => {
       const msg = 'Erro ao alterar a senha';
       console.log(msg, err);
