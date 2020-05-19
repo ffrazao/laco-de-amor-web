@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProduzirService } from '../produzir.service';
-import { ProduzirFiltro } from '../../../comum/modelo/filtro/produzir-filtro';
+import { ProduzirFiltroDTO } from '../../../comum/modelo/dto/produzir.filtro.dto';
 
 @Component({
   selector: 'app-filtro',
@@ -14,21 +14,21 @@ export class FiltroComponent implements OnInit {
 
   public frm: FormGroup;
   public isEnviado = false;
-  public entidade: ProduzirFiltro;
+  public entidade: ProduzirFiltroDTO;
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private servico: ProduzirService,
     private router: Router) { }
 
   ngOnInit(): void {
-      this.entidade = this.servico.filtro;
-      this.frm = this.criarFormulario(this.entidade);
+    this.entidade = this.servico.filtro;
+    this.frm = this.criarFormulario(this.entidade);
   }
 
   criarFormulario(entidade) {
-    let result = this.formBuilder.group(
+    const result = this.formBuilder.group(
       {
       }
     );
@@ -39,7 +39,7 @@ export class FiltroComponent implements OnInit {
     this.isEnviado = true;
     this.entidade = this.frm.value;
     this.servico.filtro = this.entidade;
-    
+
     this.router.navigate(['acao', 'Produzir']);
   }
 

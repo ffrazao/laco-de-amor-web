@@ -1,3 +1,4 @@
+import { constante } from './../../constante';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../servico/local-storage.service';
 import { Router } from '@angular/router';
@@ -8,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
+
+  public SEM_FOTO = constante.SEM_FOTO;
 
   constructor(
     private _localStorageService: LocalStorageService,
@@ -25,6 +28,10 @@ export class MenuComponent implements OnInit {
 
   public get estaLogado() {
     return this._localStorageService.estaLogado;
+  }
+
+  public get login() {
+    return this.estaLogado ? this._localStorageService.dadosLogin : null;
   }
 
 }

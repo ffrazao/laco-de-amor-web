@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta-comum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
-import { PessoaFiltro } from '../../../comum/modelo/filtro/pessoa-filtro';
+import { PessoaFiltroDTO } from '../../../comum/modelo/dto/pessoa.filtro.dto';
 
 @Component({
   selector: 'app-filtro',
@@ -15,21 +15,21 @@ export class FiltroComponent implements OnInit {
 
   public frm: FormGroup;
   public isEnviado = false;
-  public entidade: PessoaFiltro;
+  public entidade: PessoaFiltroDTO;
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private servico: PessoaService,
     private router: Router) { }
 
   ngOnInit(): void {
-      this.entidade = this.servico.filtro;
-      this.frm = this.criarFormulario(this.entidade);
+    this.entidade = this.servico.filtro;
+    this.frm = this.criarFormulario(this.entidade);
   }
 
   criarFormulario(entidade) {
-    let result = this.formBuilder.group(
+    const result = this.formBuilder.group(
       {
         tipo: [entidade.tipo, []],
         cpfCnpj: [entidade.cpfCnpj, []],
@@ -43,7 +43,7 @@ export class FiltroComponent implements OnInit {
     this.isEnviado = true;
     this.entidade = this.frm.value;
     this.servico.filtro = this.entidade;
-    
+
     this.router.navigate(['cadastro', 'pessoa']);
   }
 

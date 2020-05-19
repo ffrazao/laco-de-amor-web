@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 
 import { Vender } from '../../comum/modelo/entidade/vender';
-import { VenderFiltro } from '../../comum/modelo/filtro/vender-filtro';
+import { VenderFiltroDTO } from '../../comum/modelo/dto/vender.filtro.dto';
 import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 
 import json from '../../json/vender.json';
-import { Filtro } from '../../comum/modelo/filtro/filtro';
 
 
 @Injectable()
-export class VenderService extends ServicoCrudService<Vender, VenderFiltro> {
+export class VenderService extends ServicoCrudService<Vender, VenderFiltroDTO> {
 
   constructor() {
     super('acao/vender');
-    json.forEach(v => this.lista.push(v));
+    // json.forEach(v => this.lista.push(v));
 
-    this.filtro = new Filtro();
+    this.filtro = new VenderFiltroDTO();
   }
 
 }

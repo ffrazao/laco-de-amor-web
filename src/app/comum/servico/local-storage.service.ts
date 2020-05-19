@@ -7,6 +7,8 @@ const KEY = 'authToken';
 })
 export class LocalStorageService {
 
+  private _dadosLogin;
+
   constructor() {
   }
 
@@ -19,14 +21,20 @@ export class LocalStorageService {
   }
 
   public get dadosLogin() {
-    return this.estaLogado ? JSON.parse(localStorage.getItem(KEY)) : null;
+    if (this.estaLogado) {
+      this._dadosLogin = JSON.parse(localStorage.getItem(KEY));
+      // this._dadosLogin.foto  = 'data:image/jpeg;base64,' + this._dadosLogin.foto;
+    } else {
+      this._dadosLogin = null;
+    }
+    return this._dadosLogin;
   }
 
   public get token() {
     if (!this.estaLogado) {
       throw new Error('Efetue o login!');
     }
-    return this.dadosLogin['access_token'];
+    return this.dadosLogin.access_token;
   }
 
   public removeDadosLogin() {

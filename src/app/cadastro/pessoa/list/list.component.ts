@@ -15,7 +15,7 @@ export class ListComponent implements OnInit {
   headElements = [
     'nome',
     'vinculo',
-    'tipo',
+    'pessoaTipo',
     'cpfCnpj',
     'email',
   ];
@@ -26,11 +26,13 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe((info) => {
-      this.elements.length = 0;
-      for (let i = 0; i < info.resolve.principal.length; i++) {
-        this.elements.push(info.resolve.principal[i]);
-      }
-      this.dataSource = new MatTableDataSource(this.elements);
+      info.resolve.principal.subscribe(r => {
+        this.elements.length = 0;
+        for (let i = 0; i < r.length; i++) {
+          this.elements.push(r[i]);
+        }
+        this.dataSource = new MatTableDataSource(this.elements);
+      });
     });
   }
 

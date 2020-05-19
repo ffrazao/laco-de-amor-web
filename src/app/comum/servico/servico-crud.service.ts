@@ -1,19 +1,32 @@
-import { HttpClient } from '@angular/common/http';
+import { PessoaFiltroDTO } from '../modelo/dto/pessoa.filtro.dto';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injector, Type } from '@angular/core';
 
 import { findIndexById } from '../ferramenta/ferramenta-comum';
 
 import { environment } from '../../../environments/environment';
+import { LocalStorageService } from './local-storage.service';
 import { EntidadeId } from '../modelo/entidade-id';
-import { Filtro } from '../modelo/filtro/filtro';
+import { FiltroDTO } from '../modelo/dto/filtro.dto';
+import { InjetorEstaticoService } from './../../comum/servico/injetor-estatico.service';
+import { Observable } from 'rxjs';
 
-export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro> {
+export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroDTO> {
 
   private _http: HttpClient;
-  private _lista: E[] = [];
+  private _localStorageService: LocalStorageService;
+
+  private _lista: E[];
   private _form: E;
   private _filtro: F;
 
-  constructor(private _funcionalidade: string) { }
+  constructor(
+    private _funcionalidade: string,
+  ) {
+    const injector: Injector = InjetorEstaticoService.injector;
+    this._http = injector.get<HttpClient>(HttpClient as Type<HttpClient>);
+    this._localStorageService = injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
+  }
 
   public get funcionalidade(): string {
     return this._funcionalidade;
@@ -42,7 +55,7 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro>
   public create(entidade: E) {
     // environment.API_URL;
     if (entidade != null) {
-      entidade['id'] = this.lista.length + 1;
+      entidade.id = this.lista.length + 1;
       this.lista.push(entidade);
     }
   }
@@ -50,7 +63,7 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro>
   public restore(id: number): E {
     let result: E = null;
 
-    let idx = findIndexById(this.lista, id as number);
+    const idx = null; // findIndexById(this.lista, id as number);
     if (idx >= 0) {
       result = this.lista[idx];
     } else {
@@ -61,9 +74,9 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro>
   }
 
   public update(id: number, entidade: E): void {
-    let result: E = null;
+    const result: E = null;
 
-    let idx = findIndexById(this.lista, id);
+    const idx = null; // findIndexById(this.lista, id);
     if (idx >= 0) {
       this.lista[idx] = entidade;
     } else {
@@ -72,8 +85,8 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro>
   }
 
   public delete(id: number) {
-    let result: E = null;
-    let idx = findIndexById(this.lista, id);
+    const result: E = null;
+    const idx = null; // findIndexById(this.lista, id);
     if (idx) {
       this.lista.splice(idx, 1);
     } else {
@@ -85,31 +98,22 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends Filtro>
     return {} as E;
   }
 
-  public fitrar() {
-    if (!this.filtro || !this.lista || !this.lista.length) {
-      return this.lista;
-    }
-    let camposFiltro = Object.getOwnPropertyNames(this.filtro);
-    let camposRegistro = Object.getOwnPropertyNames(this.lista[0]);
+  public get headerData() {
+    const credentials = 'Bearer ' + this._localStorageService.token;
+    const result = {
+      'Content-Type': 'application/json; charset=utf-8',
+      Authorization: credentials
+    };
+    return new HttpHeaders(result);
+  }
 
-    return this.lista.filter(reg => {
-      let encontrado = true;
-      for (let j = 0; j < camposRegistro.length; j++) {
-        for (let i = 0; i < camposFiltro.length; i++) {
-          if (encontrado
-            && this.filtro[camposFiltro[j]]
-            && reg[camposRegistro[i]]
-            && camposFiltro[j] === camposRegistro[i]) {
-            encontrado = this.filtro[camposFiltro[j]] === reg[camposRegistro[i]];
-            break;
-          }
-        }
-        if (!encontrado) {
-          break;
-        }
-      }
-      return encontrado;
-    });
+  public fitrar(): Observable<E[]> {
+    // captar parametros do filtro
+    let param = Object.keys(this.filtro).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(this.filtro[key])).join('&');
+    if (param) {
+      param = '?' + param;
+    }
+    return this._http.get<E[]>(`${environment.REST_API_URL}${this.funcionalidade}${param}`, { headers: this.headerData });
   }
 
 }

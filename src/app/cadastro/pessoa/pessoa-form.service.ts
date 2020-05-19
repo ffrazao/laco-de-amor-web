@@ -28,7 +28,7 @@ export class PessoaFormService {
         parceiro: this.criarFormularioParceiro(entidade.parceiro),
         fornecedor: this.criarFormularioFornecedor(entidade.fornecedor),
         cliente: this.criarFormularioCliente(entidade.cliente),
-        tipo: [entidade.tipo, [Validators.required]],
+        pessoaTipo: [entidade.pessoaTipo, [Validators.required]],
         cpfCnpj: [entidade.cpfCnpj, []],
         email: [entidade.email, [Validators.email]],
         contato1: [entidade.contato1, []],

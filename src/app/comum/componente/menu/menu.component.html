@@ -34,6 +34,8 @@
 
         <span class="flexExpand"></span>
 
+        <img alt="Foto" *ngIf="estaLogado" [src]="login && login.foto ? 'data:image/jpeg;base64,' + login.foto : SEM_FOTO" class="mx-auto d-block" style="max-height: 100px; max-width: 100px; border-radius: 50%;">
+
         <button mat-icon-button [matMenuTriggerFor]="sistemaMenu"><i class="fas fa-user"></i><span class="caret"></span>
             <mat-icon>perm_identity</mat-icon>
         </button>
@@ -47,55 +49,3 @@
         </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
-
-
-<!-- 
-            <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
-    <mdb-navbar-brand><a class="navbar-brand" [routerLink]="['/']">Laço de Amor</a></mdb-navbar-brand>
-    <links>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown" dropdown>
-                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
-                    mdbWavesEffect>
-                    Cadastro<span class="caret"></span></a>
-                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-                    <a class="dropdown-item waves-light" mdbWavesEffect
-                        [routerLink]="['/', 'cadastro', 'pessoa']">Pessoas</a>
-                    <div class="divider dropdown-divider"></div>
-                    <a class="dropdown-item waves-light" mdbWavesEffect
-                        [routerLink]="['/', 'cadastro', 'usuario']">Usuário</a>
-                    <a class="dropdown-item waves-light" mdbWavesEffect
-                        [routerLink]="['/', 'cadastro', 'produto-modelo']">Modelo de Produtos</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown" dropdown>
-                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
-                    mdbWavesEffect>
-                    Ações<span class="caret"></span></a>
-                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-                    <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['/', 'acao', 'cotar']">Cotar</a>
-                    <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['/', 'acao', 'comprar']">Comprar
-                        Matéria Prima</a>
-                    <a class="dropdown-item waves-light" mdbWavesEffect
-                        [routerLink]="['/', 'acao', 'produzir']">Produzir</a>
-                    <a class="dropdown-item waves-light" mdbWavesEffect
-                        [routerLink]="['/', 'acao', 'vender']">Vender</a>
-                </div>
-            </li>
-        </ul>
-        <ul class="navbar-nav mr-auto navbar-right">
-            <li class="nav-item dropdown" dropdown>
-                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
-                    mdbWavesEffect>
-                    <i class="fas fa-user"></i><span class="caret"></span></a>
-                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-                    <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['/login']">Efetuar login
-                        (Entrar)</a>
-                    <a class="dropdown-item waves-light" mdbWavesEffect [routerLink]="['/logout']">Efetuar logout
-                        (Sair)</a>
-                </div>
-            </li>
-        </ul>
-    </links>
-</mdb-navbar>
--->

@@ -1,21 +1,26 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
 
-import { Cotar } from '../../../comum/modelo/entidade/cotar';
+import { Cotar } from './../../../comum/modelo/entidade/cotar';
 import { CotarService } from '../cotar.service';
 
 @Injectable()
-export class ListResolve implements Resolve<any> {
+export class ListResolve implements Resolve<Cotar[]> {
 
-    constructor(private servico: CotarService) { }
+    constructor(
+        private servico: CotarService
+    ) {
+    }
 
-    resolve(route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let list = this.servico.fitrar();
-        return { principal: list };
+    resolve(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ): any {
+        return {
+            principal: this.servico.fitrar()
+        };
     }
 
 }

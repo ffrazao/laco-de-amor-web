@@ -1,5 +1,5 @@
 import { Endereco } from './../modelo/entidade/endereco';
-import { Pessoa } from './../../cadastro/pessoa/pessoa';
+import { Pessoa } from './../modelo/entidade/pessoa';
 import { EventoPessoa } from '../modelo/entidade/evento-pessoa';
 import { UnidadeMedida } from '../modelo/entidade/unidade-medida';
 import { Cotar } from '../modelo/entidade/cotar';
