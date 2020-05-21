@@ -3,11 +3,11 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { constante } from '../../../comum/constante';
-import { UtilizarService } from '../utilizar.service';
+import { UtilizarCrudService } from '../utilizar.service';
 import { UtilizarFormService } from '../utilizar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
-import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
+import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
+import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
 import { Utilizar } from '../../../comum/modelo/entidade/utilizar';
 import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
@@ -15,7 +15,7 @@ import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
 import { Produto } from '../../../comum/modelo/entidade/produto';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
-import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
@@ -30,7 +30,6 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public entidade: Utilizar;
   public id: number;
-  public acao: string;
 
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
@@ -38,14 +37,14 @@ export class FormComponent implements OnInit {
   public eventoProdutoEditando = false;
 
   constructor(
-    private _service: UtilizarService,
+    private _service: UtilizarCrudService,
     private _formService: UtilizarFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
-    private _produtoModeloService: ProdutoModeloService,
-    private _pessoaService: PessoaService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
+    private _produtoModeloService: ProdutoModeloCrudService,
+    private _pessoaService: PessoaCrudService,
+    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -55,11 +54,15 @@ export class FormComponent implements OnInit {
     });
     this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._formService.criarFormulario(this.entidade);
 
       this.unidadeMedidaList = info['resolve']['apoio'][0];
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get eventoProdutoList() {
@@ -78,7 +81,7 @@ export class FormComponent implements OnInit {
       throw new Error(msg);
     }
     this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
+    if ('Novo' === this._service.acao) {
       this._service.create(this.entidade);
       this._router.navigate(['acao', 'utilizar', this.entidade.id]);
     } else {

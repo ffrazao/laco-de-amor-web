@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 
+import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 import { Cotar } from '../../comum/modelo/entidade/cotar';
 import { CotarFiltroDTO } from '../../comum/modelo/dto/cotar.filtro.dto';
-import { ServicoCrudService } from '../../comum/servico/servico-crud.service';
 import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
 
-import json from '../../json/cotar.json';
-
 @Injectable()
-export class CotarService extends ServicoCrudService<Cotar, CotarFiltroDTO> {
+export class CotarCrudService extends ServicoCrudService<Cotar, CotarFiltroDTO> {
 
   constructor() {
     super('acao/cotar');
-    // json.forEach(v => this.lista.push(v));
 
     this.filtro = new CotarFiltroDTO();
   }
@@ -52,7 +49,7 @@ export class CotarService extends ServicoCrudService<Cotar, CotarFiltroDTO> {
 }
 
 export class ResultadoValoresCotacao {
-  menor: number = 0;
-  media: number = 0;
-  maior: number = 0;
+  menor = 0;
+  media = 0;
+  maior = 0;
 }

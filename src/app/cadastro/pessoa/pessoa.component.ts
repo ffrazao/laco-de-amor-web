@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { MensagemService } from '../../comum/servico/mensagem/mensagem.service';
+import { PessoaCrudService } from './pessoa.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-pessoa',
   templateUrl: './pessoa.component.html',
@@ -7,13 +11,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PessoaComponent implements OnInit {
 
-  formulario = {
+  public formulario = {
     nome: 'Cadastro de Pessoas',
   };
 
-  constructor() { }
+  constructor(
+    private _service: PessoaCrudService,
+    private _mensagem: MensagemService,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
+
+  }
+
+  public async excluir(event) {
+    event.preventDefault();
+    if (await this._mensagem.confirme('ATENÇÃO! Esta operação não poderá ser desfeita!\n\nConfirma a exclusão?')) {
+      this._service.delete(this._service.entidade.id).subscribe(() => {
+        this._mensagem.sucesso('Registro excluído!');
+        this._router.navigate(['cadastro', 'pessoa']);
+      });
+    }
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
 }

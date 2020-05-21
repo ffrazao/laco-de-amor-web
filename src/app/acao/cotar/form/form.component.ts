@@ -3,21 +3,20 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { constante } from '../../../comum/constante';
-import { CotarService } from '../cotar.service';
+import { CotarCrudService } from '../cotar.service';
 import { CotarFormService } from '../cotar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
-import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
+import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
+import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
 import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
-import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
 import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
 import { Produto } from '../../../comum/modelo/entidade/produto';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { isNumber } from '../../../comum/ferramenta/ferramenta-comum';
-import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { unidadeMedidaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
@@ -32,7 +31,6 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public entidade: Cotar;
   public id: number;
-  public acao: string;
 
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
@@ -41,14 +39,14 @@ export class FormComponent implements OnInit {
   public selecionaTab = 0;
 
   constructor(
-    private _service: CotarService,
+    private _service: CotarCrudService,
     private _serviceFormService: CotarFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
-    private _produtoModeloService: ProdutoModeloService,
-    private _pessoaService: PessoaService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
+    private _produtoModeloService: ProdutoModeloCrudService,
+    private _pessoaService: PessoaCrudService,
+    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -59,11 +57,15 @@ export class FormComponent implements OnInit {
 
     this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._serviceFormService.criarFormulario(this.entidade);
 
       this.unidadeMedidaList = info['resolve']['apoio'][0];
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get eventoProdutoList() {
@@ -85,7 +87,7 @@ export class FormComponent implements OnInit {
     }
 
     this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
+    if ('Novo' === this._service.acao) {
       this._service.create(this.entidade);
       this._router.navigate(['acao', 'cotar', this.entidade.id]);
     } else {

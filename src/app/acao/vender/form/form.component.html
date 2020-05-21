@@ -42,8 +42,8 @@
             <li class="list-group-item">
                 <mat-form-field appearance="outline" style="width: 100%;">
                     <mat-label>Endereço de Entrega:</mat-label>
-                    <mat-select formControlName="endereco" [compareWith]="enderecoListComparar">
-                        <mat-option *ngFor="let e of frm.value.eventoPessoaList[0].pessoa['enderecoList']" [value]="e">
+                    <mat-select formControlName="endereco" [compareWith]="pessoaEnderecoListComparar">
+                        <mat-option *ngFor="let e of frm.value.eventoPessoaList[0].pessoa['pessoaEnderecoList']" [value]="e">
                             {{e.endereco.logradouro}} {{e.endereco.complemento}} {{e.endereco.numero}}
                             {{e.endereco.bairro}} {{e.endereco.cidade}} {{e.endereco.estado}} {{e.endereco.cep}}
                         </mat-option>

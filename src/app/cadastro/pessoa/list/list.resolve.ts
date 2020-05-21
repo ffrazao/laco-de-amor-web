@@ -4,13 +4,13 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
-import { PessoaService } from '../pessoa.service';
+import { PessoaCrudService } from '../pessoa.service';
 
 @Injectable()
 export class ListResolve implements Resolve<Pessoa[]> {
 
     constructor(
-        private servico: PessoaService
+        private _service: PessoaCrudService
     ) {
     }
 
@@ -18,8 +18,9 @@ export class ListResolve implements Resolve<Pessoa[]> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Listar';
         return {
-            principal: this.servico.fitrar()
+            principal: this._service.fitrar()
         };
     }
 

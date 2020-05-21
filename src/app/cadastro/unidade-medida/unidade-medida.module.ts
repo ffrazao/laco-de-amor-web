@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UnidadeMedidaService } from './unidade-medida.service';
+import { UnidadeMedidaCrudService } from './unidade-medida.service';
 
 
 @NgModule({
@@ -11,7 +11,7 @@ import { UnidadeMedidaService } from './unidade-medida.service';
   exports: [
   ],
   providers: [
-    UnidadeMedidaService
+    UnidadeMedidaCrudService
   ]
 })
 export class UnidadeMedidaModule { }

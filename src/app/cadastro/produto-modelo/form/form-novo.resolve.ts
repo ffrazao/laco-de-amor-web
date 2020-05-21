@@ -4,16 +4,16 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloCrudService } from '../produto-modelo.service';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
-    constructor(private servico: ProdutoModeloService) { }
+    constructor(private servico: ProdutoModeloCrudService) { }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this.servico.novo();
+        let entidade = this.servico.novo(null);
         return {principal: entidade, acao: "Novo"};
     }
 

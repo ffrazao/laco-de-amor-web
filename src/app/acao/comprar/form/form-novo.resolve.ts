@@ -4,33 +4,34 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ComprarService } from '../comprar.service';
-import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
-import { CotarService } from '../../cotar/cotar.service';
-import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
+import { ComprarCrudService } from '../comprar.service';
+import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { CotarCrudService } from '../../cotar/cotar.service';
+import { EventoTipoCrudService } from '../../../cadastro/evento-tipo/evento-tipo.service';
 import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
+import { Comprar } from 'src/app/comum/modelo/entidade/comprar';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
     constructor(
-        private _service: ComprarService,
-        private _unidadeMedidaService: UnidadeMedidaService,
-        private _cotarService: CotarService,
-        private _eventoTipoService: EventoTipoService,
+        private _service: ComprarCrudService,
+        private _unidadeMedidaService: UnidadeMedidaCrudService,
+        private _cotarService: CotarCrudService,
+        private _eventoTipoService: EventoTipoCrudService,
     ) {
     }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this._service.novo();
+        const entidade = new Comprar();
 
-        entidade.data = hojeStr();        
-        entidade.eventoTipo = this._eventoTipoService.restore(2);
+        entidade.data = hojeStr();
+        //entidade.eventoTipo = this._eventoTipoService.restore(2);
 
         return {
-            principal: entidade,
-            acao: "Novo",
+            principal: this._service.novo(entidade),
+            acao: 'Novo',
             apoio: [
                 this._unidadeMedidaService.lista,
                 this._cotarService.lista,

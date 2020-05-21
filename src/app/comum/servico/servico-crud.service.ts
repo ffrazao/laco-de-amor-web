@@ -1,24 +1,24 @@
-import { PessoaFiltroDTO } from '../modelo/dto/pessoa.filtro.dto';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injector, Type } from '@angular/core';
-
-import { findIndexById } from '../ferramenta/ferramenta-comum';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { LocalStorageService } from './local-storage.service';
 import { EntidadeId } from '../modelo/entidade-id';
 import { FiltroDTO } from '../modelo/dto/filtro.dto';
 import { InjetorEstaticoService } from './../../comum/servico/injetor-estatico.service';
-import { Observable } from 'rxjs';
 
 export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroDTO> {
 
   private _http: HttpClient;
   private _localStorageService: LocalStorageService;
 
-  private _lista: E[];
+  private _lista: E[] = [];
   private _form: E;
   private _filtro: F;
+
+  private _acao = '';
+  private _entidade: E;
 
   constructor(
     private _funcionalidade: string,
@@ -28,8 +28,25 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroD
     this._localStorageService = injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
   }
 
+  private get headerData() {
+    const credentials = 'Bearer ' + this._localStorageService.token;
+    const result = {
+      'Content-Type': 'application/json; charset=utf-8',
+      Authorization: credentials
+    };
+    return new HttpHeaders(result);
+  }
+
   public get funcionalidade(): string {
     return this._funcionalidade;
+  }
+
+  public get acao(): string {
+    return this._acao;
+  }
+
+  public get entidade(): E {
+    return this._entidade;
   }
 
   public get lista(): E[] {
@@ -52,59 +69,33 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroD
     this._filtro = valor;
   }
 
-  public create(entidade: E) {
-    // environment.API_URL;
-    if (entidade != null) {
-      entidade.id = this.lista.length + 1;
-      this.lista.push(entidade);
-    }
+  public set acao(valor: string) {
+    this._acao = valor;
   }
 
-  public restore(id: number): E {
-    let result: E = null;
-
-    const idx = null; // findIndexById(this.lista, id as number);
-    if (idx >= 0) {
-      result = this.lista[idx];
-    } else {
-      throw new Error('Registro não encontrado ' + id);
-    }
-
-    return result;
+  public set entidade(valor: E) {
+    this._entidade = valor;
   }
 
-  public update(id: number, entidade: E): void {
-    const result: E = null;
-
-    const idx = null; // findIndexById(this.lista, id);
-    if (idx >= 0) {
-      this.lista[idx] = entidade;
-    } else {
-      throw new Error('Registro não encontrado ' + id);
-    }
+  public create(entidade: E): Observable<number>  {
+    entidade.id = null;
+    return this._http.post<number>(`${environment.REST_API_URL}${this.funcionalidade}`, entidade, { headers: this.headerData });
   }
 
-  public delete(id: number) {
-    const result: E = null;
-    const idx = null; // findIndexById(this.lista, id);
-    if (idx) {
-      this.lista.splice(idx, 1);
-    } else {
-      throw new Error('Registro não encontrado ' + id);
-    }
+  public restore(id: number): Observable<E> {
+    return this._http.get<E>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, { headers: this.headerData });
   }
 
-  public novo() {
-    return {} as E;
+  public update(id: number, entidade: E): Observable<void> {
+    return this._http.put<void>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, entidade, { headers: this.headerData });
   }
 
-  public get headerData() {
-    const credentials = 'Bearer ' + this._localStorageService.token;
-    const result = {
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: credentials
-    };
-    return new HttpHeaders(result);
+  public delete(id: number): Observable<void> {
+    return this._http.delete<void>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, { headers: this.headerData });
+  }
+
+  public novo(modelo: E): Observable<E> {
+    return this._http.post<E>(`${environment.REST_API_URL}${this.funcionalidade}/novo`, modelo, { headers: this.headerData });
   }
 
   public fitrar(): Observable<E[]> {

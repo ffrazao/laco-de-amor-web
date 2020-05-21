@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EventoTipoService } from './evento-tipo.service';
+import { EventoTipoCrudService } from './evento-tipo.service';
 
 @NgModule({
   declarations: [],
@@ -11,7 +11,7 @@ import { EventoTipoService } from './evento-tipo.service';
   exports: [
   ],
   providers: [
-    EventoTipoService
+    EventoTipoCrudService
   ]
 })
 export class EventoTipoModule { }

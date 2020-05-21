@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EventoService } from './evento.service';
+import { EventoCrudService } from './evento.service';
 import { EventoFormService } from './evento-form.service';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { EventoFormService } from './evento-form.service';
   exports: [
   ],
   providers: [
-    EventoService,
+    EventoCrudService,
     EventoFormService,
   ]
 })

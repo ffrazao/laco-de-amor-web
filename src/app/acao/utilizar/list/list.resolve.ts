@@ -4,13 +4,13 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 
 import { Utilizar } from './../../../comum/modelo/entidade/utilizar';
-import { UtilizarService } from '../utilizar.service';
+import { UtilizarCrudService } from '../utilizar.service';
 
 @Injectable()
 export class ListResolve implements Resolve<Utilizar[]> {
 
     constructor(
-        private servico: UtilizarService
+        private servico: UtilizarCrudService
     ) {
     }
 

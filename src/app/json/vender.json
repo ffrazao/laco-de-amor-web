@@ -72,7 +72,7 @@
                     "cliente": {
                         "id": 6
                     },
-                    "enderecoList": [
+                    "pessoaEnderecoList": [
                         {
                             "id": 21,
                             "endereco": {

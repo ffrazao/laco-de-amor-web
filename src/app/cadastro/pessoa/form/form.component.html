@@ -134,7 +134,7 @@
         </div>
     </div>
 
-    <div class="form-group" formArrayName="enderecoList">
+    <div class="form-group" formArrayName="pessoaEnderecoList">
         <mat-label for="endereco">Endereço(s):</mat-label>
         <div class="table-responsive">
             <table class="table">
@@ -151,7 +151,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let el of enderecoList['controls']; index as i;" [formGroupName]="i">
+                    <tr *ngFor="let el of pessoaEnderecoList['controls']; index as i;" [formGroupName]="i">
                         <td [formGroup]="el['controls'].endereco">
                             <mat-label *ngIf="!el['editar']">{{el.value.endereco.logradouro}}</mat-label>
                             <div class="form-group" *ngIf="el['editar']">

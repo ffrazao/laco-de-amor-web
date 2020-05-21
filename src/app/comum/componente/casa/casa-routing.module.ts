@@ -4,7 +4,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { CasaComponent } from './casa.component';
 
 const routes: Routes = [
-  {path: '', component: CasaComponent}
+  {
+    path: '',
+    component: CasaComponent
+  }
 ];
 
 @NgModule({

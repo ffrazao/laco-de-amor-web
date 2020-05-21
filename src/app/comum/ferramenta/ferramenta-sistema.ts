@@ -30,7 +30,7 @@ export function pessoaListComparar(o1: Pessoa, o2: Pessoa) {
     return result;
 }
 
-export function enderecoListComparar(o1: Endereco, o2: Endereco) {
+export function pessoaEnderecoListComparar(o1: Endereco, o2: Endereco) {
     let result = o1 && o2 ? o1.id === o2.id : o1 === o2;
     return result;
 }

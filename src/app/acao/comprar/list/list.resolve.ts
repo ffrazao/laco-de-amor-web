@@ -4,13 +4,13 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 
 import { Comprar } from './../../../comum/modelo/entidade/comprar';
-import { ComprarService } from '../comprar.service';
+import { ComprarCrudService } from '../comprar.service';
 
 @Injectable()
 export class ListResolve implements Resolve<Comprar[]> {
 
     constructor(
-        private servico: ComprarService
+        private servico: ComprarCrudService
     ) {
     }
 

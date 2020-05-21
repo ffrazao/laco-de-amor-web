@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { CadastroRoutingModule } from './cadastro-routing.module';
 
-
 @NgModule({
   declarations: [],
   imports: [

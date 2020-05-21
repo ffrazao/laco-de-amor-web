@@ -4,12 +4,12 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { CotarService } from '../cotar.service';
+import { CotarCrudService } from '../cotar.service';
 
 @Injectable()
 export class FiltroResolve implements Resolve<any> {
 
-    constructor(private servico: CotarService) { }
+    constructor(private servico: CotarCrudService) { }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {

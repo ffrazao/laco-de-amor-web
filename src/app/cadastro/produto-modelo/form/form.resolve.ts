@@ -5,12 +5,12 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
-import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloCrudService } from '../produto-modelo.service';
 
 @Injectable()
 export class FormResolve implements Resolve<any> {
 
-    constructor(private servico: ProdutoModeloService) { }
+    constructor(private servico: ProdutoModeloCrudService) { }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {

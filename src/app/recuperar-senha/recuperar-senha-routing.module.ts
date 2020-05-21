@@ -4,7 +4,10 @@ import { RecuperarSenhaComponent } from './recuperar-senha.component';
 
 
 const routes: Routes = [
-  {path: '', component: RecuperarSenhaComponent}
+  {
+    path: '',
+    component: RecuperarSenhaComponent
+  }
 ];
 
 @NgModule({

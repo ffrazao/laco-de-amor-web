@@ -1,34 +1,35 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ProduzirService } from '../produzir.service';
-import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
-import { EventoTipoService } from '../../../cadastro/evento-tipo/evento-tipo.service';
+import { ProduzirCrudService } from '../produzir.service';
+import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { EventoTipoCrudService } from '../../../cadastro/evento-tipo/evento-tipo.service';
 import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
+import { Produzir } from '../../../comum/modelo/entidade/produzir';
 
 @Injectable()
 export class FormNovoResolve implements Resolve<any> {
 
     constructor(
-        private _service: ProduzirService,
-        private _unidadeMedidaService: UnidadeMedidaService,
-        private _eventoTipoService: EventoTipoService,
+        private _service: ProduzirCrudService,
+        private _unidadeMedidaService: UnidadeMedidaCrudService,
+        private _eventoTipoService: EventoTipoCrudService,
     ) {
     }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this._service.novo();
+        const entidade = new Produzir();
 
-        entidade.data = hojeStr();        
-        entidade.eventoTipo = this._eventoTipoService.restore(2);
+        entidade.data = hojeStr();
+        //entidade.eventoTipo = this._eventoTipoService.restore(2);
 
         return {
-            principal: entidade,
-            acao: "Novo",
+            principal: this._service.novo(entidade),
+            acao: 'Novo',
             apoio: [
                 this._unidadeMedidaService.lista,
             ],

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PessoaService } from '../pessoa.service';
+import { PessoaCrudService } from '../pessoa.service';
 import { PessoaFormService } from '../pessoa-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
@@ -21,17 +21,16 @@ export class FormComponent implements OnInit {
   public frm = this._formService.criarFormulario(new Pessoa());
 
   public isEnviado = false;
-  public entidade: Pessoa;
   public id: number;
-  public acao: string;
-  public isParceiro: boolean = false;
-  public isFornecedor: boolean = false;
-  public isCliente: boolean = false;
+
+  public isParceiro = false;
+  public isFornecedor = false;
+  public isCliente = false;
 
   public enderecoEditando = false;
 
   constructor(
-    private _service: PessoaService,
+    private _service: PessoaCrudService,
     private _formService: PessoaFormService,
     private _route: ActivatedRoute,
     private _router: Router,
@@ -45,13 +44,19 @@ export class FormComponent implements OnInit {
     });
 
     this._route.data.subscribe((info) => {
-      this.entidade = info['resolve']['principal'];
-      this.isParceiro = !!this.entidade.parceiro && !!this.entidade.parceiro.id;
-      this.isFornecedor = !!this.entidade.fornecedor && !!this.entidade.fornecedor.id;
-      this.isCliente = !!this.entidade.cliente && !!this.entidade.cliente.id;
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this._formService.criarFormulario(this.entidade);
+      info.resolve.principal.subscribe((p: Pessoa) => {
+        this._service.entidade = p;
+        this.isParceiro = !!this._service.entidade.parceiro && !!this._service.entidade.parceiro.id;
+        this.isFornecedor = !!this._service.entidade.fornecedor && !!this._service.entidade.fornecedor.id;
+        this.isCliente = !!this._service.entidade.cliente && !!this._service.entidade.cliente.id;
+        this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+        this.frm = this._formService.criarFormulario(this._service.entidade);
+      });
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get parceiro(): FormGroup {
@@ -66,8 +71,8 @@ export class FormComponent implements OnInit {
     return this.frm.get('cliente') as FormGroup;
   }
 
-  get enderecoList(): FormArray {
-    return this.frm.get('enderecoList') as FormArray;
+  get pessoaEnderecoList(): FormArray {
+    return this.frm.get('pessoaEnderecoList') as FormArray;
   }
 
   public enviar(event) {
@@ -75,39 +80,49 @@ export class FormComponent implements OnInit {
     this.isEnviado = true;
 
     if (this.frm.invalid) {
-      let msg = 'Dados inválidos!';
+      const msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
 
-    this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
-      this._service.create(this.entidade);
+    const entidade = this.frm.value;
 
-      if (this.entidade.parceiro.id === -1) {
-        this.entidade.parceiro.id = this.entidade.id;
+    if ('Novo' === this._service.acao) {
+      if (entidade.parceiro.id === -1) {
+        entidade.parceiro.id = entidade.id;
       }
-      if (this.entidade.fornecedor.id === -1) {
-        this.entidade.fornecedor.id = this.entidade.id;
+      if (entidade.fornecedor.id === -1) {
+        entidade.fornecedor.id = entidade.id;
       }
-      if (this.entidade.cliente.id === -1) {
-        this.entidade.cliente.id = this.entidade.id;
+      if (entidade.cliente.id === -1) {
+        entidade.cliente.id = entidade.id;
       }
-      this._service.lista.push(this.entidade);
-      this._router.navigate(['cadastro', 'pessoa', this.entidade.id]);
+      this._service.create(entidade).subscribe((id: number) => {
+        this._router.navigate(['cadastro', 'pessoa', id]);
+      });
     } else {
-      this._service.update(this.id, this.entidade);
-      this._router.navigate(['cadastro', 'pessoa']);
+      if (!entidade.parceiro.id) {
+        entidade.parceiro = null;
+      }
+      if (!entidade.fornecedor.id) {
+        entidade.fornecedor = null;
+      }
+      if (!entidade.cliente.id) {
+        entidade.cliente = null;
+      }
+      this._service.update(this.id, entidade).subscribe(() => {
+        this._router.navigate(['cadastro', 'pessoa']);
+      });
     }
   }
 
   public novoEndereco(event) {
     event.preventDefault();
-    let e = new PessoaEndereco();
-    let reg = this._formService.criarFormularioPessoaEndereco(e);
+    const e = new PessoaEndereco();
+    const reg = this._formService.criarFormularioPessoaEndereco(e);
     this.enderecoEditando = true;
     reg['editar'] = true;
-    this.enderecoList.push(reg);
+    this.pessoaEnderecoList.push(reg);
   }
 
   public salvarEndereco(reg) {
@@ -123,25 +138,25 @@ export class FormComponent implements OnInit {
   }
 
   public excluirEndereco(idx) {
-    this.enderecoList.removeAt(idx);
+    this.pessoaEnderecoList.removeAt(idx);
     this.enderecoEditando = false;
   }
 
   public cancelarEndereco(reg) {
-    if (this.enderecoList.at(reg)['anterior']) {
-      let vlr = this.enderecoList.at(reg)['anterior'];
-      this.enderecoList.at(reg).setValue(vlr);
-      this.enderecoList.at(reg)['editar']=false;
-      delete this.enderecoList.at(reg)['anterior'];
+    if (this.pessoaEnderecoList.at(reg)['anterior']) {
+      const vlr = this.pessoaEnderecoList.at(reg)['anterior'];
+      this.pessoaEnderecoList.at(reg).setValue(vlr);
+      this.pessoaEnderecoList.at(reg)['editar'] = false;
+      delete this.pessoaEnderecoList.at(reg)['anterior'];
     } else {
-      this.enderecoList.removeAt(reg);
+      this.pessoaEnderecoList.removeAt(reg);
     }
     this.enderecoEditando = false;
   }
 
   public setParceiro() {
     if (!this.isParceiro) {
-      let v = new Parceiro();
+      const v = new Parceiro();
       v.id = this.frm.value.id ? this.frm.value.id : -1;
       v.funcao = null;
       this.parceiro.setValue(v);
@@ -152,7 +167,7 @@ export class FormComponent implements OnInit {
 
   public setCliente() {
     if (!this.isCliente) {
-      let v = new Cliente();
+      const v = new Cliente();
       v.id = this.frm.value.id ? this.frm.value.id : -1;
       this.cliente.setValue(v);
     } else {
@@ -162,7 +177,7 @@ export class FormComponent implements OnInit {
 
   public setFornecedor() {
     if (!this.isFornecedor) {
-      let v = new Fornecedor();
+      const v = new Fornecedor();
       v.id = this.frm.value.id ? this.frm.value.id : -1;
       this.fornecedor.setValue(v);
     } else {

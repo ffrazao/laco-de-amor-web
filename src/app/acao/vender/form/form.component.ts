@@ -4,11 +4,11 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { constante } from '../../../comum/constante';
-import { VenderService } from '../vender.service';
+import { VenderCrudService } from '../vender.service';
 import { VenderFormService } from '../vender-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
-import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
+import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
+import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
 import { Vender } from '../../../comum/modelo/entidade/vender';
 import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
@@ -16,8 +16,8 @@ import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
 import { Produto } from '../../../comum/modelo/entidade/produto';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
-import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
-import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar, pessoaListComparar, enderecoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { eventoPessoaListComparar, unidadeMedidaListComparar, eventoProdutoListComparar, pessoaListComparar, pessoaEnderecoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
   selector: 'app-form',
@@ -31,7 +31,6 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public entidade: Vender;
   public id: number;
-  public acao: string;
 
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
@@ -39,14 +38,14 @@ export class FormComponent implements OnInit {
   public eventoProdutoEditando = false;
 
   constructor(
-    private _service: VenderService,
+    private _service: VenderCrudService,
     private _formService: VenderFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
-    private _produtoModeloService: ProdutoModeloService,
-    private _pessoaService: PessoaService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
+    private _produtoModeloService: ProdutoModeloCrudService,
+    private _pessoaService: PessoaCrudService,
+    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -56,11 +55,15 @@ export class FormComponent implements OnInit {
     });
     this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._formService.criarFormulario(this.entidade);
 
       this.unidadeMedidaList = info['resolve']['apoio'][0];
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get eventoPessoaList() {
@@ -83,7 +86,7 @@ export class FormComponent implements OnInit {
       throw new Error(msg);
     }
     this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
+    if ('Novo' === this._service.acao) {
       this._service.create(this.entidade);
       this._router.navigate(['acao', 'vender', this.entidade.id]);
     } else {
@@ -146,8 +149,8 @@ export class FormComponent implements OnInit {
     return pessoaListComparar(o1, o2);
   }
 
-  public enderecoListComparar(o1: Endereco, o2: Endereco) {
-    return enderecoListComparar(o1, o2);
+  public pessoaEnderecoListComparar(o1: Endereco, o2: Endereco) {
+    return pessoaEnderecoListComparar(o1, o2);
   }
 
   // GESTÃO DOS PRODUTOS A COTAR

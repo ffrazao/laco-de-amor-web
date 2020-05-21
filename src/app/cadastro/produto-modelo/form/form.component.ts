@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
 
-import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloCrudService } from '../produto-modelo.service';
 import { ProdutoModeloFormService } from '../produto-modelo-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { AnexarService } from '../../../comum/servico/anexar/anexar.service';
@@ -26,14 +25,13 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public entidade: ProdutoModelo;
   public id: number;
-  public acao: string;
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public produtoDescricaoEditando = false;
   public produtoPrecoEditando = false;
 
   constructor(
-    private _service: ProdutoModeloService,
+    private _service: ProdutoModeloCrudService,
     private _formService: ProdutoModeloFormService,
     private _mensagem: MensagemService,
     private _anexar: AnexarService,
@@ -49,9 +47,13 @@ export class FormComponent implements OnInit {
 
     this.route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._formService.criarFormulario(this.entidade);
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get produtoDescricaoList(): FormArray {
@@ -77,7 +79,7 @@ export class FormComponent implements OnInit {
     }
 
     this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
+    if ('Novo' === this._service.acao) {
       this._service.create(this.entidade);
       this._service.lista.push(this.entidade);
       this.router.navigate(['cadastro', 'produto-modelo', this.entidade.id]);

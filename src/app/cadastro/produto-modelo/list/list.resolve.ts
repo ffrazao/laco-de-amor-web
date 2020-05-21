@@ -4,13 +4,13 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 
 import { ProdutoModelo } from './../../../comum/modelo/entidade/produto-modelo';
-import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloCrudService } from '../produto-modelo.service';
 
 @Injectable()
 export class ListResolve implements Resolve<ProdutoModelo[]> {
 
     constructor(
-        private servico: ProdutoModeloService
+        private servico: ProdutoModeloCrudService
     ) {
     }
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
 import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
 import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';

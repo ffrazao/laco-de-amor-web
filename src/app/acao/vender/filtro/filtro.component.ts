@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { VenderService } from '../vender.service';
+import { VenderCrudService } from '../vender.service';
 import { VenderFiltroDTO } from '../../../comum/modelo/dto/vender.filtro.dto';
 
 @Component({
@@ -19,7 +19,7 @@ export class FiltroComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private servico: VenderService,
+    private servico: VenderCrudService,
     private router: Router) { }
 
   ngOnInit(): void {

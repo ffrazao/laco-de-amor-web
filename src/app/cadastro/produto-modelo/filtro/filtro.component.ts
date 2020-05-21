@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta-comum';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProdutoModeloService } from '../produto-modelo.service';
+import { ProdutoModeloCrudService } from '../produto-modelo.service';
 import { ProdutoModeloFiltroDTO } from '../../../comum/modelo/dto/produto-modelo.filtro.dto';
 import { ProdutoModelo } from 'src/app/comum/modelo/entidade/produto-modelo';
 
@@ -21,7 +21,7 @@ export class FiltroComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private servico: ProdutoModeloService,
+    private servico: ProdutoModeloCrudService,
     private router: Router) { }
 
   ngOnInit(): void {

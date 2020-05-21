@@ -4,12 +4,12 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { VenderService } from '../vender.service';
+import { VenderCrudService } from '../vender.service';
 
 @Injectable()
 export class FiltroResolve implements Resolve<any> {
 
-    constructor(private servico: VenderService) { }
+    constructor(private servico: VenderCrudService) { }
 
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): any | Observable<any> | Promise<any> {

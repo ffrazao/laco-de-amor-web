@@ -34,7 +34,7 @@ export class PessoaFormService {
         contato1: [entidade.contato1, []],
         contato2: [entidade.contato2, []],
         contato3: [entidade.contato3, []],
-        enderecoList: this.criarFormularioEnderecoList(entidade.enderecoList),
+        pessoaEnderecoList: this.criarFormularioPessoaEnderecoList(entidade.pessoaEnderecoList),
       }
     );
 
@@ -90,7 +90,7 @@ export class PessoaFormService {
     return result;
   }
 
-  public criarFormularioEnderecoList(lista: PessoaEndereco[]) {
+  public criarFormularioPessoaEnderecoList(lista: PessoaEndereco[]) {
     let result = [];
 
     if (lista && lista.length) {

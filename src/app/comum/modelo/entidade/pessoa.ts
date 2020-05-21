@@ -17,6 +17,6 @@ export class Pessoa implements EntidadeId {
     public contato1: string;
     public contato2: string;
     public contato3: string;
-    public enderecoList: PessoaEndereco[] = [];
+    public pessoaEnderecoList: PessoaEndereco[] = [];
 
 }

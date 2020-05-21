@@ -4,15 +4,15 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ProduzirService } from '../produzir.service';
-import { UnidadeMedidaService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { ProduzirCrudService } from '../produzir.service';
+import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 
 @Injectable()
 export class FormResolve implements Resolve<any> {
 
     constructor(
-        private _service: ProduzirService,
-        private _unidadeMedidaService: UnidadeMedidaService,
+        private _service: ProduzirCrudService,
+        private _unidadeMedidaService: UnidadeMedidaCrudService,
         ) { }
 
     resolve(route: ActivatedRouteSnapshot,

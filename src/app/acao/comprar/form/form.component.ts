@@ -4,11 +4,11 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { constante } from '../../../comum/constante';
-import { ComprarService } from '../comprar.service';
-import { ComprarFormService } from '../comprar-form.service';
+import { ComprarCrudService } from '../comprar.service';
+import { ComprarFormCrudService } from '../comprar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
-import { ProdutoModeloService } from '../../../cadastro/produto-modelo/produto-modelo.service';
-import { PessoaService } from '../../../cadastro/pessoa/pessoa.service';
+import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
+import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
 import { Comprar } from '../../../comum/modelo/entidade/comprar';
 import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
@@ -19,7 +19,7 @@ import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { MatSelectChange } from '@angular/material/select';
 import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
-import { EventoPessoaFuncaoService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 
 @Component({
@@ -34,7 +34,6 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public entidade: Comprar;
   public id: number;
-  public acao: string;
 
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
@@ -43,14 +42,14 @@ export class FormComponent implements OnInit {
   public cotacaoList: Cotar[] = [];
 
   constructor(
-    private _service: ComprarService,
-    private _serviceFormService: ComprarFormService,
+    private _service: ComprarCrudService,
+    private _serviceFormService: ComprarFormCrudService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
-    private _produtoModeloService: ProdutoModeloService,
-    private _pessoaService: PessoaService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoService,
+    private _produtoModeloService: ProdutoModeloCrudService,
+    private _pessoaService: PessoaCrudService,
+    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -60,12 +59,16 @@ export class FormComponent implements OnInit {
     });
     this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
-      this.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
+      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._serviceFormService.criarFormulario(this.entidade);
 
       this.unidadeMedidaList = info['resolve']['apoio'][0];
       this.cotacaoList = info['resolve']['apoio'][1];
     });
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   get eventoProdutoList() {
@@ -84,7 +87,7 @@ export class FormComponent implements OnInit {
       throw new Error(msg);
     }
     this.entidade = this.frm.value;
-    if ('Novo' === this.acao) {
+    if ('Novo' === this._service.acao) {
       this._service.create(this.entidade);
       this._router.navigate(['acao', 'comprar', this.entidade.id]);
     } else {
@@ -113,11 +116,11 @@ export class FormComponent implements OnInit {
     if (!this.frm.value.eventoPessoaList.length
       || await this._mensagem.confirme(`Confirme a utilização da cotação ${cotacao.data}`)) {
       // captar o valor atual do formulario
-      let entidade: Comprar = this.frm.value as Comprar;
+      const entidade: Comprar = this.frm.value as Comprar;
       // definir o evento pai
       entidade.pai = cotacao;
       // trabalhar as pessoas envolvidas
-      let epesl = entidade.eventoPessoaList;
+      const epesl = entidade.eventoPessoaList;
       // zerar lista de compra
       epesl.length = 0;
       // incluir os itens cotados como itens de compra
@@ -126,7 +129,7 @@ export class FormComponent implements OnInit {
         epesl.push(ep as EventoPessoa);
       });
       // trabalhar os produtos a serem comprados
-      let eprdl = entidade.eventoProdutoList;
+      const eprdl = entidade.eventoProdutoList;
       // zerar lista de compra
       eprdl.length = 0;
       // incluir os itens cotados como itens de compra
@@ -134,7 +137,7 @@ export class FormComponent implements OnInit {
         ep.id = null;
         ep.eventoPessoa = null;
         eprdl.push(ep as EventoProduto);
-        let menorCotacao = this.menorCotacao(ep.produto, entidade.pai);
+        const menorCotacao = this.menorCotacao(ep.produto, entidade.pai);
         ep.quantidade = menorCotacao.quantidade;
         ep.unidadeMedida = menorCotacao.unidadeMedida;
         ep.valorUnitario = menorCotacao.valorUnitario;
@@ -149,8 +152,8 @@ export class FormComponent implements OnInit {
   private menorCotacao(produto: Produto, cotacao: Cotar): EventoProduto {
     let result = new EventoProduto();
 
-    for (let c of cotacao.eventoPessoaList) {
-      for (let ep of c.eventoProdutoList) {
+    for (const c of cotacao.eventoPessoaList) {
+      for (const ep of c.eventoProdutoList) {
         if (produto.produtoModelo.id === ep.produto.produtoModelo.id) {
           if (!result.valorUnitario) {
             result = ep;
@@ -240,9 +243,9 @@ export class FormComponent implements OnInit {
   }
 
   public eventoPessoaListChange(event: MatSelectChange, eventoProduto: FormGroup) {
-    let produto: Produto = eventoProduto.value.produto;
-    let fornecedor: Fornecedor = ((event.value as EventoPessoa).pessoa as Fornecedor);
-    let cotacao: EventoProduto = this.getCotacao(produto, fornecedor);
+    const produto: Produto = eventoProduto.value.produto;
+    const fornecedor: Fornecedor = ((event.value as EventoPessoa).pessoa as Fornecedor);
+    const cotacao: EventoProduto = this.getCotacao(produto, fornecedor);
     if (cotacao) {
       eventoProduto.controls.quantidade.setValue(cotacao.quantidade);
       eventoProduto.controls.unidadeMedida.setValue(cotacao.unidadeMedida);
@@ -254,7 +257,7 @@ export class FormComponent implements OnInit {
 
   private getCotacao(produto: Produto, fornecedor: Fornecedor): EventoProduto {
     let result = null;
-    let cotacao = (this.frm.value as Comprar).pai;
+    const cotacao = (this.frm.value as Comprar).pai;
     if (cotacao) {
       if (cotacao.eventoPessoaList) {
         fora: for (let i = 0; i < cotacao.eventoPessoaList.length; i++) {

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { gerarFormulario } from '../../../comum/ferramenta/ferramenta-comum';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PessoaService } from '../pessoa.service';
+import { PessoaCrudService } from '../pessoa.service';
 import { PessoaFiltroDTO } from '../../../comum/modelo/dto/pessoa.filtro.dto';
 
 @Component({
@@ -20,7 +20,7 @@ export class FiltroComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private servico: PessoaService,
+    private servico: PessoaCrudService,
     private router: Router) { }
 
   ngOnInit(): void {

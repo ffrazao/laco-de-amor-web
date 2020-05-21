@@ -33,7 +33,7 @@ import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-me
     MatIconModule,
     MatTabsModule,
     MatAutocompleteModule,
-    
+
     PipeModule,
     UnidadeMedidaModule,
   ]

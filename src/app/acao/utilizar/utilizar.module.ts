@@ -7,7 +7,7 @@ import { ListResolve } from './list/list.resolve';
 import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
-import { UtilizarService } from './utilizar.service';
+import { UtilizarCrudService } from './utilizar.service';
 import { UtilizarFormService } from './utilizar-form.service';
 import { UnidadeMedidaModule } from '../../cadastro/unidade-medida/unidade-medida.module';
 import { CotarModule } from '../cotar/cotar.module';
@@ -24,7 +24,7 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
     EventoPessoaFuncaoModule,
   ],
   providers: [
-    UtilizarService,
+    UtilizarCrudService,
     UtilizarFormService,
     ListResolve,
     FormResolve,

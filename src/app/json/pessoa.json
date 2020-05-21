@@ -34,7 +34,7 @@
         "nome": "Teste D",
         "pessoaTipo": "PJ",
         "cpfCnpj": "333.333.333-33",
-        "enderecoList": [
+        "pessoaEnderecoList": [
             {
                 "id": 1,
                 "pessoa": {
@@ -114,7 +114,7 @@
         "cliente": {
             "id": 6
         },
-        "enderecoList": [
+        "pessoaEnderecoList": [
             {
                 "id": 21,
                 "endereco": {
