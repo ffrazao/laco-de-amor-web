@@ -1,6 +1,6 @@
 export function gerarFormulario<T>(entidade: T) {
-    let result = {};
-    let campos = Object.getOwnPropertyNames(entidade);
+    const result = {};
+    const campos = Object.getOwnPropertyNames(entidade);
 
     console.log(Object.getPrototypeOf(entidade));
 
@@ -63,7 +63,15 @@ export function isNumber(value: string | number): boolean {
 }
 
 export function hojeStr() {
-    let data = new Date();
-    return ("0" + data.getDate()).substr(-2) + "/"
-        + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear();
-} 
+    const data = new Date();
+    return `${('0' + data.getDate()).substr(-2)}/${('0' + (data.getMonth() + 1)).substr(-2)}/${data.getFullYear()}`;
+}
+
+export function deEnumParaChaveValor(e: any): any {
+    return Object.keys(e).map(key => {
+        return {
+            chave: key,
+            valor: e[key]
+        };
+    });
+}

@@ -11,7 +11,7 @@ import { Comprar } from '../../comum/modelo/entidade/comprar';
 import { Evento } from '../../comum/modelo/entidade/evento';
 
 @Injectable()
-export class ComprarFormCrudService extends EventoFormService {
+export class ComprarFormService extends EventoFormService {
 
   private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService;
 

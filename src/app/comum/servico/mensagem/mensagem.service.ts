@@ -23,7 +23,7 @@ export class MensagemService {
   public confirme(mensagem: string): Promise<boolean> {
     return new Promise(async resolve => {
       const dialogRef = await this.dialog.open(ConfirmeComponent, {
-        width: '250px',
+        width: '450px',
         data: { mensagem }
       });
 

@@ -8,7 +8,7 @@ import { PessoaFiltroDTO } from '../../comum/modelo/dto/pessoa.filtro.dto';
 export class PessoaCrudService extends ServicoCrudService<Pessoa, PessoaFiltroDTO> {
 
   constructor() {
-    super('/pessoa');
+    super('pessoa');
 
     this.filtro = new PessoaFiltroDTO();
   }

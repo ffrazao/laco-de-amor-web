@@ -6,10 +6,13 @@ import { PessoaCrudService } from '../pessoa.service';
 import { PessoaFormService } from '../pessoa-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
-import { Parceiro } from '../../../comum/modelo/entidade/parceiro';
-import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
 import { Cliente } from '../../../comum/modelo/entidade/cliente';
+import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
+import { Parceiro } from '../../../comum/modelo/entidade/parceiro';
 import { PessoaEndereco } from '../../../comum/modelo/entidade/pessoa-endereco';
+import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
+import { ParceiroFuncao } from './../../../comum/modelo/dominio/parceiro-funcao';
+import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
 
 @Component({
   selector: 'app-form',
@@ -18,16 +21,19 @@ import { PessoaEndereco } from '../../../comum/modelo/entidade/pessoa-endereco';
 })
 export class FormComponent implements OnInit {
 
-  public frm = this._formService.criarFormulario(new Pessoa());
+  public frm: FormGroup = this._formService.criarFormulario(new Pessoa());
 
   public isEnviado = false;
   public id: number;
 
-  public isParceiro = false;
-  public isFornecedor = false;
-  public isCliente = false;
-
   public enderecoEditando = false;
+
+  public parceiroFuncaoList: any;
+  public pessoaTipoList: any;
+
+  private _cliente: boolean;
+  private _fornecedor: boolean;
+  private _parceiro: boolean;
 
   constructor(
     private _service: PessoaCrudService,
@@ -36,6 +42,8 @@ export class FormComponent implements OnInit {
     private _router: Router,
     private _mensagem: MensagemService,
   ) {
+    this.parceiroFuncaoList = deEnumParaChaveValor(ParceiroFuncao);
+    this.pessoaTipoList = deEnumParaChaveValor(PessoaTipo);
   }
 
   ngOnInit() {
@@ -46,29 +54,14 @@ export class FormComponent implements OnInit {
     this._route.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Pessoa) => {
         this._service.entidade = p;
-        this.isParceiro = !!this._service.entidade.parceiro && !!this._service.entidade.parceiro.id;
-        this.isFornecedor = !!this._service.entidade.fornecedor && !!this._service.entidade.fornecedor.id;
-        this.isCliente = !!this._service.entidade.cliente && !!this._service.entidade.cliente.id;
-        this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-        this.frm = this._formService.criarFormulario(this._service.entidade);
+        this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
+        this.carregar(this._service.entidade);
       });
     });
   }
 
   public get acao() {
     return this._service.acao;
-  }
-
-  get parceiro(): FormGroup {
-    return this.frm.get('parceiro') as FormGroup;
-  }
-
-  get fornecedor(): FormGroup {
-    return this.frm.get('fornecedor') as FormGroup;
-  }
-
-  get cliente(): FormGroup {
-    return this.frm.get('cliente') as FormGroup;
   }
 
   get pessoaEnderecoList(): FormArray {
@@ -88,31 +81,37 @@ export class FormComponent implements OnInit {
     const entidade = this.frm.value;
 
     if ('Novo' === this._service.acao) {
-      if (entidade.parceiro.id === -1) {
-        entidade.parceiro.id = entidade.id;
-      }
-      if (entidade.fornecedor.id === -1) {
-        entidade.fornecedor.id = entidade.id;
-      }
-      if (entidade.cliente.id === -1) {
-        entidade.cliente.id = entidade.id;
-      }
       this._service.create(entidade).subscribe((id: number) => {
-        this._router.navigate(['cadastro', 'pessoa', id]);
+        this._mensagem.sucesso('Novo registro efetuado!\n\nVisualizando...');
+        this._router.navigate(['cadastro', this._service.funcionalidade, id]);
       });
     } else {
-      if (!entidade.parceiro.id) {
-        entidade.parceiro = null;
-      }
-      if (!entidade.fornecedor.id) {
-        entidade.fornecedor = null;
-      }
-      if (!entidade.cliente.id) {
-        entidade.cliente = null;
-      }
       this._service.update(this.id, entidade).subscribe(() => {
-        this._router.navigate(['cadastro', 'pessoa']);
+        this._mensagem.sucesso('Registro atualizado!');
+        this._router.navigate(['cadastro', this._service.funcionalidade]);
       });
+    }
+  }
+
+  public carregar(f: Pessoa) {
+    if (!f) {
+      f = new Pessoa();
+    }
+    this.frm = this._formService.criarFormulario(f);
+  }
+
+  public async restaurar() {
+    if (await
+      this._mensagem.confirme(
+        `
+        <p>
+           Confirma a restauração dos dados do formulário?
+        </p>
+        <div class="alert alert-danger" role="alert">
+           Todas as modificações serão perdidas!
+        </div>
+         `)) {
+      this.carregar(this._service.entidade);
     }
   }
 
@@ -154,35 +153,68 @@ export class FormComponent implements OnInit {
     this.enderecoEditando = false;
   }
 
-  public setParceiro() {
-    if (!this.isParceiro) {
-      const v = new Parceiro();
-      v.id = this.frm.value.id ? this.frm.value.id : -1;
+  get cliente(): FormGroup {
+    return this.frm.get('cliente') as FormGroup;
+  }
+
+  get fornecedor(): FormGroup {
+    return this.frm.get('fornecedor') as FormGroup;
+  }
+
+  get parceiro(): FormGroup {
+    return this.frm.get('parceiro') as FormGroup;
+  }
+
+  public get isCliente(): boolean {
+    if (this._cliente === undefined) {
+    }
+    this._cliente = this.cliente.value !== null;
+    return this._cliente;
+  }
+
+  public set isCliente(is: boolean) {
+    let v = null;
+    if (is) {
+      v = new Cliente();
+      v.id = this.frm.value.id;
+    }
+    this.frm.setControl('cliente', this._formService.criarFormularioCliente(v));
+    this._cliente = is;
+  }
+
+  public get isFornecedor(): boolean {
+    if (this._fornecedor === undefined) {
+    }
+    this._fornecedor = this.fornecedor.value !== null;
+    return this._fornecedor;
+  }
+
+  public set isFornecedor(is: boolean) {
+    let v = null;
+    if (is) {
+      v = new Fornecedor();
+      v.id = this.frm.value.id;
+    }
+    this.frm.setControl('fornecedor', this._formService.criarFormularioFornecedor(v));
+    this._fornecedor = is;
+  }
+
+  public get isParceiro(): boolean {
+    if (this._parceiro === undefined) {
+    }
+    this._parceiro = this.parceiro.value !== null;
+    return this._parceiro;
+  }
+
+  public set isParceiro(is: boolean) {
+    let v = null;
+    if (is) {
+      v = new Parceiro();
+      v.id = this.frm.value.id;
       v.funcao = null;
-      this.parceiro.setValue(v);
-    } else {
-      this.parceiro.setValue({ id: null, funcao: null });
     }
-  }
-
-  public setCliente() {
-    if (!this.isCliente) {
-      const v = new Cliente();
-      v.id = this.frm.value.id ? this.frm.value.id : -1;
-      this.cliente.setValue(v);
-    } else {
-      this.cliente.setValue({ id: null });
-    }
-  }
-
-  public setFornecedor() {
-    if (!this.isFornecedor) {
-      const v = new Fornecedor();
-      v.id = this.frm.value.id ? this.frm.value.id : -1;
-      this.fornecedor.setValue(v);
-    } else {
-      this.fornecedor.setValue({ id: null });
-    }
+    this.frm.setControl('parceiro', this._formService.criarFormularioParceiro(v));
+    this._parceiro = is;
   }
 
 }

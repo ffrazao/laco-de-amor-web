@@ -9,7 +9,7 @@ import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
 export class CotarCrudService extends ServicoCrudService<Cotar, CotarFiltroDTO> {
 
   constructor() {
-    super('acao/cotar');
+    super('cotar');
 
     this.filtro = new CotarFiltroDTO();
   }

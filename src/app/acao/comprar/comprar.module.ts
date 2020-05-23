@@ -8,7 +8,7 @@ import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
 import { FiltroResolve } from './filtro/filtro.resolve';
 import { ComprarCrudService } from './comprar.service';
-import { ComprarFormCrudService } from './comprar-form.service';
+import { ComprarFormService } from './comprar-form.service';
 import { UnidadeMedidaModule } from '../../cadastro/unidade-medida/unidade-medida.module';
 import { CotarModule } from '../cotar/cotar.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
@@ -24,7 +24,7 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
   ],
   providers: [
     ComprarCrudService,
-    ComprarFormCrudService,
+    ComprarFormService,
     ListResolve,
     FormResolve,
     FormNovoResolve,

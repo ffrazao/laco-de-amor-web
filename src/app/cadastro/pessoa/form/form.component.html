@@ -18,16 +18,14 @@
         <mat-label>Tipo de Vínculo:</mat-label>
         <ul class="list-group">
             <li class="list-group-item list-group-item-action">
-                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isParceiro" (click)="setParceiro()">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isParceiro">
                     Parceiro
                 </mat-checkbox>
-
                 <div *ngIf="isParceiro" [formGroup]="parceiro">
                     <mat-form-field appearance="outline">
                         <mat-label>Função</mat-label>
                         <mat-select formControlName="funcao">
-                            <mat-option value="Costureiro(a)">Costureiro(a)</mat-option>
-                            <mat-option value="Entregador(a)">Entregador(a)</mat-option>
+                            <mat-option *ngFor="let e of parceiroFuncaoList" value="{{e.chave}}">{{e.valor}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <div class="text-danger" *ngIf="isEnviado && parceiro['controls'].funcao.invalid">
@@ -38,13 +36,12 @@
                 </div>
             </li>
             <li class="list-group-item list-group-item-action">
-                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isFornecedor"
-                    (click)="setFornecedor()">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isFornecedor">
                     Fornecedor
                 </mat-checkbox>
             </li>
             <li class="list-group-item list-group-item-action">
-                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isCliente" (click)="setCliente()">
+                <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="isCliente">
                     Cliente
                 </mat-checkbox>
             </li>
@@ -55,11 +52,8 @@
         <mat-label>Tipo de Pessoa:</mat-label>
         <mat-radio-group formControlName="pessoaTipo" aria-label="Selecione uma Opção">
             <ul class="list-group">
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="PF">Física</mat-radio-button>
-                </li>
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="PJ">Jurídica</mat-radio-button>
+                <li *ngFor="let e of pessoaTipoList" class="list-group-item list-group-item-action">
+                    <mat-radio-button value="{{e.chave}}">{{e.valor}}</mat-radio-button>
                 </li>
             </ul>
         </mat-radio-group>
@@ -280,4 +274,6 @@
     -->
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
+
 </form>

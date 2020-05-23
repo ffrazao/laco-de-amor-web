@@ -8,7 +8,7 @@ import { UtilizarFiltroDTO } from '../../comum/modelo/dto/utilizar.filtro.dto';
 export class UtilizarCrudService extends ServicoCrudService<Utilizar, UtilizarFiltroDTO> {
 
   constructor() {
-    super('acao/utilizar');
+    super('utilizar');
 
     this.filtro = new UtilizarFiltroDTO();
   }

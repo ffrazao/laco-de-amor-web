@@ -1,3 +1,4 @@
+import { PessoaTipo } from './../dominio/pessoa-tipo';
 import { EntidadeId } from '../entidade-id';
 import { Parceiro } from './parceiro';
 import { Fornecedor } from './fornecedor';
@@ -11,7 +12,7 @@ export class Pessoa implements EntidadeId {
     public cliente: Cliente;
     public fornecedor: Fornecedor;
     public parceiro: Parceiro;
-    public pessoaTipo: string;
+    public pessoaTipo: PessoaTipo;
     public cpfCnpj: string;
     public email: string;
     public contato1: string;

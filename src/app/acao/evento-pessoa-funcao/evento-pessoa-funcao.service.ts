@@ -8,7 +8,7 @@ import { EventoPessoaFuncaoFiltroDTO } from 'src/app/comum/modelo/dto/evento-pes
 export class EventoPessoaFuncaoCrudService extends ServicoCrudService<EventoPessoaFuncao, EventoPessoaFuncaoFiltroDTO> {
 
   constructor() {
-    super('cadastro/evento-pessoa-funcao');
+    super('evento-pessoa-funcao');
 
     this.filtro = new EventoPessoaFuncaoFiltroDTO();
   }

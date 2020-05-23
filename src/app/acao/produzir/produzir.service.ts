@@ -8,7 +8,7 @@ import { ProduzirFiltroDTO } from '../../comum/modelo/dto/produzir.filtro.dto';
 export class ProduzirCrudService extends ServicoCrudService<Produzir, ProduzirFiltroDTO> {
 
   constructor() {
-    super('acao/produzir');
+    super('produzir');
 
     this.filtro = new ProduzirFiltroDTO();
   }

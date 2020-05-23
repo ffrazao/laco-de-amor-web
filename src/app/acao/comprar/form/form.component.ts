@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { constante } from '../../../comum/constante';
 import { ComprarCrudService } from '../comprar.service';
-import { ComprarFormCrudService } from '../comprar-form.service';
+import { ComprarFormService } from '../comprar-form.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
 import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
@@ -43,7 +43,7 @@ export class FormComponent implements OnInit {
 
   constructor(
     private _service: ComprarCrudService,
-    private _serviceFormService: ComprarFormCrudService,
+    private _serviceFormService: ComprarFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,

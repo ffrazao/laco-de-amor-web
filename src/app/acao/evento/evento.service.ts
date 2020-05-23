@@ -8,7 +8,7 @@ import { EventoFiltroDTO } from 'src/app/comum/modelo/dto/evento.filtro.dto';
 export class EventoCrudService extends ServicoCrudService<Evento, EventoFiltroDTO> {
 
   constructor() {
-    super('cadastro/evento');
+    super('evento');
 
     this.filtro = new EventoFiltroDTO();
   }

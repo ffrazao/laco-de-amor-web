@@ -8,7 +8,7 @@ import { ComprarFiltroDTO } from '../../comum/modelo/dto/comprar.filtro.dto';
 export class ComprarCrudService extends ServicoCrudService<Comprar, ComprarFiltroDTO> {
 
   constructor() {
-    super('acao/comprar');
+    super('comprar');
 
     this.filtro = new ComprarFiltroDTO();
   }

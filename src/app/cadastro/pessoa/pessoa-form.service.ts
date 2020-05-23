@@ -7,6 +7,7 @@ import { Fornecedor } from '../../comum/modelo/entidade/fornecedor';
 import { Cliente } from '../../comum/modelo/entidade/cliente';
 import { PessoaEndereco } from '../../comum/modelo/entidade/pessoa-endereco';
 import { Endereco } from '../../comum/modelo/entidade/endereco';
+import { PessoaFiltroDTO } from '../../comum/modelo/dto/pessoa.filtro.dto';
 
 @Injectable()
 export class PessoaFormService {
@@ -21,7 +22,7 @@ export class PessoaFormService {
       entidade = new Pessoa();
     }
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         nome: [entidade.nome, [Validators.required]],
@@ -38,24 +39,18 @@ export class PessoaFormService {
       }
     );
 
-    // inserir validador a depender de condição
-    result.get('parceiro').get('id').valueChanges.subscribe((vlr) => {
-      result.get('parceiro').get('funcao').setValidators(vlr ? [Validators.required] : []);
-      result.get('parceiro').get('funcao').updateValueAndValidity();
-    });
-
     return result;
   }
 
   public criarFormularioParceiro(entidade: Parceiro) {
     if (!entidade) {
-      entidade = new Parceiro();
+      return this._formBuilder.control(null, []);
     }
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
-        funcao: [entidade.funcao, []],
+        funcao: [entidade.funcao, [Validators.required]],
       }
     );
 
@@ -64,10 +59,10 @@ export class PessoaFormService {
 
   public criarFormularioFornecedor(entidade: Fornecedor) {
     if (!entidade) {
-      entidade = new Fornecedor();
+      return this._formBuilder.control(null, []);
     }
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
       }
@@ -78,10 +73,10 @@ export class PessoaFormService {
 
   public criarFormularioCliente(entidade: Cliente) {
     if (!entidade) {
-      entidade = new Cliente();
+      return this._formBuilder.control(null, []);
     }
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
       }
@@ -91,11 +86,11 @@ export class PessoaFormService {
   }
 
   public criarFormularioPessoaEnderecoList(lista: PessoaEndereco[]) {
-    let result = [];
+    const result = [];
 
     if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioPessoaEndereco(lista[i]));
+      for (const pessoaEndereco of lista) {
+        result.push(this.criarFormularioPessoaEndereco(pessoaEndereco));
       }
     }
     return this._formBuilder.array(result);
@@ -105,7 +100,7 @@ export class PessoaFormService {
     if (!entidade) {
       entidade = new PessoaEndereco();
     }
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         endereco: this.criarFormularioEndereco(entidade.endereco),
@@ -118,7 +113,7 @@ export class PessoaFormService {
     if (!entidade) {
       entidade = new Endereco();
     }
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         logradouro: [entidade.logradouro, [Validators.required]],
@@ -128,6 +123,17 @@ export class PessoaFormService {
         cidade: [entidade.cidade, []],
         uf: [entidade.uf, []],
         cep: [entidade.cep, []],
+      }
+    );
+    return result;
+  }
+
+  public criarFormularioFiltro(entidade: PessoaFiltroDTO) {
+    const result = this._formBuilder.group(
+      {
+        pessoaTipo: [entidade.pessoaTipo, []],
+        cpfCnpj: [entidade.cpfCnpj, []],
+        nome: [entidade.nome, []],
       }
     );
     return result;

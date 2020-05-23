@@ -8,7 +8,7 @@ import { EventoTipoFiltroDTO } from './../../comum/modelo/dto/evento-tipo.filtro
 export class EventoTipoCrudService extends ServicoCrudService<EventoTipo, EventoTipoFiltroDTO> {
 
   constructor() {
-    super('cadastro/evento-tipo');
+    super('evento-tipo');
 
     this.filtro = new EventoTipoFiltroDTO();
   }

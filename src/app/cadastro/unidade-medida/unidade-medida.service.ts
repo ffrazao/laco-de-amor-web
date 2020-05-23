@@ -8,7 +8,7 @@ import { UnidadeMedidaFiltroDTO } from './../../comum/modelo/dto/unidade-medida.
 export class UnidadeMedidaCrudService extends ServicoCrudService<UnidadeMedida, UnidadeMedidaFiltroDTO> {
 
   constructor() {
-    super('cadastro/unidade-medida');
+    super('unidade-medida');
 
     this.filtro = new UnidadeMedidaFiltroDTO();
   }

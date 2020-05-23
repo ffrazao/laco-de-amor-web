@@ -35,17 +35,17 @@ export class FormComponent implements OnInit {
     private _formService: ProdutoModeloFormService,
     private _mensagem: MensagemService,
     private _anexar: AnexarService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private _route: ActivatedRoute,
+    private _router: Router,
   ) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(p => {
+    this._route.params.subscribe(p => {
       this.id = p.id;
     });
 
-    this.route.data.subscribe((info) => {
+    this._route.data.subscribe((info) => {
       this.entidade = info['resolve']['principal'];
       this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
       this.frm = this._formService.criarFormulario(this.entidade);
@@ -73,19 +73,23 @@ export class FormComponent implements OnInit {
     this.isEnviado = true;
 
     if (this.frm.invalid) {
-      let msg = 'Dados inválidos!';
+      const msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
 
-    this.entidade = this.frm.value;
+    const entidade = this.frm.value;
+
     if ('Novo' === this._service.acao) {
-      this._service.create(this.entidade);
-      this._service.lista.push(this.entidade);
-      this.router.navigate(['cadastro', 'produto-modelo', this.entidade.id]);
+      this._service.create(entidade).subscribe((id: number) => {
+        this._mensagem.sucesso('Novo registro efetuado!\n\nVisualizando...');
+        this._router.navigate(['cadastro', this._service.funcionalidade, id]);
+      });
     } else {
-      this._service.update(this.id, this.entidade);
-      this.router.navigate(['cadastro', 'produto-modelo']);
+      this._service.update(this.id, entidade).subscribe(() => {
+        this._mensagem.sucesso('Registro atualizado!');
+        this._router.navigate(['cadastro', this._service.funcionalidade]);
+      });
     }
   }
 

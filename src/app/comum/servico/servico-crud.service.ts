@@ -77,34 +77,36 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroD
     this._entidade = valor;
   }
 
-  public create(entidade: E): Observable<number>  {
+  public create(entidade: E): Observable<number> {
     entidade.id = null;
-    return this._http.post<number>(`${environment.REST_API_URL}${this.funcionalidade}`, entidade, { headers: this.headerData });
+    return this._http.post<number>(`${environment.REST_API_URL}/${this.funcionalidade}`, entidade, { headers: this.headerData });
   }
 
   public restore(id: number): Observable<E> {
-    return this._http.get<E>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, { headers: this.headerData });
+    return this._http.get<E>(`${environment.REST_API_URL}/${this.funcionalidade}/${id}`, { headers: this.headerData });
   }
 
   public update(id: number, entidade: E): Observable<void> {
-    return this._http.put<void>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, entidade, { headers: this.headerData });
+    return this._http.put<void>(`${environment.REST_API_URL}/${this.funcionalidade}/${id}`, entidade, { headers: this.headerData });
   }
 
   public delete(id: number): Observable<void> {
-    return this._http.delete<void>(`${environment.REST_API_URL}${this.funcionalidade}/${id}`, { headers: this.headerData });
+    return this._http.delete<void>(`${environment.REST_API_URL}/${this.funcionalidade}/${id}`, { headers: this.headerData });
   }
 
   public novo(modelo: E): Observable<E> {
-    return this._http.post<E>(`${environment.REST_API_URL}${this.funcionalidade}/novo`, modelo, { headers: this.headerData });
+    return this._http.post<E>(`${environment.REST_API_URL}/${this.funcionalidade}/novo`, modelo, { headers: this.headerData });
   }
 
   public fitrar(): Observable<E[]> {
     // captar parametros do filtro
-    let param = Object.keys(this.filtro).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(this.filtro[key])).join('&');
+    let param = Object.keys(this.filtro).filter(key => this.filtro[key])
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(this.filtro[key]))
+      .join('&');
     if (param) {
       param = '?' + param;
     }
-    return this._http.get<E[]>(`${environment.REST_API_URL}${this.funcionalidade}${param}`, { headers: this.headerData });
+    return this._http.get<E[]>(`${environment.REST_API_URL}/${this.funcionalidade}${param}`, { headers: this.headerData });
   }
 
 }

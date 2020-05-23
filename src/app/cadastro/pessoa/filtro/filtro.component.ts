@@ -1,10 +1,12 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
-import { gerarFormulario } from '../../../comum/ferramenta/ferramenta-comum';
-import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaCrudService } from '../pessoa.service';
+import { PessoaFormService } from '../pessoa-form.service';
 import { PessoaFiltroDTO } from '../../../comum/modelo/dto/pessoa.filtro.dto';
+import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
+import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
 
 @Component({
   selector: 'app-filtro',
@@ -15,36 +17,33 @@ export class FiltroComponent implements OnInit {
 
   public frm: FormGroup;
   public isEnviado = false;
-  public entidade: PessoaFiltroDTO;
+
+  public pessoaTipoList: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private servico: PessoaCrudService,
-    private router: Router) { }
-
-  ngOnInit(): void {
-    this.entidade = this.servico.filtro;
-    this.frm = this.criarFormulario(this.entidade);
+    private _service: PessoaCrudService,
+    private _formService: PessoaFormService,
+    private router: Router
+  ) {
+    this.pessoaTipoList = deEnumParaChaveValor(PessoaTipo);
   }
 
-  criarFormulario(entidade) {
-    const result = this.formBuilder.group(
-      {
-        tipo: [entidade.tipo, []],
-        cpfCnpj: [entidade.cpfCnpj, []],
-        nome: [entidade.nome, []],
-      }
-    );
-    return result;
+  ngOnInit(): void {
+    this.carregar(this._service.filtro);
   }
 
   public enviar() {
     this.isEnviado = true;
-    this.entidade = this.frm.value;
-    this.servico.filtro = this.entidade;
+    this._service.filtro = this.frm.value;
 
     this.router.navigate(['cadastro', 'pessoa']);
+  }
+
+  public carregar(f: PessoaFiltroDTO) {
+    if (!f) {
+      f = new PessoaFiltroDTO();
+    }
+    this.frm = this._formService.criarFormularioFiltro(f);
   }
 
 }
