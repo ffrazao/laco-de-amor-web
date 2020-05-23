@@ -26,7 +26,6 @@
         </div>
     </div>
 
-
     <div class="form-group">
         <mat-label>Matéria Prima:</mat-label>
         <mat-radio-group formControlName="materiaPrima" aria-label="Selecione uma Opção">
@@ -61,7 +60,6 @@
             </div>
         </div>
     </div>
-
     <mat-tab-group animationDuration="0ms">
         <mat-tab label="Informações">
             <div class="form-group" formArrayName="produtoDescricaoList">
@@ -77,9 +75,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let el of ordenadoProdutoDescricao(produtoDescricaoList.controls); index as i;  first as isFirst; last as isLast"
-                                [formGroupName]="i">
-                                <td>
-                                    <mat-label *ngIf="!el.editar">{{el.value.produtoAtributo.nome}}</mat-label>
+                            [formGroupName]="i">
+                            <td>
+                                <mat-label *ngIf="!el.editar">{{el.value.produtoAtributo.nome ? el.value.produtoAtributo.nome : el.value.produtoAtributo}}</mat-label>
                                     <div class="form-group" *ngIf="el.editar">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Atributo</mat-label>
@@ -180,7 +178,7 @@
                                 </div>
                             </td>
                             <td>
-                                <mat-label *ngIf="!el.editar">{{el.value.valor}}</mat-label>
+                                <mat-label *ngIf="!el.editar">{{el.value.valor | currency:'BRL':true}}</mat-label>
                                 <div class="form-group" *ngIf="el.editar">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Valor</mat-label>
@@ -194,15 +192,12 @@
                                 </div>
                             </td>
                             <td>
-                                <mat-label *ngIf="!el.editar">{{el.value.destinacao}}</mat-label>
+                                <mat-label *ngIf="!el.editar">{{exibeProdutoPrecoDestinacao(el.value.destinacao)}}</mat-label>
                                 <div class="form-group" *ngIf="el.editar">
                                     <mat-radio-group formControlName="destinacao" aria-label="Selecione uma Opção">
                                         <ul class="list-group">
-                                            <li class="list-group-item list-group-item-action">
-                                                <mat-radio-button value="Compra">Compra</mat-radio-button>
-                                            </li>
-                                            <li class="list-group-item list-group-item-action">
-                                                <mat-radio-button value="Venda">Venda</mat-radio-button>
+                                            <li class="list-group-item list-group-item-action" *ngFor="let e of produtoPrecoDestinacaoList">
+                                                <mat-radio-button value="{{e.chave}}">{{e.valor}}</mat-radio-button>
                                             </li>
                                         </ul>
                                     </mat-radio-group>
@@ -243,4 +238,6 @@
     -->
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
+
 </form>

@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { ProdutoModelo } from '../../comum/modelo/entidade/produto-modelo';
 import { ProdutoDescricao } from '../../comum/modelo/entidade/produto-descricao';
 import { ProdutoAtributo } from '../../comum/modelo/entidade/produto-atributo';
 import { ProdutoPreco } from '../../comum/modelo/entidade/produto-preco';
-import { Observable, of } from 'rxjs';
 import { ProdutoAtributoService } from '../produto-atributo/produto-atributo.service';
+import { ProdutoModeloFiltroDTO } from '../../comum/modelo/dto/produto-modelo.filtro.dto';
 
 @Injectable()
 export class ProdutoModeloFormService {
 
-  public $produtoAtributoList: Observable<ProdutoAtributo[]> = of(
-    this._produtoAtributoService.lista
-  );
+  public $produtoAtributoList: Observable<ProdutoAtributo[]> = this._produtoAtributoService.fitrar();
 
   constructor(
-    private formBuilder: FormBuilder,
+    private _formBuilder: FormBuilder,
     private _produtoAtributoService: ProdutoAtributoService,
   ) {
   }
@@ -27,7 +26,7 @@ export class ProdutoModeloFormService {
       entidade = new ProdutoModelo();
     }
 
-    let result = this.formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         nome: [entidade.nome, [Validators.required]],
@@ -50,14 +49,14 @@ export class ProdutoModeloFormService {
         result.push(this.criarFormularioProdutoDescricao(lista[i]));
       }
     }
-    return this.formBuilder.array(result);
+    return this._formBuilder.array(result);
   }
 
   public criarFormularioProdutoDescricao(entidade: ProdutoDescricao) {
     if (!entidade) {
       entidade = new ProdutoDescricao();
     }
-    let result = this.formBuilder.group(
+    let result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         produtoAtributo: this.criarFormularioProdutoAtributo(entidade.produtoAtributo),
@@ -73,12 +72,12 @@ export class ProdutoModeloFormService {
     if (!entidade) {
       entidade = new ProdutoAtributo();
     }
-    let result = this.formBuilder.control(entidade, [Validators.required]);
+    const result = this._formBuilder.control(entidade, [Validators.required]);
 
     result['$produtoAtributoListFiltered'] = result.valueChanges.pipe(
       startWith(''),
       switchMap(value => {
-        let r = this._filter(value);
+        const r = this._filter(value);
         return r;
       })
     );
@@ -90,32 +89,33 @@ export class ProdutoModeloFormService {
     let filterValue = '';
     if (value) {
       filterValue = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
+      this._produtoAtributoService.filtro.nome = filterValue;
       return this.$produtoAtributoList.pipe(
         map(atributos => atributos.filter(atributo => atributo.nome.toLowerCase().includes(filterValue)))
       );
     } else {
-      let result = new ProdutoAtributo();
+      const result = new ProdutoAtributo();
       result.nome = typeof value === 'string' ? value.toLowerCase() : value.nome.toLowerCase();
       return this.$produtoAtributoList;
     }
   }
 
   public criarFormularioProdutoPrecoList(lista: ProdutoPreco[]) {
-    let result = [];
+    const result = [];
 
     if (lista && lista.length) {
       for (let i = 0; i < lista.length; i++) {
         result.push(this.criarFormularioProdutoPreco(lista[i]));
       }
     }
-    return this.formBuilder.array(result);
+    return this._formBuilder.array(result);
   }
 
   public criarFormularioProdutoPreco(entidade: ProdutoPreco) {
     if (!entidade) {
       entidade = new ProdutoPreco();
     }
-    let result = this.formBuilder.group(
+    let result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         vigencia: [entidade.vigencia, [Validators.required]],
@@ -124,6 +124,20 @@ export class ProdutoModeloFormService {
       }
     );
 
+    return result;
+  }
+
+  public criarFormularioFiltro(entidade: ProdutoModeloFiltroDTO) {
+    if (!entidade) {
+      entidade = new ProdutoModeloFiltroDTO();
+    }
+    const result = this._formBuilder.group(
+      {
+        nome: [entidade.nome, []],
+        codigo: [entidade.codigo, []],
+        materiaPrima: [entidade.materiaPrima, []],
+      }
+    );
     return result;
   }
 

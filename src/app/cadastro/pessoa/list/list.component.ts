@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { PessoaCrudService } from '../pessoa.service';
+import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
 import { ParceiroFuncao } from '../../../comum/modelo/dominio/parceiro-funcao';
 import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';

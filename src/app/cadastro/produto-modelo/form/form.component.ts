@@ -12,6 +12,8 @@ import { ProdutoPreco } from '../../../comum/modelo/entidade/produto-preco';
 import { ProdutoAtributo } from '../../../comum/modelo/entidade/produto-atributo';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
 import { constante } from 'src/app/comum/constante';
+import { removeMime, adMime, deEnumParaChaveValor } from 'src/app/comum/ferramenta/ferramenta-comum';
+import { ProdutoPrecoDestinacao } from 'src/app/comum/modelo/dominio/produto-preco-destinacao';
 
 @Component({
   selector: 'app-form',
@@ -23,21 +25,24 @@ export class FormComponent implements OnInit {
   public frm = this._formService.criarFormulario(new ProdutoModelo());
 
   public isEnviado = false;
-  public entidade: ProdutoModelo;
   public id: number;
+
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public produtoDescricaoEditando = false;
   public produtoPrecoEditando = false;
 
+  public produtoPrecoDestinacaoList: any;
+
   constructor(
     private _service: ProdutoModeloCrudService,
     private _formService: ProdutoModeloFormService,
-    private _mensagem: MensagemService,
-    private _anexar: AnexarService,
     private _route: ActivatedRoute,
     private _router: Router,
+    private _mensagem: MensagemService,
+    private _anexar: AnexarService,
   ) {
+    this.produtoPrecoDestinacaoList = deEnumParaChaveValor(ProdutoPrecoDestinacao);
   }
 
   ngOnInit() {
@@ -46,9 +51,12 @@ export class FormComponent implements OnInit {
     });
 
     this._route.data.subscribe((info) => {
-      this.entidade = info['resolve']['principal'];
-      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this._formService.criarFormulario(this.entidade);
+      info.resolve.principal.subscribe((p: ProdutoModelo) => {
+        this._service.entidade = p;
+        this._service.entidade.foto = adMime(this._service.entidade.foto);
+        this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
+        this.carregar(this._service.entidade);
+      });
     });
   }
 
@@ -79,6 +87,17 @@ export class FormComponent implements OnInit {
     }
 
     const entidade = this.frm.value;
+    entidade.foto = removeMime(entidade.foto);
+
+    if (entidade.produtoDescricaoList) {
+      for (const pd of entidade.produtoDescricaoList) {
+        if (pd.produtoAtributo && typeof pd.produtoAtributo === 'string') {
+          const nome = pd.produtoAtributo;
+          pd.produtoAtributo = new ProdutoAtributo();
+          pd.produtoAtributo.nome = nome;
+        }
+      }
+    }
 
     if ('Novo' === this._service.acao) {
       this._service.create(entidade).subscribe((id: number) => {
@@ -90,6 +109,28 @@ export class FormComponent implements OnInit {
         this._mensagem.sucesso('Registro atualizado!');
         this._router.navigate(['cadastro', this._service.funcionalidade]);
       });
+    }
+  }
+
+  public carregar(f: ProdutoModelo) {
+    if (!f) {
+      f = new ProdutoModelo();
+    }
+    this.frm = this._formService.criarFormulario(f);
+  }
+
+  public async restaurar() {
+    if (await
+      this._mensagem.confirme(
+        `
+        <p>
+           Confirma a restauração dos dados do formulário?
+        </p>
+        <div class="alert alert-danger" role="alert">
+           Todas as modificações serão perdidas!
+        </div>
+         `)) {
+      this.carregar(this._service.entidade);
     }
   }
 
@@ -213,7 +254,7 @@ export class FormComponent implements OnInit {
   public carregarFoto(event) {
     event.preventDefault();
     this._anexar.carregar([AnexarTipo.IMAGEM], false).subscribe((v) => {
-      let foto = v['IMAGEM'][0];
+      const foto = v['IMAGEM'][0];
       this.frm.get('foto').setValue(foto);
     });
   }
@@ -221,6 +262,14 @@ export class FormComponent implements OnInit {
   public limparFoto(event) {
     event.preventDefault();
     this.frm.get('foto').setValue(null);
+  }
+
+  public exibeProdutoPrecoDestinacao(v: ProdutoPrecoDestinacao) {
+    if (!v) {
+      return '';
+    }
+    const result = this.produtoPrecoDestinacaoList.filter((i: { chave: string, valor: string }) => i.chave === v);
+    return result && result[0] ? result[0].valor : '';
   }
 
 }

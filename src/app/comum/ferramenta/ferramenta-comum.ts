@@ -75,3 +75,19 @@ export function deEnumParaChaveValor(e: any): any {
         };
     });
 }
+
+export const IMAGE_MIME_DEFAULT = 'data:image/jpeg;base64,';
+
+export function adMime(v: string) {
+    if (v && !v.startsWith(IMAGE_MIME_DEFAULT.substr(0, 5))) {
+        v = IMAGE_MIME_DEFAULT + v;
+    }
+    return v;
+}
+
+export function removeMime(v: string) {
+    if (v && v.startsWith(IMAGE_MIME_DEFAULT.substr(0, 5))) {
+        v = v.substr(v.indexOf(',') + 1, v.length);
+    }
+    return v;
+}

@@ -1,5 +1,5 @@
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
-    
+
     <p class="h5 mb-4 text-left">Filtrar</p>
 
     <div class="form-group">
@@ -49,7 +49,14 @@
             </div>
         </div>
     </div>
-    
+
     <button class="btn btn-success btn-block" type="submit">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="carregar(null)">Limpar Campos do Filtro</button>
 
 </form>
+
+<p>vl /{{frm.value | json}}/</p>
+<p>st /{{frm.status}}/</p>
+<p>er /{{frm.errors | json}}/</p>
+            <!-- 
+-->

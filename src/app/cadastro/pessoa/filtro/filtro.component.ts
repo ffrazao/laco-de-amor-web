@@ -1,10 +1,11 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { PessoaCrudService } from '../pessoa.service';
 import { PessoaFormService } from '../pessoa-form.service';
 import { PessoaFiltroDTO } from '../../../comum/modelo/dto/pessoa.filtro.dto';
+
 import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
 import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
 
@@ -23,7 +24,7 @@ export class FiltroComponent implements OnInit {
   constructor(
     private _service: PessoaCrudService,
     private _formService: PessoaFormService,
-    private router: Router
+    private router: Router,
   ) {
     this.pessoaTipoList = deEnumParaChaveValor(PessoaTipo);
   }
@@ -36,7 +37,7 @@ export class FiltroComponent implements OnInit {
     this.isEnviado = true;
     this._service.filtro = this.frm.value;
 
-    this.router.navigate(['cadastro', 'pessoa']);
+    this.router.navigate(['cadastro', this._service.funcionalidade]);
   }
 
   public carregar(f: PessoaFiltroDTO) {

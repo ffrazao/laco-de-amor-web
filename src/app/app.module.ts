@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,7 @@ import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
 import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
 import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
 import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
+import { ErrorIntercept } from './comum/servico/erro/error-intercept';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,11 @@ import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
     AuthGuardService,
     AutorizarTrocarSenhaResolve,
     TrocarSenhaResolve,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorIntercept,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

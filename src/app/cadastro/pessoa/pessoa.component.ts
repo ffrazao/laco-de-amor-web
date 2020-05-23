@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MensagemService } from '../../comum/servico/mensagem/mensagem.service';
 import { PessoaCrudService } from './pessoa.service';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pessoa',
@@ -19,11 +19,9 @@ export class PessoaComponent implements OnInit {
     private _service: PessoaCrudService,
     private _mensagem: MensagemService,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-
   }
 
   public async excluir(event) {

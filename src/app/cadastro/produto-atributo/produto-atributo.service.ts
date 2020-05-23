@@ -8,7 +8,7 @@ import { ProdutoAtributoFiltroDTO } from 'src/app/comum/modelo/dto/produto-atrib
 export class ProdutoAtributoService extends ServicoCrudService<ProdutoAtributo, ProdutoAtributoFiltroDTO> {
 
   constructor() {
-    super('cadastro/produto-atributo');
+    super('produto-atributo');
 
     this.filtro = new ProdutoAtributoFiltroDTO();
   }

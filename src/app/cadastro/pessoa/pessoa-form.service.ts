@@ -129,11 +129,14 @@ export class PessoaFormService {
   }
 
   public criarFormularioFiltro(entidade: PessoaFiltroDTO) {
+    if (!entidade) {
+      entidade = new Pessoa();
+    }
     const result = this._formBuilder.group(
       {
+        nome: [entidade.nome, []],
         pessoaTipo: [entidade.pessoaTipo, []],
         cpfCnpj: [entidade.cpfCnpj, []],
-        nome: [entidade.nome, []],
       }
     );
     return result;

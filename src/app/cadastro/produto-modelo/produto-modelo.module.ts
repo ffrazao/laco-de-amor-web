@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ProdutoModeloComponent } from './produto-modelo.component';
 import { ProdutoModeloRoutingModule } from './produto-modelo-routing.module';
+import { ProdutoModeloComponent } from './produto-modelo.component';
 import { ListResolve } from './list/list.resolve';
 import { FormResolve } from './form/form.resolve';
 import { FormNovoResolve } from './form/form-novo.resolve';
