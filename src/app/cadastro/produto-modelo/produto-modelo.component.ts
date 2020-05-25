@@ -29,7 +29,7 @@ export class ProdutoModeloComponent implements OnInit {
     if (await this._mensagem.confirme('ATENÇÃO! Esta operação não poderá ser desfeita!\n\nConfirma a exclusão?')) {
       this._service.delete(this._service.entidade.id).subscribe(() => {
         this._mensagem.sucesso('Registro excluído!');
-        this._router.navigate(['cadastro', 'pessoa']);
+        this._router.navigate(['cadastro', this._service.funcionalidade]);
       });
     }
   }

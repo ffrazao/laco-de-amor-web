@@ -1,5 +1,5 @@
-import { FiltroDTO } from './filtro.dto';
+import { EventoFiltroDTO } from './evento.filtro.dto';
 
-export class ProduzirFiltroDTO implements FiltroDTO {
+export class ProduzirFiltroDTO extends EventoFiltroDTO {
 
 }

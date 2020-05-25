@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
 
-import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { CotarCrudService } from '../cotar.service';
+import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
 
 @Injectable()
-export class FormResolve implements Resolve<any> {
+export class FormResolve implements Resolve<Cotar> {
 
     constructor(
         private _service: CotarCrudService,
@@ -16,13 +16,16 @@ export class FormResolve implements Resolve<any> {
     ) {
     }
 
-    resolve(route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        let entidade = this._service.restore(route.params['id']);
+    resolve(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ): any {
         return {
-            principal: entidade,
+            principal: this._service.restore(route.params.id),
             acao: 'Visualizar',
-            apoio: [this._unidadeMedidaService.lista],
+            apoio: [
+                {unidadeMedidaList: this._unidadeMedidaService.filtrar()}
+            ]
         };
     }
 

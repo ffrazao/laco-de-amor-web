@@ -130,7 +130,7 @@ export class PessoaFormService {
 
   public criarFormularioFiltro(entidade: PessoaFiltroDTO) {
     if (!entidade) {
-      entidade = new Pessoa();
+      entidade = new PessoaFiltroDTO();
     }
     const result = this._formBuilder.group(
       {

@@ -52,8 +52,8 @@ export class FormComponent implements OnInit {
 
     this._route.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: ProdutoModelo) => {
+        p.foto = adMime(p.foto);
         this._service.entidade = p;
-        this._service.entidade.foto = adMime(this._service.entidade.foto);
         this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
         this.carregar(this._service.entidade);
       });

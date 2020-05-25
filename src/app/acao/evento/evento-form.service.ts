@@ -5,6 +5,7 @@ import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../comum/modelo/entidade/evento-pessoa';
 import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
 import { Evento } from '../../comum/modelo/entidade/evento';
+import { EventoFiltroDTO } from 'src/app/comum/modelo/dto/evento.filtro.dto';
 
 @Injectable()
 export class EventoFormService {
@@ -19,7 +20,7 @@ export class EventoFormService {
       entidade = new Evento();
     }
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         data: [entidade.data, [Validators.required]],
@@ -41,7 +42,7 @@ export class EventoFormService {
   }
 
   public criarFormularioEventoProdutoList(lista: EventoProduto[]): FormArray {
-    let result = [];
+    const result = [];
 
     if (lista && lista.length) {
       for (let i = 0; i < lista.length; i++) {
@@ -52,7 +53,7 @@ export class EventoFormService {
   }
 
   public criarFormularioEventoPessoaList(lista: EventoPessoa[]): FormArray {
-    let result = [];
+    const result = [];
 
     if (lista && lista.length) {
       for (let i = 0; i < lista.length; i++) {
@@ -67,9 +68,9 @@ export class EventoFormService {
       entidade = new EventoProduto();
     }
 
-    let obrigatorio = cotacao ? [Validators.required] : [];
+    const obrigatorio = cotacao ? [Validators.required] : [];
 
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         produto: [entidade.produto, [Validators.required]],
@@ -95,7 +96,7 @@ export class EventoFormService {
     if (!entidade) {
       entidade = new EventoPessoa();
     }
-    let result = this._formBuilder.group(
+    const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         pessoa: [entidade.pessoa, [Validators.required]],
@@ -111,6 +112,22 @@ export class EventoFormService {
 
     return result;
   }
+
+  public criarFormularioFiltro(entidade: EventoFiltroDTO) {
+    if (!entidade) {
+      entidade = new EventoFiltroDTO();
+    }
+    const result = this._formBuilder.group(
+      {
+        dataInicio: [entidade.dataInicio, []],
+        dataTermino: [entidade.dataTermino, []],
+        produto: [entidade.produto, []],
+        participante: [entidade.participante, []],
+      }
+    );
+    return result;
+  }
+
 
   private calculaOrcamento(lista: EventoProduto[]): number {
     let total = 0;

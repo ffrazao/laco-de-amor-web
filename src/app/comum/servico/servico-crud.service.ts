@@ -98,7 +98,7 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroD
     return this._http.post<E>(`${environment.REST_API_URL}/${this.funcionalidade}/novo`, modelo, { headers: this.headerData });
   }
 
-  public fitrar(): Observable<E[]> {
+  public filtrar(): Observable<E[]> {
     // captar parametros do filtro
     let param = Object.keys(this.filtro).filter(key => this.filtro[key])
       .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(this.filtro[key]))

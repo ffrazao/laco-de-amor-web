@@ -20,7 +20,7 @@ export class ListResolve implements Resolve<ProdutoModelo[]> {
     ): any {
         this._service.acao = 'Listar';
         return {
-            principal: this._service.fitrar()
+            principal: this._service.filtrar()
         };
     }
 

@@ -352,7 +352,7 @@
                                 <th class="text-right" colspan="6">Total da cotação {{i + 1}} do fornecedor
                                     {{el.value.pessoa.nome}}
                                 </th>
-                                <th class="text-right">{{el.value.eventoProdutoListTotal | currency:'BRL':true}}</th>
+                                <th class="text-right">{{el.value.eventoProdutoListTotal | currency:'BRL':'symbol'}}</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -361,11 +361,13 @@
         </mat-tab>
     </mat-tab-group>
 
-    <!-- 
     <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
     <p>er /{{frm.errors | json}}/</p>
+                <!-- 
     -->
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
+
 </form>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { ActivatedRoute, Router } from '@angular/router';
 import { CotarCrudService } from '../cotar.service';
+import { CotarFormService } from '../cotar-form.service';
 import { CotarFiltroDTO } from '../../../comum/modelo/dto/cotar.filtro.dto';
 
 @Component({
@@ -14,33 +15,30 @@ export class FiltroComponent implements OnInit {
 
   public frm: FormGroup;
   public isEnviado = false;
-  public entidade: CotarFiltroDTO;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private servico: CotarCrudService,
-    private router: Router) { }
-
-  ngOnInit(): void {
-    this.entidade = this.servico.filtro;
-    this.frm = this.criarFormulario(this.entidade);
+    private _service: CotarCrudService,
+    private _formService: CotarFormService,
+    private _router: Router,
+  ) {
   }
 
-  criarFormulario(entidade) {
-    const result = this.formBuilder.group(
-      {
-      }
-    );
-    return result;
+  ngOnInit(): void {
+    this.carregar(this._service.filtro);
   }
 
   public enviar() {
     this.isEnviado = true;
-    this.entidade = this.frm.value;
-    this.servico.filtro = this.entidade;
+    this._service.filtro = this.frm.value;
 
-    this.router.navigate(['acao', 'cotar']);
+    this._router.navigate(['acao', this._service.funcionalidade]);
+  }
+
+  public carregar(f: CotarFiltroDTO) {
+    if (!f) {
+      f = new CotarFiltroDTO();
+    }
+    this.frm = this._formService.criarFormularioFiltro(f);
   }
 
 }

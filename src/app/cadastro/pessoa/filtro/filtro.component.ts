@@ -24,7 +24,7 @@ export class FiltroComponent implements OnInit {
   constructor(
     private _service: PessoaCrudService,
     private _formService: PessoaFormService,
-    private router: Router,
+    private _router: Router,
   ) {
     this.pessoaTipoList = deEnumParaChaveValor(PessoaTipo);
   }
@@ -37,7 +37,7 @@ export class FiltroComponent implements OnInit {
     this.isEnviado = true;
     this._service.filtro = this.frm.value;
 
-    this.router.navigate(['cadastro', this._service.funcionalidade]);
+    this._router.navigate(['cadastro', this._service.funcionalidade]);
   }
 
   public carregar(f: PessoaFiltroDTO) {

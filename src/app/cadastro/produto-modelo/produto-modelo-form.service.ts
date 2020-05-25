@@ -13,7 +13,7 @@ import { ProdutoModeloFiltroDTO } from '../../comum/modelo/dto/produto-modelo.fi
 @Injectable()
 export class ProdutoModeloFormService {
 
-  public $produtoAtributoList: Observable<ProdutoAtributo[]> = this._produtoAtributoService.fitrar();
+  public $produtoAtributoList: Observable<ProdutoAtributo[]> = this._produtoAtributoService.filtrar();
 
   constructor(
     private _formBuilder: FormBuilder,

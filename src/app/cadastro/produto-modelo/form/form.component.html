@@ -178,7 +178,7 @@
                                 </div>
                             </td>
                             <td>
-                                <mat-label *ngIf="!el.editar">{{el.value.valor | currency:'BRL':true}}</mat-label>
+                                <mat-label *ngIf="!el.editar">{{el.value.valor | currency:'BRL':'symbol'}}</mat-label>
                                 <div class="form-group" *ngIf="el.editar">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Valor</mat-label>

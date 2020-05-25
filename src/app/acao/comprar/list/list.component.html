@@ -41,14 +41,14 @@
             <td>{{e.eventoPessoa.pessoa.cpfCnpj}}</td>
             <td class="text-right">{{e.quantidade}}</td>
             <td>{{e.unidadeMedida.nome}}</td>
-            <td class="text-right">{{e.valorUnitario | currency:'BRL':true}}</td>
-            <td class="text-right">{{e.valorTotal | currency:'BRL':true}}</td>
+            <td class="text-right">{{e.valorUnitario | currency:'BRL':'symbol'}}</td>
+            <td class="text-right">{{e.valorTotal | currency:'BRL':'symbol'}}</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td class="text-right" colspan="8">Valor Total</td>
-            <td class="text-right">{{el.eventoProdutoListTotal | currency:'BRL':true}}</td>
+            <td class="text-right">{{el.eventoProdutoListTotal | currency:'BRL':'symbol'}}</td>
           </tr>
         </tfoot>
       </table>

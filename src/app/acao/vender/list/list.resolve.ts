@@ -19,7 +19,7 @@ export class ListResolve implements Resolve<Vender[]> {
         state: RouterStateSnapshot
     ): any {
         return {
-            principal: this.servico.fitrar()
+            principal: this.servico.filtrar()
         };
     }
 

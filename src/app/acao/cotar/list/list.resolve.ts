@@ -10,7 +10,7 @@ import { CotarCrudService } from '../cotar.service';
 export class ListResolve implements Resolve<Cotar[]> {
 
     constructor(
-        private servico: CotarCrudService
+        private _service: CotarCrudService
     ) {
     }
 
@@ -18,8 +18,9 @@ export class ListResolve implements Resolve<Cotar[]> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Listar';
         return {
-            principal: this.servico.fitrar()
+            principal: this._service.filtrar()
         };
     }
 

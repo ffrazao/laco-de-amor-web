@@ -4,6 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { CotarCrudService } from '../cotar.service';
+import { EventoProduto } from 'src/app/comum/modelo/entidade/evento-produto';
+import { constante } from './../../../comum/constante';
+import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-list',
@@ -24,6 +27,8 @@ export class ListComponent implements OnInit {
 
   public dataSource: MatTableDataSource<Cotar>;
 
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
+
   constructor(
     private _service: CotarCrudService,
     private _activatedRoute: ActivatedRoute
@@ -34,7 +39,14 @@ export class ListComponent implements OnInit {
     this._activatedRoute.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Cotar[]) => {
         this._service.lista.length = 0;
-        p.forEach((r: Cotar) => this._service.lista.push(r));
+        p.forEach((r: Cotar) => {
+          if (r.eventoProdutoList) {
+            r.eventoProdutoList.forEach((ep: EventoProduto) =>
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
+            );
+          }
+          this._service.lista.push(r);
+        });
         this.dataSource = new MatTableDataSource(this._service.lista);
       });
     });
