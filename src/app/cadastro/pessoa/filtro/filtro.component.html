@@ -48,13 +48,39 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <mat-label>Tipo de Vínculo:</mat-label>
+        <mat-radio-group aria-label="Selecione mais de uma Opção">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action">
+                    <a (click)="marcarTodosNenhum()"> Todos/Nenhum </a>
+                </li>
+                <li class="list-group-item list-group-item-action">
+                    <mat-checkbox [(ngModel)]="cliente" [ngModelOptions]="{standalone: true}">
+                        Cliente
+                    </mat-checkbox>
+                </li>
+                <li class="list-group-item list-group-item-action">
+                    <mat-checkbox [(ngModel)]="fornecedor" [ngModelOptions]="{standalone: true}">
+                        Fornecedor
+                    </mat-checkbox>
+                </li>
+                <li class="list-group-item list-group-item-action">
+                    <mat-checkbox [(ngModel)]="parceiro" [ngModelOptions]="{standalone: true}">
+                        Parceiro
+                    </mat-checkbox>
+                </li>
+            </ul>
+        </mat-radio-group>
+    </div>
+
     <button class="btn btn-success btn-block" type="submit">Enviar</button>
     <button class="btn btn-secondary btn-block" type="button" (click)="carregar(null)">Limpar Campos do Filtro</button>
 
 </form>
 
-<!-- 
 <p>vl /{{frm.value | json}}/</p>
 <p>st /{{frm.status}}/</p>
 <p>er /{{frm.errors | json}}/</p>
+            <!-- 
 -->

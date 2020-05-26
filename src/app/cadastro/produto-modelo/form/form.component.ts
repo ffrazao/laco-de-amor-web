@@ -11,9 +11,10 @@ import { ProdutoDescricao } from '../../../comum/modelo/entidade/produto-descric
 import { ProdutoPreco } from '../../../comum/modelo/entidade/produto-preco';
 import { ProdutoAtributo } from '../../../comum/modelo/entidade/produto-atributo';
 import { AnexarTipo } from '../../../comum/servico/anexar/anexar-tipo';
-import { constante } from 'src/app/comum/constante';
-import { removeMime, adMime, deEnumParaChaveValor } from 'src/app/comum/ferramenta/ferramenta-comum';
-import { ProdutoPrecoDestinacao } from 'src/app/comum/modelo/dominio/produto-preco-destinacao';
+import { constante } from '../../../comum/constante';
+import { removeMime, adMime, deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
+import { ProdutoPrecoDestinacao } from '../../../comum/modelo/dominio/produto-preco-destinacao';
+import { Confirmacao } from '../../../comum/modelo/dominio/confirmacao';
 
 @Component({
   selector: 'app-form',
@@ -34,6 +35,8 @@ export class FormComponent implements OnInit {
 
   public produtoPrecoDestinacaoList: any;
 
+  public confirmacaoList: any;
+
   constructor(
     private _service: ProdutoModeloCrudService,
     private _formService: ProdutoModeloFormService,
@@ -43,6 +46,7 @@ export class FormComponent implements OnInit {
     private _anexar: AnexarService,
   ) {
     this.produtoPrecoDestinacaoList = deEnumParaChaveValor(ProdutoPrecoDestinacao);
+    this.confirmacaoList = deEnumParaChaveValor(Confirmacao);
   }
 
   ngOnInit() {
@@ -270,6 +274,14 @@ export class FormComponent implements OnInit {
     }
     const result = this.produtoPrecoDestinacaoList.filter((i: { chave: string, valor: string }) => i.chave === v);
     return result && result[0] ? result[0].valor : '';
+  }
+
+  public exibeConfirmacao(v: Confirmacao) {
+    if (!v) {
+      return '';
+    }
+    const result = this.confirmacaoList.filter((i: { chave: string, valor: string }) => i.chave === v);
+    return result ? result[0].valor : '';
   }
 
 }

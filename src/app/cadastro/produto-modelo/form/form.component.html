@@ -30,11 +30,8 @@
         <mat-label>Matéria Prima:</mat-label>
         <mat-radio-group formControlName="materiaPrima" aria-label="Selecione uma Opção">
             <ul class="list-group">
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="S">Sim</mat-radio-button>
-                </li>
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="N">Não</mat-radio-button>
+                <li class="list-group-item list-group-item-action" *ngFor="let e of confirmacaoList">
+                    <mat-radio-button value="{{e.chave}}">{{e.valor}}</mat-radio-button>
                 </li>
             </ul>
         </mat-radio-group>
@@ -164,11 +161,11 @@
                         <tr *ngFor="let el of ordenadoProdutoPreco(produtoPrecoList.controls); index as i;"
                             [formGroupName]="i">
                             <td>
-                                <mat-label *ngIf="!el.editar">{{el.value.vigencia}}</mat-label>
+                                <mat-label *ngIf="!el.editar">{{el.value.vigencia | date: 'dd/MM/yyyy'}}</mat-label>
                                 <div class="form-group" *ngIf="el.editar">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Vigência</mat-label>
-                                        <input matInput placeholder="Vigência" formControlName="vigencia">
+                                        <input matInput type="date" placeholder="Vigência" formControlName="vigencia">
                                     </mat-form-field>
                                 </div>
                                 <div class="text-danger" *ngIf="isEnviado && el.controls.vigencia.invalid">
@@ -182,7 +179,9 @@
                                 <div class="form-group" *ngIf="el.editar">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Valor</mat-label>
-                                        <input matInput placeholder="Valor" formControlName="valor">
+                                        <input matInput type="number" placeholder="Valor" formControlName="valor" 
+                                            step="0.1" 
+                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
                                     </mat-form-field>
                                 </div>
                                 <div class="text-danger" *ngIf="isEnviado && el.controls.valor.invalid">

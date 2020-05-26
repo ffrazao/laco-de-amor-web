@@ -1,3 +1,4 @@
+import { PessoaVinculoTipo } from './../../comum/modelo/dominio/pessoa-vinculo-tipo';
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -137,6 +138,7 @@ export class PessoaFormService {
         nome: [entidade.nome, []],
         pessoaTipo: [entidade.pessoaTipo, []],
         cpfCnpj: [entidade.cpfCnpj, []],
+        pessoaVinculoTipo: [entidade.pessoaVinculoTipo, []],
       }
     );
     return result;

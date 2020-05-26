@@ -18,6 +18,8 @@ import { constante } from '../../../comum/constante';
 import { isNumber, adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
 import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { unidadeMedidaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { Confirmacao } from 'src/app/comum/modelo/dominio/confirmacao';
+import { EventoPessoaFuncao } from 'src/app/comum/modelo/entidade/evento-pessoa-funcao';
 
 @Component({
   selector: 'app-form',
@@ -34,6 +36,7 @@ export class FormComponent implements OnInit {
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public unidadeMedidaList: UnidadeMedida[] = [];
+  private eventoPessoaFuncao;
 
   public selecionaTab = 0;
 
@@ -45,7 +48,6 @@ export class FormComponent implements OnInit {
     private _mensagem: MensagemService,
     private _produtoModeloService: ProdutoModeloCrudService,
     private _pessoaService: PessoaCrudService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -70,6 +72,10 @@ export class FormComponent implements OnInit {
       info.resolve.apoio[0].unidadeMedidaList.subscribe((a: UnidadeMedida[]) => {
         this.unidadeMedidaList.length = 0;
         a.forEach(aa => this.unidadeMedidaList.push(aa));
+      });
+
+      info.resolve.apoio[1].eventoPessoaFuncao.subscribe((a: EventoPessoaFuncao[]) => {
+        this.eventoPessoaFuncao = a[0];
       });
     });
   }
@@ -162,16 +168,17 @@ export class FormComponent implements OnInit {
       this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
         const result = [];
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
-          this._produtoModeloService.lista.forEach(val => {
-            let p = this.pesquisarEventoProduto.toLowerCase();
-            if (val.materiaPrima === 'S' &&
-              (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
+          this._produtoModeloService.filtro.nome = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.codigo = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.materiaPrima = 'S';
+          this._produtoModeloService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
       });
     }
   }
@@ -230,17 +237,18 @@ export class FormComponent implements OnInit {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
         const result = [];
         if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
-          this._pessoaService.lista.forEach(val => {
-            let p = this.pesquisarEventoPessoa.toLowerCase();
-            if ((val.fornecedor && val.fornecedor.id) &&
-              (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+          this._pessoaService.filtro.nome = this.pesquisarEventoPessoa;
+          this._pessoaService.filtro.cpfCnpj = this.pesquisarEventoPessoa;
+          this._pessoaService.filtro.pessoaVinculoTipo = ['FORNECEDOR'];
+          this._pessoaService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
-      })
+      });
     }
   }
 
@@ -249,10 +257,10 @@ export class FormComponent implements OnInit {
   }
 
   public adicionarEventoPessoa() {
-    let ep = new EventoPessoa();
-    ep.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[0];
+    const ep = new EventoPessoa();
+    ep.eventoPessoaFuncao = this.eventoPessoaFuncao;
     ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
-    let id = ep.pessoa.id;
+    const id = ep.pessoa.id;
     let existe = false;
     this.eventoPessoaList.value.forEach(e => {
       if (e.pessoa.id === id) {

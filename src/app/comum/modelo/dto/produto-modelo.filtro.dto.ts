@@ -5,6 +5,6 @@ export class ProdutoModeloFiltroDTO implements FiltroDTO {
 
     nome: string;
     codigo: string;
-    materiaPrima: Confirmacao;
+    materiaPrima: Confirmacao | string;
 
 }

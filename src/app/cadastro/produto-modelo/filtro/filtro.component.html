@@ -34,11 +34,8 @@
                 <li class="list-group-item list-group-item-action">
                     <mat-radio-button value="">Todos</mat-radio-button>
                 </li>
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="S">Sim</mat-radio-button>
-                </li>
-                <li class="list-group-item list-group-item-action">
-                    <mat-radio-button value="N">Não</mat-radio-button>
+                <li class="list-group-item list-group-item-action" *ngFor="let e of confirmacaoList">
+                    <mat-radio-button value="{{e.chave}}">{{e.valor}}</mat-radio-button>
                 </li>
             </ul>
         </mat-radio-group>

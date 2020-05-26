@@ -6,6 +6,7 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { CotarCrudService } from '../cotar.service';
 import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 
 @Injectable()
 export class FormResolve implements Resolve<Cotar> {
@@ -13,6 +14,7 @@ export class FormResolve implements Resolve<Cotar> {
     constructor(
         private _service: CotarCrudService,
         private _unidadeMedidaService: UnidadeMedidaCrudService,
+        private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
     ) {
     }
 
@@ -20,11 +22,13 @@ export class FormResolve implements Resolve<Cotar> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._eventoPessoaFuncaoService.filtro.codigo = 'FORNECEDOR';
         return {
             principal: this._service.restore(route.params.id),
             acao: 'Visualizar',
             apoio: [
-                {unidadeMedidaList: this._unidadeMedidaService.filtrar()}
+                {unidadeMedidaList: this._unidadeMedidaService.filtrar()},
+                {eventoPessoaFuncao: this._eventoPessoaFuncaoService.filtrar()}
             ]
         };
     }

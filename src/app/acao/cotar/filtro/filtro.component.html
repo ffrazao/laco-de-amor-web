@@ -5,7 +5,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Data Inicial</mat-label>
-            <input matInput placeholder="A partir de" formControlName="dataInicio">
+            <input matInput type="date" placeholder="A partir de" formControlName="dataInicio">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.dataInicio.invalid">
             <div *ngIf="frm.controls.dataInicio.errors.required">
@@ -17,7 +17,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Data Término</mat-label>
-            <input matInput placeholder="Até" formControlName="dataTermino">
+            <input matInput type="date" placeholder="Até" formControlName="dataTermino">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.dataTermino.invalid">
             <div *ngIf="frm.controls.dataTermino.errors.required">
@@ -29,7 +29,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Produto</mat-label>
-            <input matInput placeholder="Até" formControlName="produto">
+            <input matInput placeholder="Produto relacionado" formControlName="produto">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.produto.invalid">
             <div *ngIf="frm.controls.produto.errors.required">
@@ -41,7 +41,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Participante</mat-label>
-            <input matInput placeholder="Participante" formControlName="participante">
+            <input matInput placeholder="Participante relacionado" formControlName="participante">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.participante.invalid">
             <div *ngIf="frm.controls.participante.errors.required">

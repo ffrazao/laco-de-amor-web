@@ -186,13 +186,13 @@ export class FormComponent implements OnInit {
   public completarEventoProduto(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
-        let result = [];
+        const result = [];
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
           this._produtoModeloService.lista.forEach(val => {
             let p = this.pesquisarEventoProduto.toLowerCase();
@@ -219,7 +219,7 @@ export class FormComponent implements OnInit {
     if (!ep.unidadeMedida && this.unidadeMedidaList.length === 1) {
       ep.unidadeMedida = this.unidadeMedidaList[0];
     }
-    let id = ep.produto.produtoModelo.id;
+    const id = ep.produto.produtoModelo.id;
     let existe = false;
     this.eventoProdutoList.value.forEach(e => {
       if (e.produto.produtoModelo.id === id) {
@@ -291,16 +291,16 @@ export class FormComponent implements OnInit {
   public completarEventoPessoa(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
-        let result = [];
+        const result = [];
         if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
           this._pessoaService.lista.forEach(val => {
-            let p = this.pesquisarEventoPessoa.toLowerCase();
+            const p = this.pesquisarEventoPessoa.toLowerCase();
             if ((val.fornecedor && val.fornecedor.id) &&
               (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
               result.push(Object.assign({}, val));
@@ -309,7 +309,7 @@ export class FormComponent implements OnInit {
         }
         resolve(result);
         return result;
-      })
+      });
     }
   }
 

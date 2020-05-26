@@ -6,7 +6,7 @@ import { ProdutoModeloCrudService } from '../produto-modelo.service';
 import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
 import { constante } from '../../../comum/constante';
 import { adMime, deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
-import { Confirmacao } from 'src/app/comum/modelo/dominio/confirmacao';
+import { Confirmacao } from '../../../comum/modelo/dominio/confirmacao';
 
 @Component({
   selector: 'app-list',

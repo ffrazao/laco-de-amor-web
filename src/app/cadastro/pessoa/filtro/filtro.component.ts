@@ -8,6 +8,7 @@ import { PessoaFiltroDTO } from '../../../comum/modelo/dto/pessoa.filtro.dto';
 
 import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
 import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
+import { PessoaVinculoTipo } from '../../../comum/modelo/dominio/pessoa-vinculo-tipo';
 
 @Component({
   selector: 'app-filtro',
@@ -19,7 +20,14 @@ export class FiltroComponent implements OnInit {
   public frm: FormGroup;
   public isEnviado = false;
 
+  public marcarTodosNenhumVlr = false;
+
   public pessoaTipoList: any;
+  public pessoaVinculoTipoList: any;
+
+  public cliente = false;
+  public fornecedor = false;
+  public parceiro = false;
 
   constructor(
     private _service: PessoaCrudService,
@@ -27,6 +35,7 @@ export class FiltroComponent implements OnInit {
     private _router: Router,
   ) {
     this.pessoaTipoList = deEnumParaChaveValor(PessoaTipo);
+    this.pessoaVinculoTipoList = deEnumParaChaveValor(PessoaVinculoTipo);
   }
 
   ngOnInit(): void {
@@ -36,7 +45,16 @@ export class FiltroComponent implements OnInit {
   public enviar() {
     this.isEnviado = true;
     this._service.filtro = this.frm.value;
-
+    this._service.filtro.pessoaVinculoTipo = [];
+    if (this.cliente) {
+      this._service.filtro.pessoaVinculoTipo.push('CLIENTE');
+    }
+    if (this.fornecedor) {
+      this._service.filtro.pessoaVinculoTipo.push('FORNECEDOR');
+    }
+    if (this.parceiro) {
+      this._service.filtro.pessoaVinculoTipo.push('PARCEIRO');
+    }
     this._router.navigate(['cadastro', this._service.funcionalidade]);
   }
 
@@ -45,6 +63,21 @@ export class FiltroComponent implements OnInit {
       f = new PessoaFiltroDTO();
     }
     this.frm = this._formService.criarFormularioFiltro(f);
+    this.cliente = false;
+    this.fornecedor = false;
+    this.parceiro = false;
+    if (f.pessoaVinculoTipo) {
+      this.cliente = f.pessoaVinculoTipo.includes('CLIENTE');
+      this.fornecedor = f.pessoaVinculoTipo.includes('FORNECEDOR');
+      this.parceiro = f.pessoaVinculoTipo.includes('PARCEIRO');
+    }
+  }
+
+  public marcarTodosNenhum() {
+    this.marcarTodosNenhumVlr = !this.marcarTodosNenhumVlr;
+    this.cliente = this.marcarTodosNenhumVlr;
+    this.fornecedor = this.marcarTodosNenhumVlr;
+    this.parceiro = this.marcarTodosNenhumVlr;
   }
 
 }

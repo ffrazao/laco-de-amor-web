@@ -6,5 +6,6 @@ export class PessoaFiltroDTO implements FiltroDTO {
     nome: string;
     pessoaTipo: PessoaTipo;
     cpfCnpj: string;
+    pessoaVinculoTipo: string[];
 
 }
