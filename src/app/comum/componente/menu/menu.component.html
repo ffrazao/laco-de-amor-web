@@ -15,16 +15,14 @@
                     Pessoas
                 </a>
             </button>
-            <!-- 
-            <button mat-menu-item>
-                <a [routerLink]="['/', 'cadastro', 'usuario']">
-                    Usuário
-                </a>
-            </button>
-            -->
             <button mat-menu-item>
                 <a [routerLink]="['/', 'cadastro', 'produto-modelo']">
                     Modelo de Produtos
+                </a>
+            </button>
+            <button mat-menu-item>
+                <a [routerLink]="['/', 'cadastro', 'usuario']">
+                    Usuário
                 </a>
             </button>
         </mat-menu>
@@ -62,10 +60,8 @@
 
         <span class="flexExpand"></span>
 
-        <img alt="Foto" 
-            *ngIf="estaLogado" 
-            [src]="login && login.foto ? 'data:image/jpeg;base64,' + login.foto : SEM_FOTO" 
-            class="mx-auto d-block" 
+        <img alt="Foto" *ngIf="estaLogado"
+            [src]="login && login.foto ? 'data:image/jpeg;base64,' + login.foto : SEM_FOTO" class="mx-auto d-block"
             style="max-height: 100px; max-width: 100px; border-radius: 50%;">
 
         <button mat-icon-button [matMenuTriggerFor]="sistemaMenu">
