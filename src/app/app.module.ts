@@ -1,3 +1,4 @@
+import { MirrorModule } from './comum/componente/mirror/mirror.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +18,8 @@ import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
 import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
 import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
 import { ErrorIntercept } from './comum/servico/erro/error-intercept';
+import { DomService } from './comum/servico/dom.service';
+import { HttpConfigInterceptor } from './comum/servico/interceptor/httpconfig.interceptor';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -34,6 +37,7 @@ registerLocaleData(localePt, 'pt-BR');
     AppRoutingModule,
     MenuModule,
     RodapeModule,
+    MirrorModule,
   ],
   exports: [
     MensagemModule,
@@ -45,10 +49,15 @@ registerLocaleData(localePt, 'pt-BR');
     AuthGuardService,
     AutorizarTrocarSenhaResolve,
     TrocarSenhaResolve,
+    DomService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpConfigInterceptor, multi: true
     },
     {
       provide: LOCALE_ID,

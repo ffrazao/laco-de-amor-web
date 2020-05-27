@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +13,8 @@ import { CotarFiltroDTO } from '../../../comum/modelo/dto/cotar.filtro.dto';
   styleUrls: ['./filtro.component.scss']
 })
 export class FiltroComponent implements OnInit {
+
+  public prod = environment.production;
 
   public frm: FormGroup;
   public isEnviado = false;

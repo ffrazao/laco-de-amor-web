@@ -1,8 +1,63 @@
 <form class="text-left" [formGroup]="frm" (ngSubmit)="enviar()">
 
     <p class="h5 mb-4 text-left">Filtrar</p>
-    
+
+    <div class="form-group">
+        <mat-form-field appearance="outline">
+            <mat-label>Data Inicial</mat-label>
+            <input matInput type="date" placeholder="A partir de" formControlName="dataInicio">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.dataInicio.invalid">
+            <div *ngIf="frm.controls.dataInicio.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <mat-form-field appearance="outline">
+            <mat-label>Data Término</mat-label>
+            <input matInput type="date" placeholder="Até" formControlName="dataTermino">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.dataTermino.invalid">
+            <div *ngIf="frm.controls.dataTermino.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <mat-form-field appearance="outline">
+            <mat-label>Produto</mat-label>
+            <input matInput placeholder="Nome ou Código do Produto relacionado" formControlName="produto">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.produto.invalid">
+            <div *ngIf="frm.controls.produto.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <mat-form-field appearance="outline">
+            <mat-label>Parceiro</mat-label>
+            <input matInput placeholder="Nome ou CPF do Parceiro relacionado" formControlName="participante">
+        </mat-form-field>
+        <div class="text-danger" *ngIf="isEnviado && frm.controls.participante.invalid">
+            <div *ngIf="frm.controls.participante.errors.required">
+                Campo obrigatório!
+            </div>
+        </div>
+    </div>
 
     <button class="btn btn-success btn-block" type="submit">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="carregar(null)">Limpar Campos do Filtro</button>
 
 </form>
+
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+    <p><b>prod: {{prod}}</b></p>
+    <p>vl /{{frm.value | json}}/</p>
+    <p>st /{{frm.status}}/</p>
+    <p>er /{{frm.errors | json}}/</p>
+</div>

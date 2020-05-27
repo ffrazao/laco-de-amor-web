@@ -2,37 +2,34 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
 
 import { ProduzirCrudService } from '../produzir.service';
 import { UnidadeMedidaCrudService } from '../../../cadastro/unidade-medida/unidade-medida.service';
-import { EventoTipoCrudService } from '../../../cadastro/evento-tipo/evento-tipo.service';
-import { hojeStr } from '../../../comum/ferramenta/ferramenta-comum';
+import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { Produzir } from '../../../comum/modelo/entidade/produzir';
 
 @Injectable()
-export class FormNovoResolve implements Resolve<any> {
+export class FormNovoResolve implements Resolve<Produzir> {
 
     constructor(
         private _service: ProduzirCrudService,
         private _unidadeMedidaService: UnidadeMedidaCrudService,
-        private _eventoTipoService: EventoTipoCrudService,
+        private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
     ) {
     }
 
-    resolve(route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        const entidade = new Produzir();
-
-        entidade.data = hojeStr();
-        //entidade.eventoTipo = this._eventoTipoService.restore(2);
-
+    resolve(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ): any {
+        this._eventoPessoaFuncaoService.filtro.codigo = 'PARCEIRO';
         return {
-            principal: this._service.novo(entidade),
+            principal: this._service.novo(null),
             acao: 'Novo',
             apoio: [
-                this._unidadeMedidaService.lista,
-            ],
+                {unidadeMedidaList: this._unidadeMedidaService.filtrar()},
+                {eventoPessoaFuncao: this._eventoPessoaFuncaoService.filtrar()}
+            ]
         };
     }
 

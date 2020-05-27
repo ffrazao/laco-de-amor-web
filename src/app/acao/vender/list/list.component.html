@@ -1,76 +1,91 @@
 <p class="h5 mb-4 text-left">Listagem</p>
 
-<mat-form-field>
-  <mat-label>Filtro</mat-label>
-  <input matInput (keyup)="aplicarFiltro($event)" placeholder="filtro">
-</mat-form-field>
+<div *ngIf="!dataSource?.data?.length">
+  <div class="alert alert-warning" role="alert">
+    ATENÇÃO!!! Não foi encontrado nenhum registro
+  </div>
+  <p>Deseja inserir um <a [routerLink]="['novo']">novo registro</a>?</p>
+</div>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
+<div *ngIf="dataSource?.data?.length">
 
-  <ng-container matColumnDef="data" sticky>
-    <th mat-header-cell *matHeaderCellDef> Data </th>
-    <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.data}}</a> </td>
-  </ng-container>
+  <mat-form-field>
+    <mat-label>Filtro</mat-label>
+    <input matInput (keyup)="aplicarFiltro($event)" placeholder="filtro">
+  </mat-form-field>
 
-  <ng-container matColumnDef="nome" sticky>
-    <th mat-header-cell *matHeaderCellDef> Cliente </th>
-    <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.nome}} </td>
-  </ng-container>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
 
-  <ng-container matColumnDef="cpfCnpj" sticky>
-    <th mat-header-cell *matHeaderCellDef> CPF/CNPJ </th>
-    <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.cpfCnpj}} </td>
-  </ng-container>
+    <ng-container matColumnDef="data" sticky>
+      <th mat-header-cell *matHeaderCellDef> Data </th>
+      <td mat-cell *matCellDef="let el">
+        <a [routerLink]="[el.id]">{{el.data | date: 'dd/MM/yyyy HH:mm'}}</a>
+      </td>
+    </ng-container>
 
-  <ng-container matColumnDef="eventoProdutoList">
-    <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
-    <td mat-cell *matCellDef="let el">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Foto</th>
-            <th>Nome</th>
-            <th>Código</th>
-            <th>Quantidade</th>
-            <th>Unidade de Medida</th>
-            <th>Valor Unitário</th>
-            <th>Valor Total</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let e of el.eventoProdutoList; let i = index">
-          <tr *ngIf="i<3">
-            <td>
-              <img [src]="e.produto.produtoModelo.foto ? e.produto.produtoModelo.foto : SEM_IMAGEM"
-                class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
-            </td>
-            <td>{{e.produto.produtoModelo.nome}}</td>
-            <td>{{e.produto.produtoModelo.codigo}}</td>
-            <td class="text-right">{{e.quantidade}}</td>
-            <td>{{e.unidadeMedida.nome}}</td>
-            <td class="text-right">{{e.valorUnitario | currency:'BRL':'symbol'}}</td>
-            <td class="text-right">{{e.valorTotal | currency:'BRL':'symbol'}}</td>
-          </tr>
-          <tr *ngIf="i>=3">
-            <td colspan="7" class="text-center">
-              <a [routerLink]="[el.id]">. . .</a>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th class="text-right" colspan="8">Total da Venda:</th>
-            <th class="text-right">{{el.eventoProdutoListTotal | currency:'BRL':'symbol'}}</th>
-          </tr>
-        </tfoot>
-      </table>
-    </td>
-  </ng-container>
+    <ng-container matColumnDef="nome" sticky>
+      <th mat-header-cell *matHeaderCellDef> Cliente </th>
+      <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.nome}} </td>
+    </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
+    <ng-container matColumnDef="cpfCnpj" sticky>
+      <th mat-header-cell *matHeaderCellDef> CPF/CNPJ </th>
+      <td mat-cell *matCellDef="let el"> {{el.eventoPessoaList[0].pessoa.cpfCnpj}} </td>
+    </ng-container>
 
-</table>
+    <ng-container matColumnDef="eventoProdutoList">
+      <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
+      <td mat-cell *matCellDef="let el">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nome</th>
+              <th>Código</th>
+              <th>Quantidade</th>
+              <th>Unidade de Medida</th>
+              <th>Valor Unitário</th>
+              <th>Valor Total</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let e of el.eventoProdutoList; let i = index">
+            <tr *ngIf="i<3">
+              <td>
+                <img [src]="e?.produto?.produtoModelo?.foto ? e?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+                  class="rounded mx-auto d-block" style="max-height: 50px; max-width: 50px;">
+              </td>
+              <td>{{e.produto.produtoModelo.nome}}</td>
+              <td>{{e.produto.produtoModelo.codigo}}</td>
+              <td class="text-right">{{e.quantidade}}</td>
+              <td>{{e.unidadeMedida.nome}}</td>
+              <td class="text-right">{{e.valorUnitario | currency:'BRL':'symbol'}}</td>
+              <td class="text-right">{{e.valorTotal | currency:'BRL':'symbol'}}</td>
+            </tr>
+            <tr *ngIf="i>=3">
+              <td colspan="7" class="text-center">
+                <a [routerLink]="[el.id]">. . .</a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th class="text-right" colspan="8">Total da Venda:</th>
+              <th class="text-right">{{el.eventoProdutoListTotal | currency:'BRL':'symbol'}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </td>
+    </ng-container>
 
-<!-- 
-/{{elements | json}}/ 
--->
+    <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
+
+  </table>
+</div>
+
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+  <p><b>prod: {{prod}}</b></p>
+  <p>
+    /{{dataSource?.data | json}}/
+  </p>
+</div>

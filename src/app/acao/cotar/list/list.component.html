@@ -19,7 +19,7 @@
     <ng-container matColumnDef="data" sticky>
       <th mat-header-cell *matHeaderCellDef> Data </th>
       <td mat-cell *matCellDef="let el">
-        <a [routerLink]="[el.id]">{{el.data | date: 'dd/MM/yyyy hh:mm'}}</a>
+        <a [routerLink]="[el.id]">{{el.data | date: 'dd/MM/yyyy HH:mm'}}</a>
       </td>
     </ng-container>
 
@@ -28,7 +28,7 @@
       <td mat-cell *matCellDef="let el">
         <mat-list>
           <mat-list-item *ngFor="let e of el.eventoProdutoList">
-            <img [src]="e.produto.produtoModelo.foto ? e.produto.produtoModelo.foto : SEM_IMAGEM"
+            <img [src]="e?.produto?.produtoModelo?.foto ? e?.produto?.produtoModelo?.foto : SEM_IMAGEM"
               class="rounded mx-auto d-block" style="max-height: 50px; max-width: 50px;">
             <b>{{e.produto.produtoModelo.nome}}</b>
             ({{e.produto.produtoModelo.codigo}})
@@ -76,6 +76,9 @@
   </table>
 </div>
 
-<!-- 
-/{{elements | json}}/ 
--->
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+  <p><b>prod: {{prod}}</b></p>
+  <p>
+    /{{dataSource?.data | json}}/
+  </p>
+</div>

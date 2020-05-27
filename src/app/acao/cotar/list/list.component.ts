@@ -1,9 +1,11 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { CotarCrudService } from '../cotar.service';
+import { CotarFormService } from '../cotar-form.service';
+import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { EventoProduto } from 'src/app/comum/modelo/entidade/evento-produto';
 import { constante } from './../../../comum/constante';
 import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
@@ -15,8 +17,9 @@ import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
 })
 export class ListComponent implements OnInit {
 
-  // 'Id'
-  headElements = [
+  public prod = environment.production;
+
+  public headElements = [
     'data',
     'eventoProdutoList',
     'eventoPessoaList',
@@ -31,6 +34,7 @@ export class ListComponent implements OnInit {
 
   constructor(
     private _service: CotarCrudService,
+    private _formService: CotarFormService,
     private _activatedRoute: ActivatedRoute
   ) {
   }
@@ -58,15 +62,15 @@ export class ListComponent implements OnInit {
   }
 
   menorCotacao(c: Cotar) {
-    return this._service.calcularValoresCotacao(c).menor;
+    return this._formService.calcularValoresCotacao(c).menor;
   }
 
   mediaCotacao(c: Cotar) {
-    return this._service.calcularValoresCotacao(c).media;
+    return this._formService.calcularValoresCotacao(c).media;
   }
 
   maiorCotacao(c: Cotar) {
-    return this._service.calcularValoresCotacao(c).maior;
+    return this._formService.calcularValoresCotacao(c).maior;
   }
 
 }

@@ -1,5 +1,5 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
-
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -21,6 +21,8 @@ import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
+import { adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-form',
@@ -29,21 +31,23 @@ import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListCompara
 })
 export class FormComponent implements OnInit {
 
-  public frm = this._serviceFormService.criarFormulario(new Comprar());
+  public prod = environment.production;
+
+  public frm = this._formService.criarFormulario(new Comprar());
 
   public isEnviado = false;
-  public entidade: Comprar;
   public id: number;
 
   public SEM_IMAGEM = constante.SEM_IMAGEM;
 
   public unidadeMedidaList: UnidadeMedida[] = [];
+  private eventoPessoaFuncao;
   public cotacao;
   public cotacaoList: Cotar[] = [];
 
   constructor(
     private _service: ComprarCrudService,
-    private _serviceFormService: ComprarFormService,
+    private _formService: ComprarFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
@@ -57,15 +61,31 @@ export class FormComponent implements OnInit {
     this._route.params.subscribe(p => {
       this.id = p.id;
     });
-    this._route.data.subscribe((info) => {
-      this.entidade = info['resolve']['principal'];
-      this._service.acao = !info['resolve']['acao'] ? 'Novo' : info['resolve']['acao'];
-      this.frm = this._serviceFormService.criarFormulario(this.entidade);
 
-      this.unidadeMedidaList = info['resolve']['apoio'][0];
-      this.cotacaoList = info['resolve']['apoio'][1];
+    this._route.data.subscribe((info) => {
+      this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
+
+      info.resolve.principal.subscribe((p: Comprar) => {
+        if (p.eventoProdutoList) {
+          p.eventoProdutoList.forEach((ep: EventoProduto) =>
+            ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
+          );
+        }
+        this._service.entidade = p;
+        this.carregar(this._service.entidade);
+      });
+
+      info.resolve.apoio[0].unidadeMedidaList.subscribe((a: UnidadeMedida[]) => {
+        this.unidadeMedidaList.length = 0;
+        a.forEach(aa => this.unidadeMedidaList.push(aa));
+      });
+
+      info.resolve.apoio[1].eventoPessoaFuncao.subscribe((a: EventoPessoaFuncao[]) => {
+        this.eventoPessoaFuncao = a[0];
+      });
     });
   }
+
 
   public get acao() {
     return this._service.acao;
@@ -79,20 +99,51 @@ export class FormComponent implements OnInit {
     event.preventDefault();
     this.isEnviado = true;
 
-    console.log(this.frm.value);
-
     if (this.frm.invalid) {
-      let msg = 'Dados inválidos!';
+      const msg = 'Dados inválidos!';
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
-    this.entidade = this.frm.value;
+
+    const entidade = this.frm.value;
+    if (entidade.eventoProdutoList) {
+      entidade.eventoProdutoList.forEach((ep: EventoProduto) =>
+        ep.produto.produtoModelo.foto = removeMime(ep.produto.produtoModelo.foto)
+      );
+    }
+
     if ('Novo' === this._service.acao) {
-      this._service.create(this.entidade);
-      this._router.navigate(['acao', 'comprar', this.entidade.id]);
+      this._service.create(entidade).subscribe((id: number) => {
+        this._mensagem.sucesso('Novo registro efetuado!\n\nVisualizando...');
+        this._router.navigate(['acao', this._service.funcionalidade, id]);
+      });
     } else {
-      this._service.update(this.id, this.entidade);
-      this._router.navigate(['acao', 'comprar']);
+      this._service.update(this.id, entidade).subscribe(() => {
+        this._mensagem.sucesso('Registro atualizado!');
+        this._router.navigate(['acao', this._service.funcionalidade]);
+      });
+    }
+  }
+
+  public carregar(f: Comprar) {
+    if (!f) {
+      f = new Comprar();
+    }
+    this.frm = this._formService.criarFormulario(f);
+  }
+
+  public async restaurar() {
+    if (await
+      this._mensagem.confirme(
+        `
+        <p>
+           Confirma a restauração dos dados do formulário?
+        </p>
+        <div class="alert alert-danger" role="alert">
+           Todas as modificações serão perdidas!
+        </div>
+         `)) {
+      this.carregar(this._service.entidade);
     }
   }
 
@@ -145,7 +196,7 @@ export class FormComponent implements OnInit {
         ep.eventoPessoa = menorCotacao.eventoPessoa;
       });
       // atualizar o formulario
-      this.frm = this._serviceFormService.criarFormulario(entidade);
+      this.frm = this._formService.criarFormulario(entidade);
     }
   }
 
@@ -229,7 +280,7 @@ export class FormComponent implements OnInit {
     if (existe) {
       this._mensagem.erro('Item já cadastrado!');
     } else {
-      this.eventoProdutoList.push(this._serviceFormService.criarFormularioEventoProduto(ep));
+      this.eventoProdutoList.push(this._formService.criarFormularioEventoProduto(ep));
     }
     this.pesquisarEventoProduto = '';
   }

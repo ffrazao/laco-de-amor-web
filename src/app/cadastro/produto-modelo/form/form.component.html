@@ -230,13 +230,14 @@
         </mat-tab>
     </mat-tab-group>
 
-    <!-- 
-    <p>vl /{{frm.value | json}}/</p>
-    <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p>
-    -->
-
     <button type="submit" class="btn btn-success btn-block">Enviar</button>
     <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
 
 </form>
+
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+    <p><b>prod: {{prod}}</b></p>
+    <p>vl /{{frm.value | json}}/</p>
+    <p>st /{{frm.status}}/</p>
+    <p>er /{{frm.errors | json}}/</p>
+</div>

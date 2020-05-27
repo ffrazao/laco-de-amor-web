@@ -5,7 +5,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Data</mat-label>
-            <input matInput placeholder="Data de Venda" formControlName="data">
+            <input matInput type="datetime-local" placeholder="Data da Venda" formControlName="data">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm.controls.data.invalid">
             <div *ngIf="frm.controls.data.errors?.required">
@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group" *ngIf="frm.value.eventoPessoaList[0].pessoa && frm.value.eventoPessoaList[0].pessoa['id']">
+    <div class="form-group" *ngIf="frm.value.eventoPessoaList[0]?.pessoa && frm.value.eventoPessoaList[0]?.pessoa['id']">
         <mat-label>Informações do Cliente:</mat-label>
         <ul class="list-group">
             <li class="list-group-item">E-mail: <a href="mailto:{{frm.value.eventoPessoaList[0].pessoa['email']}}">{{frm.value.eventoPessoaList[0].pessoa['email']}}</a></li>
@@ -234,11 +234,14 @@
         </div>
     </div>
 
-    <!-- 
+    <button type="submit" class="btn btn-success btn-block">Enviar</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
+
+</form>
+
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+    <p><b>prod: {{prod}}</b></p>
     <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
     <p>er /{{frm.errors | json}}/</p>
-    -->
-
-    <button type="submit" class="btn btn-success btn-block">Enviar</button>
-</form>
+</div>

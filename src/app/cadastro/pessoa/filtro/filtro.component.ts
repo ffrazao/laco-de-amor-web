@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,6 +17,8 @@ import { PessoaVinculoTipo } from '../../../comum/modelo/dominio/pessoa-vinculo-
   styleUrls: ['./filtro.component.scss']
 })
 export class FiltroComponent implements OnInit {
+
+  public prod = environment.production;
 
   public frm: FormGroup;
   public isEnviado = false;

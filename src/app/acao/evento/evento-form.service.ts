@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 
+import { Evento } from '../../comum/modelo/entidade/evento';
 import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../comum/modelo/entidade/evento-pessoa';
-import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
-import { Evento } from '../../comum/modelo/entidade/evento';
 import { EventoFiltroDTO } from 'src/app/comum/modelo/dto/evento.filtro.dto';
+import { Produto } from 'src/app/comum/modelo/entidade/produto';
+import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class EventoFormService {
@@ -67,9 +68,7 @@ export class EventoFormService {
     if (!entidade) {
       entidade = new EventoProduto();
     }
-
     const obrigatorio = cotacao ? [Validators.required] : [];
-
     const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
@@ -128,6 +127,31 @@ export class EventoFormService {
     return result;
   }
 
+  public adicionaProdutoList(frm: FormGroup, prod: Produto) {
+    if (!frm['produtoList']) {
+      frm['produtoList'] = [];
+    }
+    let existe = false;
+    for (let i = 0; i < frm['produtoList'].length; i++) {
+      if (frm['produtoList'][i].produtoModelo.id === prod.produtoModelo.id) {
+        existe = true;
+        break;
+      }
+    }
+    if (!existe) {
+      frm['produtoList'].push(prod);
+    }
+  }
+
+  public configProdutoList(result) {
+    result['produtoList'] = [];
+    if (result.controls.eventoProdutoList.value) {
+      result.controls.eventoProdutoList.value.forEach(ep => {
+        this.adicionaProdutoList(result, ep.produto);
+      });
+    }
+    return result;
+  }
 
   private calculaOrcamento(lista: EventoProduto[]): number {
     let total = 0;
@@ -141,4 +165,42 @@ export class EventoFormService {
     return total;
   }
 
+  public calcularValoresCotacao(c: Evento): ResultadoValoresCotacao {
+    let menor = 0;
+    let media = 0;
+    let maior = 0;
+    if (c.eventoPessoaList && c.eventoPessoaList.length) {
+      let totalGeral = 0;
+      for (let i = 0; i < c.eventoPessoaList.length; i++) {
+        let total = 0;
+        if (c.eventoPessoaList[i].eventoProdutoList && c.eventoPessoaList[i].eventoProdutoList.length) {
+          for (let j = 0; j < c.eventoPessoaList[i].eventoProdutoList.length; j++) {
+            let p: EventoProduto = c.eventoPessoaList[i].eventoProdutoList[j];
+            total += p.quantidade * p.valorUnitario;
+          }
+        }
+        if (i === 0) {
+          menor = total;
+          maior = total;
+        } else {
+          menor = menor < total ? menor: total;
+          maior = total > maior ? total : maior;
+        }
+        totalGeral += total;
+      }
+      media = totalGeral / c.eventoPessoaList.length;
+    }
+    return {
+      menor,
+      media,
+      maior,
+    };
+  }
+
+}
+
+export class ResultadoValoresCotacao {
+  menor = 0;
+  media = 0;
+  maior = 0;
 }

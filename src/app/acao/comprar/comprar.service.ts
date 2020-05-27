@@ -14,3 +14,4 @@ export class ComprarCrudService extends ServicoCrudService<Comprar, ComprarFiltr
   }
 
 }
+

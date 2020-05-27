@@ -10,7 +10,7 @@ import { VenderCrudService } from '../vender.service';
 export class ListResolve implements Resolve<Vender[]> {
 
     constructor(
-        private servico: VenderCrudService
+        private _service: VenderCrudService
     ) {
     }
 
@@ -18,8 +18,9 @@ export class ListResolve implements Resolve<Vender[]> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Listar';
         return {
-            principal: this.servico.filtrar()
+            principal: this._service.filtrar()
         };
     }
 

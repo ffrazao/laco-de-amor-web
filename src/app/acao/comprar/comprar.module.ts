@@ -10,16 +10,21 @@ import { FiltroResolve } from './filtro/filtro.resolve';
 import { ComprarCrudService } from './comprar.service';
 import { ComprarFormService } from './comprar-form.service';
 import { UnidadeMedidaModule } from '../../cadastro/unidade-medida/unidade-medida.module';
-import { CotarModule } from '../cotar/cotar.module';
+import { EventoTipoModule } from '../../cadastro/evento-tipo/evento-tipo.module';
+import { ProdutoModeloModule } from '../../cadastro/produto-modelo/produto-modelo.module';
+import { PessoaModule } from '../../cadastro/pessoa/pessoa.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
+
 
 @NgModule({
   declarations: [ComprarComponent],
   imports: [
     CommonModule,
     ComprarRoutingModule,
-    CotarModule,
     UnidadeMedidaModule,
+    EventoTipoModule,
+    ProdutoModeloModule,
+    PessoaModule,
     EventoPessoaFuncaoModule,
   ],
   providers: [

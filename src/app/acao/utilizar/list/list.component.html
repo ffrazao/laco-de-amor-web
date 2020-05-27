@@ -1,60 +1,75 @@
 <p class="h5 mb-4 text-left">Listagem</p>
 
-<mat-form-field>
-  <mat-label>Filtro</mat-label>
-  <input matInput (keyup)="aplicarFiltro($event)" placeholder="filtro">
-</mat-form-field>
+<div *ngIf="!dataSource?.data?.length">
+  <div class="alert alert-warning" role="alert">
+    ATENÇÃO!!! Não foi encontrado nenhum registro
+  </div>
+  <p>Deseja inserir um <a [routerLink]="['novo']">novo registro</a>?</p>
+</div>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
+<div *ngIf="dataSource?.data?.length">
 
-  <ng-container matColumnDef="data" sticky>
-    <th mat-header-cell *matHeaderCellDef> Data </th>
-    <td mat-cell *matCellDef="let el"> <a [routerLink]="[el.id]">{{el.data}}</a> </td>
-  </ng-container>
+  <mat-form-field>
+    <mat-label>Filtro</mat-label>
+    <input matInput (keyup)="aplicarFiltro($event)" placeholder="filtro">
+  </mat-form-field>
 
-  <ng-container matColumnDef="eventoProdutoList">
-    <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
-    <td mat-cell *matCellDef="let el">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Parceiro</th>
-            <th>CPF/CNPJ</th>
-            <th>Foto</th>
-            <th>Nome</th>
-            <th>Código</th>
-            <th>Quantidade</th>
-            <th>Unidade de Medida</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let e of el.eventoProdutoList; let i = index">
-          <tr *ngIf="i<3">
-            <td>{{e.eventoPessoa.pessoa.nome}}</td>
-            <td>{{e.eventoPessoa.pessoa.cpfCnpj}}</td>
-            <td>
-              <img [src]="e.produto.produtoModelo.foto ? e.produto.produtoModelo.foto : SEM_IMAGEM"
-                class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
-            </td>
-            <td>{{e.produto.produtoModelo.nome}}</td>
-            <td>{{e.produto.produtoModelo.codigo}}</td>
-            <td class="text-right">{{e.quantidade}}</td>
-            <td>{{e.unidadeMedida.nome}}</td>
-          </tr>
-          <tr *ngIf="i>=3">
-            <td colspan="7" class="text-center">
-              <a [routerLink]="[el.id]">. . .</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </td>
-  </ng-container>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 example-container">
 
-  <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
-  <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
+    <ng-container matColumnDef="data" sticky>
+      <th mat-header-cell *matHeaderCellDef> Data </th>
+      <td mat-cell *matCellDef="let el">
+        <a [routerLink]="[el.id]">{{el.data | date: 'dd/MM/yyyy HH:mm'}}</a>
+      </td>
+    </ng-container>
 
-</table>
+    <ng-container matColumnDef="eventoProdutoList">
+      <th mat-header-cell *matHeaderCellDef> Produto(s) </th>
+      <td mat-cell *matCellDef="let el">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Parceiro</th>
+              <th>CPF/CNPJ</th>
+              <th>Foto</th>
+              <th>Nome</th>
+              <th>Código</th>
+              <th>Quantidade</th>
+              <th>Unidade de Medida</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let e of el?.eventoProdutoList; let i = index">
+            <tr *ngIf="i<3">
+              <td>{{e?.eventoPessoa?.pessoa?.nome}}</td>
+              <td>{{e?.eventoPessoa?.pessoa?.cpfCnpj}}</td>
+              <td>
+                <img [src]="e?.produto?.produtoModelo?.foto ? e?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+                  class="rounded mx-auto d-block" style="max-height: 50px; max-width: 50px;">
+              </td>
+              <td>{{e?.produto?.produtoModelo?.nome}}</td>
+              <td>{{e?.produto?.produtoModelo?.codigo}}</td>
+              <td class="text-right">{{e?.quantidade}}</td>
+              <td>{{e?.unidadeMedida?.nome}}</td>
+            </tr>
+            <tr *ngIf="i>=3">
+              <td colspan="7" class="text-center">
+                <a [routerLink]="[el?.id]">. . .</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </ng-container>
 
-<!-- 
-/{{elements | json}}/ 
--->
+    <tr mat-header-row *matHeaderRowDef="headElements; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: headElements;"></tr>
+
+  </table>
+</div>
+
+<div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
+  <p><b>prod: {{prod}}</b></p>
+  <p>
+    /{{dataSource?.data | json}}/
+  </p>
+</div>

@@ -9,7 +9,9 @@ import { ListResolve } from './list/list.resolve';
 
 const routes: Routes = [
   {
-    path: '', component: ComprarComponent, children: [
+    path: '',
+    component: ComprarComponent,
+    children: [
       {
         path: 'filtro',
         loadChildren: () => import('./filtro/filtro.module').then(m => m.FiltroModule),

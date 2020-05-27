@@ -1,8 +1,10 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { ActivatedRoute, Router } from '@angular/router';
 import { ComprarCrudService } from '../comprar.service';
+import { ComprarFormService } from '../comprar-form.service';
 import { ComprarFiltroDTO } from '../../../comum/modelo/dto/comprar.filtro.dto';
 
 @Component({
@@ -12,35 +14,34 @@ import { ComprarFiltroDTO } from '../../../comum/modelo/dto/comprar.filtro.dto';
 })
 export class FiltroComponent implements OnInit {
 
+  public prod = environment.production;
+
   public frm: FormGroup;
   public isEnviado = false;
-  public entidade: ComprarFiltroDTO;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private servico: ComprarCrudService,
-    private router: Router) { }
-
-  ngOnInit(): void {
-    this.entidade = this.servico.filtro;
-    this.frm = this.criarFormulario(this.entidade);
+    private _service: ComprarCrudService,
+    private _formService: ComprarFormService,
+    private _router: Router,
+  ) {
   }
 
-  criarFormulario(entidade) {
-    const result = this.formBuilder.group(
-      {
-      }
-    );
-    return result;
+  ngOnInit(): void {
+    this.carregar(this._service.filtro);
   }
 
   public enviar() {
     this.isEnviado = true;
-    this.entidade = this.frm.value;
-    this.servico.filtro = this.entidade;
+    this._service.filtro = this.frm.value;
 
-    this.router.navigate(['acao', 'comprar']);
+    this._router.navigate(['acao', this._service.funcionalidade]);
+  }
+
+  public carregar(f: ComprarFiltroDTO) {
+    if (!f) {
+      f = new ComprarFiltroDTO();
+    }
+    this.frm = this._formService.criarFormularioFiltro(f);
   }
 
 }

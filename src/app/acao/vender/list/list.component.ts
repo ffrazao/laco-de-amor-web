@@ -1,10 +1,13 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Vender } from '../../../comum/modelo/entidade/vender';
-import { constante } from '../../../comum/constante';
 import { VenderCrudService } from '../vender.service';
+import { Vender } from '../../../comum/modelo/entidade/vender';
+import { EventoProduto } from 'src/app/comum/modelo/entidade/evento-produto';
+import { constante } from '../../../comum/constante';
+import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-list',
@@ -13,7 +16,8 @@ import { VenderCrudService } from '../vender.service';
 })
 export class ListComponent implements OnInit {
 
-  // 'Id'
+  public prod = environment.production;
+
   public headElements = [
     'data',
     'nome',
@@ -35,7 +39,14 @@ export class ListComponent implements OnInit {
     this._activatedRoute.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Vender[]) => {
         this._service.lista.length = 0;
-        p.forEach((r: Vender) => this._service.lista.push(r));
+        p.forEach((r: Vender) => {
+          if (r.eventoProdutoList) {
+            r.eventoProdutoList.forEach((ep: EventoProduto) =>
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
+            );
+          }
+          this._service.lista.push(r);
+        });
         this.dataSource = new MatTableDataSource(this._service.lista);
       });
     });
@@ -44,10 +55,6 @@ export class ListComponent implements OnInit {
   public aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  public maximoLinhas(l: number, t: number) {
-    return l < t;
   }
 
 }

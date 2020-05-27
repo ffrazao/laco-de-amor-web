@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +21,8 @@ import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
+
+  public prod = environment.production;
 
   public frm: FormGroup = this._formService.criarFormulario(new Pessoa());
 

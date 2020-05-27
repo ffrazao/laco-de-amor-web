@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +23,8 @@ import { Confirmacao } from '../../../comum/modelo/dominio/confirmacao';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
+
+  public prod = environment.production;
 
   public frm = this._formService.criarFormulario(new ProdutoModelo());
 

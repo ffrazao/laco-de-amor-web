@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MensagemService } from 'src/app/comum/servico/mensagem/mensagem.service';
+import { MensagemService } from '../../comum/servico/mensagem/mensagem.service';
 import { CotarCrudService } from './cotar.service';
 
 @Component({

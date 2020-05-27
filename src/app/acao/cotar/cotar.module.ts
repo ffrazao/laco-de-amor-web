@@ -35,6 +35,5 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
     FormNovoResolve,
     FiltroResolve
   ]
-
 })
 export class CotarModule { }

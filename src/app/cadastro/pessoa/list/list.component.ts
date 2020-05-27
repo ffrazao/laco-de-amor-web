@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,7 +16,8 @@ import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
 })
 export class ListComponent implements OnInit {
 
-  // 'Nome', 'Vínculo', 'Tipo', 'CPF/CNPJ', 'E-mail'
+  public prod = environment.production;
+
   public headElements = [
     'nome',
     'vinculo',

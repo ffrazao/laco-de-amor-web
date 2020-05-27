@@ -10,7 +10,9 @@ import { FiltroResolve } from './filtro/filtro.resolve';
 import { VenderCrudService } from './vender.service';
 import { VenderFormService } from './vender-form.service';
 import { UnidadeMedidaModule } from '../../cadastro/unidade-medida/unidade-medida.module';
-import { CotarModule } from '../cotar/cotar.module';
+import { EventoTipoModule } from '../../cadastro/evento-tipo/evento-tipo.module';
+import { ProdutoModeloModule } from '../../cadastro/produto-modelo/produto-modelo.module';
+import { PessoaModule } from '../../cadastro/pessoa/pessoa.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
 
@@ -19,8 +21,10 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
   imports: [
     CommonModule,
     VenderRoutingModule,
-    CotarModule,
     UnidadeMedidaModule,
+    EventoTipoModule,
+    ProdutoModeloModule,
+    PessoaModule,
     EventoPessoaFuncaoModule,
   ],
   providers: [
@@ -31,6 +35,5 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
     FormNovoResolve,
     FiltroResolve
   ]
-
 })
 export class VenderModule { }

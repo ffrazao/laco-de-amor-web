@@ -14,3 +14,4 @@ export class VenderCrudService extends ServicoCrudService<Vender, VenderFiltroDT
   }
 
 }
+

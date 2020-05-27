@@ -1,10 +1,13 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Comprar } from '../../../comum/modelo/entidade/comprar';
 import { ComprarCrudService } from './../comprar.service';
+import { Comprar } from '../../../comum/modelo/entidade/comprar';
+import { EventoProduto } from 'src/app/comum/modelo/entidade/evento-produto';
 import { constante } from '../../../comum/constante';
+import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-list',
@@ -13,7 +16,8 @@ import { constante } from '../../../comum/constante';
 })
 export class ListComponent implements OnInit {
 
-  // 'data', 'eventoProdutoList'
+  public prod = environment.production;
+
   public headElements = [
     'data',
     'eventoProdutoList'
@@ -33,7 +37,14 @@ export class ListComponent implements OnInit {
     this._activatedRoute.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Comprar[]) => {
         this._service.lista.length = 0;
-        p.forEach((r: Comprar) => this._service.lista.push(r));
+        p.forEach((r: Comprar) => {
+          if (r.eventoProdutoList) {
+            r.eventoProdutoList.forEach((ep: EventoProduto) =>
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
+            );
+          }
+          this._service.lista.push(r);
+        });
         this.dataSource = new MatTableDataSource(this._service.lista);
       });
     });

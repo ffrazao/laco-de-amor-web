@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,11 +16,9 @@ import { Produto } from '../../../comum/modelo/entidade/produto';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { constante } from '../../../comum/constante';
-import { isNumber, adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
-import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { unidadeMedidaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
-import { Confirmacao } from 'src/app/comum/modelo/dominio/confirmacao';
-import { EventoPessoaFuncao } from 'src/app/comum/modelo/entidade/evento-pessoa-funcao';
+import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
+import { isNumber, adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-form',
@@ -27,6 +26,8 @@ import { EventoPessoaFuncao } from 'src/app/comum/modelo/entidade/evento-pessoa-
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
+
+  public prod = environment.production;
 
   public frm = this._formService.criarFormulario(new Cotar());
 
