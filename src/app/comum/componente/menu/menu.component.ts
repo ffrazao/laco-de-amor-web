@@ -26,6 +26,10 @@ export class MenuComponent implements OnInit {
     this._router.navigate(['/']);
   }
 
+  public adMime(v) {
+    return this.adMime(v);
+  }
+
   public get estaLogado() {
     return this._localStorageService.estaLogado;
   }

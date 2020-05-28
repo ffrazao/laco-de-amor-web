@@ -79,7 +79,7 @@
                                             {{i+1}}
                                         </td>
                                         <td>
-                                            <img [src]="el?.value?.produto?.produtoModelo?.foto ? el?.value?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+                                            <img [src]="el?.value?.produto?.produtoModelo?.foto ? adMime(el?.value?.produto?.produtoModelo?.foto) : SEM_IMAGEM"
                                                 class="rounded mx-auto d-block"
                                                 style="max-height: 100px; max-width: 100px;">
                                         </td>

@@ -21,7 +21,6 @@ export class FormResolve implements Resolve<Pessoa> {
         this._service.acao = 'Visualizar';
         return {
             principal: this._service.restore(route.params.id),
-            acao: 'Visualizar'
         };
     }
 

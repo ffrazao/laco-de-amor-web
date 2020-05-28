@@ -53,6 +53,10 @@ export class ListComponent implements OnInit {
     });
   }
 
+  public adMime(v) {
+    return adMime(v);
+  }
+
   public aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

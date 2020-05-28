@@ -61,7 +61,6 @@ export class FormComponent implements OnInit {
       info.resolve.principal.subscribe((p: ProdutoModelo) => {
         p.foto = adMime(p.foto);
         this._service.entidade = p;
-        this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
         this.carregar(this._service.entidade);
       });
     });
@@ -139,6 +138,10 @@ export class FormComponent implements OnInit {
          `)) {
       this.carregar(this._service.entidade);
     }
+  }
+
+  public adMime(v) {
+    return adMime(v);
   }
 
   public ordenadoProdutoDescricao(lista) {

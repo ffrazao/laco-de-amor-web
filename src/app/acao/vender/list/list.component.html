@@ -51,7 +51,7 @@
           <tbody *ngFor="let e of el.eventoProdutoList; let i = index">
             <tr *ngIf="i<3">
               <td>
-                <img [src]="e?.produto?.produtoModelo?.foto ? e?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+                <img [src]="e?.produto?.produtoModelo?.foto ? adMime(e?.produto?.produtoModelo?.foto) : SEM_IMAGEM"
                   class="rounded mx-auto d-block" style="max-height: 50px; max-width: 50px;">
               </td>
               <td>{{e.produto.produtoModelo.nome}}</td>

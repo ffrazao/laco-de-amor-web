@@ -1,6 +1,6 @@
 import { PessoaVinculoTipo } from './../../comum/modelo/dominio/pessoa-vinculo-tipo';
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 
 import { Pessoa } from '../../comum/modelo/entidade/pessoa';
 import { Parceiro } from '../../comum/modelo/entidade/parceiro';
@@ -31,14 +31,32 @@ export class PessoaFormService {
         fornecedor: this.criarFormularioFornecedor(entidade.fornecedor),
         cliente: this.criarFormularioCliente(entidade.cliente),
         pessoaTipo: [entidade.pessoaTipo, [Validators.required]],
-        cpfCnpj: [entidade.cpfCnpj, []],
         email: [entidade.email, [Validators.email]],
-        contato1: [entidade.contato1, []],
-        contato2: [entidade.contato2, []],
-        contato3: [entidade.contato3, []],
         pessoaEnderecoList: this.criarFormularioPessoaEnderecoList(entidade.pessoaEnderecoList),
       }
     );
+
+    result.addControl('cpfCnpj',
+      new FormControl(entidade.cpfCnpj, {
+        validators: Validators.pattern('([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})'),
+        updateOn: 'blur'
+      }));
+      
+    result.addControl('contato1',
+      new FormControl(entidade.contato1, {
+        validators: Validators.pattern('(\\(?\\d{2}\\)?\\s)?(\\d{4,5}\\-\\d{4})'),
+        updateOn: 'blur'
+      }));
+    result.addControl('contato2',
+      new FormControl(entidade.contato2, {
+        validators: Validators.pattern('(\\(?\\d{2}\\)?\\s)?(\\d{4,5}\\-\\d{4})'),
+        updateOn: 'blur'
+      }));
+    result.addControl('contato3',
+      new FormControl(entidade.contato3, {
+        validators: Validators.pattern('(\\(?\\d{2}\\)?\\s)?(\\d{4,5}\\-\\d{4})'),
+        updateOn: 'blur'
+      }));
 
     return result;
   }
@@ -123,9 +141,10 @@ export class PessoaFormService {
         bairro: [entidade.bairro, []],
         cidade: [entidade.cidade, []],
         uf: [entidade.uf, []],
-        cep: [entidade.cep, []],
       }
     );
+    result.addControl('cep', new FormControl(entidade.cep, { validators: Validators.pattern('[0-9]{5}-[0-9]{3}'), updateOn: 'blur' }));
+
     return result;
   }
 

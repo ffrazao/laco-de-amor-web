@@ -87,7 +87,7 @@
                         </td>
                         <td [attr.colspan]="el.editar ? 3 : 0">
                             <img *ngIf="!el.editar"
-                                [src]="el?.value?.produto?.produtoModelo?.foto ? el?.value?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+                                [src]="el?.value?.produto?.produtoModelo?.foto ? adMime(el?.value?.produto?.produtoModelo?.foto) : SEM_IMAGEM"
                                 class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
                             <div class="form-group" *ngIf="el.editar">
                                 <mat-form-field appearance="outline"

@@ -25,6 +25,7 @@
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "@brunoc/ngx-viacep": "^2.1.2",
     "bootstrap": "4.1.1",
     "express": "^4.17.1",
     "ngx-bootstrap": "^5.6.1",

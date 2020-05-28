@@ -61,6 +61,10 @@ export class ListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  public adMime(v) {
+    return adMime(v);
+  }
+
   menorCotacao(c: Cotar) {
     return this._formService.calcularValoresCotacao(c).menor;
   }

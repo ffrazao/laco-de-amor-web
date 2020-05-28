@@ -53,8 +53,6 @@ export class FormComponent implements OnInit {
     });
 
     this._route.data.subscribe((info) => {
-      this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
-
       info.resolve.principal.subscribe((p: Usuario) => {
         this._service.entidade = p;
         this.carregar(this._service.entidade);

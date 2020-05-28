@@ -39,6 +39,7 @@ export class UsuarioFormService {
     const result = this._formBuilder.group(
       {
         login: [entidade.login, []],
+        email: [entidade.email, []],
         ativo: [entidade.ativo, []],
         perfil: [entidade.perfil, []],
       }

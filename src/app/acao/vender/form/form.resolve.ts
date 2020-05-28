@@ -22,10 +22,10 @@ export class FormResolve implements Resolve<Vender> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Visualizar';
         this._eventoPessoaFuncaoService.filtro.codigo = 'CLIENTE';
         return {
             principal: this._service.restore(route.params.id),
-            acao: 'Visualizar',
             apoio: [
                 {unidadeMedidaList: this._unidadeMedidaService.filtrar()},
                 {eventoPessoaFuncao: this._eventoPessoaFuncaoService.filtrar()}

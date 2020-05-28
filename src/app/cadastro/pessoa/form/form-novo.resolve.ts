@@ -18,9 +18,9 @@ export class FormNovoResolve implements Resolve<Pessoa> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Novo';
         return {
             principal: this._service.novo(null),
-            acao: 'Novo'
         };
     }
 

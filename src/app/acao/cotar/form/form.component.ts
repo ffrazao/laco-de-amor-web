@@ -58,13 +58,20 @@ export class FormComponent implements OnInit {
     });
 
     this._route.data.subscribe((info) => {
-      this._service.acao = !info.resolve.acao ? 'Novo' : info.resolve.acao;
-
       info.resolve.principal.subscribe((p: Cotar) => {
         if (p.eventoProdutoList) {
           p.eventoProdutoList.forEach((ep: EventoProduto) =>
             ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
           );
+        }
+        if (p.eventoPessoaList) {
+          p.eventoPessoaList.forEach((ep: EventoPessoa) => {
+            if (ep.eventoProdutoList) {
+              ep.eventoProdutoList.forEach((ep1: EventoProduto) =>
+                ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto)
+              );
+            }
+          });
         }
         this._service.entidade = p;
         this.carregar(this._service.entidade);
@@ -143,6 +150,10 @@ export class FormComponent implements OnInit {
          `)) {
       this.carregar(this._service.entidade);
     }
+  }
+  
+  public adMime(v) {
+    return adMime(v);
   }
 
   // GESTÃO DOS PRODUTOS A COTAR

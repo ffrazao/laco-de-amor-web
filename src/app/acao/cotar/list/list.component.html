@@ -28,7 +28,7 @@
       <td mat-cell *matCellDef="let el">
         <mat-list>
           <mat-list-item *ngFor="let e of el.eventoProdutoList">
-            <img [src]="e?.produto?.produtoModelo?.foto ? e?.produto?.produtoModelo?.foto : SEM_IMAGEM"
+            <img [src]="e?.produto?.produtoModelo?.foto ? adMime(e?.produto?.produtoModelo?.foto) : SEM_IMAGEM"
               class="rounded mx-auto d-block" style="max-height: 50px; max-width: 50px;">
             <b>{{e.produto.produtoModelo.nome}}</b>
             ({{e.produto.produtoModelo.codigo}})

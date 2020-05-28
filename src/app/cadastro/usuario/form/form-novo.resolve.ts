@@ -18,9 +18,9 @@ export class FormNovoResolve implements Resolve<Usuario> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
+        this._service.acao = 'Visualizar';
         return {
             principal: this._service.novo(null),
-            acao: 'Novo'
         };
     }
 
