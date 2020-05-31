@@ -296,6 +296,9 @@
                                             <div *ngIf="p.controls.quantidade.errors?.required">
                                                 Campo obrigatório!
                                             </div>
+                                            <div *ngIf="p.controls.quantidade.errors?.min">
+                                                Valor inválido!
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -328,6 +331,9 @@
                                             <div *ngIf="p.controls.valorUnitario.errors?.required">
                                                 Campo obrigatório!
                                             </div>
+                                            <div *ngIf="p.controls.valorUnitario.errors?.min">
+                                                Valor inválido!
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -352,7 +358,8 @@
                                 <th class="text-right" colspan="6">Total da cotação {{i + 1}} do fornecedor
                                     {{el.value.pessoa.nome}}
                                 </th>
-                                <th class="text-right">{{el.value.eventoProdutoListTotal | currency:'BRL':'symbol'}}</th>
+                                <th class="text-right">{{el.value.eventoProdutoListTotal | currency:'BRL':'symbol'}}
+                                </th>
                             </tr>
                         </tfoot>
                     </table>
@@ -362,13 +369,18 @@
     </mat-tab-group>
 
     <button type="submit" class="btn btn-success btn-block">Enviar</button>
-    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar Dados do Formulário</button>
+    <button class="btn btn-secondary btn-block" type="button" (click)="restaurar()" *ngIf="!frm.pristine">Restaurar
+        Dados do Formulário</button>
 
 </form>
 
 <div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
     <p><b>prod: {{prod}}</b></p>
-    <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p>
+    <div>er
+        <pre [innerHTML]="frm.errors | jsonFormat"></pre>
+    </div>
+    <div>vl
+        <pre [innerHTML]="frm.value | jsonFormat"></pre>
+    </div>
 </div>

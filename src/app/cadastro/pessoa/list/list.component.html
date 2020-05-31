@@ -50,7 +50,7 @@
 
 <div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
   <p><b>prod: {{prod}}</b></p>
-  <p>
-    /{{dataSource?.data | json}}/
-  </p>
+  <div>vl
+      <pre [innerHTML]="dataSource?.data | jsonFormat"></pre>
+  </div>
 </div>

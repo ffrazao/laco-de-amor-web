@@ -44,22 +44,16 @@ export class EventoFormService {
 
   public criarFormularioEventoProdutoList(lista: EventoProduto[]): FormArray {
     const result = [];
-
     if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioEventoProduto(lista[i]));
-      }
+      lista.forEach(ep => result.push(this.criarFormularioEventoProduto(ep)));
     }
     return this._formBuilder.array(result);
   }
 
   public criarFormularioEventoPessoaList(lista: EventoPessoa[]): FormArray {
     const result = [];
-
     if (lista && lista.length) {
-      for (let i = 0; i < lista.length; i++) {
-        result.push(this.criarFormularioEventoPessoa(lista[i]));
-      }
+      lista.forEach(ep => result.push(this.criarFormularioEventoPessoa(ep)));
     }
     return this._formBuilder.array(result);
   }
@@ -68,27 +62,32 @@ export class EventoFormService {
     if (!entidade) {
       entidade = new EventoProduto();
     }
-    const obrigatorio = cotacao ? [Validators.required] : [];
     const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
         produto: [entidade.produto, [Validators.required]],
-        quantidade: [entidade.quantidade, [Validators.required]],
+        quantidade: [entidade.quantidade, [Validators.required, Validators.min(0.001)]],
         unidadeMedida: [entidade.unidadeMedida, [Validators.required]],
-        valorUnitario: [entidade.valorUnitario, obrigatorio],
-        valorTotal: [entidade.valorTotal, obrigatorio],
+        valorUnitario: [entidade.valorUnitario, [Validators.min(0.01)]],
+        valorTotal: [this.multiplicaValores(entidade.quantidade, entidade.valorUnitario), [Validators.min(0.01)]],
         eventoPessoa: [entidade.eventoPessoa, []],
       }
     );
 
     if (cotacao) {
-      result.valueChanges.subscribe(v => {
-        if (v.quantidade && v.valorUnitario) {
-          result.get('valorTotal').setValue(v.quantidade * v.valorUnitario, { emitEvent: false });
-        }
-      });
+      result.controls.valorUnitario.setValidators([Validators.min(0.01), Validators.required]);
+      result.controls.valorTotal.setValidators([Validators.min(0.01), Validators.required]);
     }
+
+    result.valueChanges.subscribe(v => {
+      result.controls.valorTotal.setValue(this.multiplicaValores(v.quantidade, v.valorUnitario), { emitEvent: false });
+    });
+
     return result;
+  }
+
+  private multiplicaValores(a, b) {
+    return (a && b && isNumber(a) && isNumber(b)) ? a * b : null;
   }
 
   public criarFormularioEventoPessoa(entidade: EventoPessoa): FormGroup {
@@ -153,12 +152,12 @@ export class EventoFormService {
     return result;
   }
 
-  private calculaOrcamento(lista: EventoProduto[]): number {
+  public calculaOrcamento(lista: EventoProduto[]): number {
     let total = 0;
     if (lista && lista.length) {
-      lista.forEach(vv => {
-        if (isNumber(vv.valorTotal)) {
-          total += vv.valorTotal;
+      lista.forEach(item => {
+        if (item.valorTotal && isNumber(item.valorTotal)) {
+          total += item.valorTotal;
         }
       });
     }
@@ -183,7 +182,7 @@ export class EventoFormService {
           menor = total;
           maior = total;
         } else {
-          menor = menor < total ? menor: total;
+          menor = menor < total ? menor : total;
           maior = total > maior ? total : maior;
         }
         totalGeral += total;

@@ -14,6 +14,7 @@ import { EventoTipoModule } from '../../cadastro/evento-tipo/evento-tipo.module'
 import { ProdutoModeloModule } from '../../cadastro/produto-modelo/produto-modelo.module';
 import { PessoaModule } from '../../cadastro/pessoa/pessoa.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
+import { CotarModule } from '../cotar/cotar.module';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-
     ProdutoModeloModule,
     PessoaModule,
     EventoPessoaFuncaoModule,
+    CotarModule,
   ],
   providers: [
     ComprarCrudService,

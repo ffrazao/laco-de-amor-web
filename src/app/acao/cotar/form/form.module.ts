@@ -34,8 +34,8 @@ import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-me
     MatTabsModule,
     MatAutocompleteModule,
 
-    PipeModule,
     UnidadeMedidaModule,
+    PipeModule,
   ]
 })
 export class FormModule { }

@@ -9,6 +9,7 @@ import { Cotar } from '../../../comum/modelo/entidade/cotar';
 import { EventoProduto } from 'src/app/comum/modelo/entidade/evento-produto';
 import { constante } from './../../../comum/constante';
 import { adMime } from 'src/app/comum/ferramenta/ferramenta-comum';
+import { EventoPessoa } from 'src/app/comum/modelo/entidade/evento-pessoa';
 
 @Component({
   selector: 'app-list',
@@ -45,9 +46,22 @@ export class ListComponent implements OnInit {
         this._service.lista.length = 0;
         p.forEach((r: Cotar) => {
           if (r.eventoProdutoList) {
-            r.eventoProdutoList.forEach((ep: EventoProduto) =>
-              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
-            );
+            r.eventoProdutoList.forEach((ep: EventoProduto) => {
+              if (ep.produto.produtoModelo.foto) {
+                ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto);
+              }
+            });
+          }
+          if (r.eventoPessoaList) {
+            r.eventoPessoaList.forEach((ep: EventoPessoa) => {
+              if (ep.eventoProdutoList) {
+                ep.eventoProdutoList.forEach((ep1: EventoProduto) => {
+                  if (ep1.produto.produtoModelo.foto) {
+                    ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto);
+                  }
+                });
+              }
+            });
           }
           this._service.lista.push(r);
         });

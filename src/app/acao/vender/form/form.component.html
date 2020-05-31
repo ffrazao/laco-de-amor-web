@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-group" formArrayName="eventoPessoaList">
-        <mat-form-field appearance="outline" style="width: 100%;" formGroupName="0">
+        <mat-form-field appearance="outline" style="width: 100%;" *ngFor="let el of eventoPessoaList.controls; index as i" [formGroupName]="i">
             <mat-label>Cliente</mat-label>
             <input type="text" matInput placeholder="Pesquisar Cliente" [matAutocomplete]="autoEventoPessoa"
                 formControlName="pessoa" (keyup)="completarEventoPessoa($event)">
@@ -43,7 +43,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                     <mat-label>Endereço de Entrega:</mat-label>
                     <mat-select formControlName="endereco" [compareWith]="pessoaEnderecoListComparar">
-                        <mat-option *ngFor="let e of frm.value.eventoPessoaList[0].pessoa['pessoaEnderecoList']" [value]="e">
+                        <mat-option *ngFor="let e of frm.value.eventoPessoaList[0].pessoa['pessoaEnderecoList']" [value]="e.endereco">
                             {{e.endereco.logradouro}} {{e.endereco.complemento}} {{e.endereco.numero}}
                             {{e.endereco.bairro}} {{e.endereco.cidade}} {{e.endereco.estado}} {{e.endereco.cep}}
                         </mat-option>
@@ -141,6 +141,9 @@
                                     <div *ngIf="el['controls'].quantidade.errors?.required">
                                         Campo obrigatório!
                                     </div>
+                                    <div *ngIf="el['controls'].quantidade.errors?.min">
+                                        Valor inválido!
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -174,6 +177,9 @@
                                 <div class="text-danger" *ngIf="isEnviado && el['controls'].valorUnitario.invalid">
                                     <div *ngIf="el['controls'].valorUnitario.errors?.required">
                                         Campo obrigatório!
+                                    </div>
+                                    <div *ngIf="el['controls'].valorUnitario.errors?.min">
+                                        Valor inválido!
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +247,11 @@
 
 <div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
     <p><b>prod: {{prod}}</b></p>
-    <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p>
+    <div>er
+        <pre [innerHTML]="frm.errors | jsonFormat"></pre>
+    </div>
+    <div>vl
+        <pre [innerHTML]="frm.value | jsonFormat"></pre>
+    </div>
 </div>

@@ -1,4 +1,3 @@
-import { MirrorModule } from './comum/componente/mirror/mirror.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,6 +19,8 @@ import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
 import { ErrorIntercept } from './comum/servico/erro/error-intercept';
 import { HttpConfigInterceptor } from './comum/servico/interceptor/httpconfig.interceptor';
 import { ServicoModule } from './comum/servico/servico.module';
+import { PipeModule } from './comum/pipe/pipe.module';
+import { MirrorModule } from './comum/componente/mirror/mirror.module';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -39,6 +40,7 @@ registerLocaleData(localePt, 'pt-BR');
     RodapeModule,
     MirrorModule,
     ServicoModule,
+    PipeModule,
   ],
   exports: [
     MensagemModule,

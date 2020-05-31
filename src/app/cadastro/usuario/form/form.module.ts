@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
+import { PipeModule } from '../../../comum/pipe/pipe.module';
 
 @NgModule({
   declarations: [FormComponent],
@@ -25,6 +26,7 @@ import { FormComponent } from './form.component';
     MatSelectModule,
     MatRadioModule,
     MatButtonModule,
+    PipeModule,
   ]
 })
 export class FormModule { }

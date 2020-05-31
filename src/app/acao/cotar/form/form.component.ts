@@ -60,16 +60,20 @@ export class FormComponent implements OnInit {
     this._route.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Cotar) => {
         if (p.eventoProdutoList) {
-          p.eventoProdutoList.forEach((ep: EventoProduto) =>
-            ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
-          );
+          p.eventoProdutoList.forEach((ep: EventoProduto) => {
+            if (ep.produto.produtoModelo.foto) {
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto);
+            }
+          });
         }
         if (p.eventoPessoaList) {
           p.eventoPessoaList.forEach((ep: EventoPessoa) => {
             if (ep.eventoProdutoList) {
-              ep.eventoProdutoList.forEach((ep1: EventoProduto) =>
-                ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto)
-              );
+              ep.eventoProdutoList.forEach((ep1: EventoProduto) => {
+                if (ep1.produto.produtoModelo.foto) {
+                  ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto);
+                }
+              });
             }
           });
         }
@@ -106,6 +110,8 @@ export class FormComponent implements OnInit {
 
     if (this.frm.invalid) {
       const msg = 'Dados inválidos!';
+      console.error(this.frm);
+      console.error(this.frm);
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
@@ -115,6 +121,13 @@ export class FormComponent implements OnInit {
       entidade.eventoProdutoList.forEach((ep: EventoProduto) =>
         ep.produto.produtoModelo.foto = removeMime(ep.produto.produtoModelo.foto)
       );
+    }
+    if (entidade.eventoPessoaList) {
+      entidade.eventoPessoaList.forEach((ep: EventoPessoa) => {
+        if (ep.eventoProdutoList) {
+          ep.eventoProdutoList.forEach((epp: EventoProduto) => epp.produto.produtoModelo.foto = removeMime(epp.produto.produtoModelo.foto));
+        }
+      });
     }
 
     if ('Novo' === this._service.acao) {
@@ -151,7 +164,7 @@ export class FormComponent implements OnInit {
       this.carregar(this._service.entidade);
     }
   }
-  
+
   public adMime(v) {
     return adMime(v);
   }
@@ -230,9 +243,9 @@ export class FormComponent implements OnInit {
     return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
   }
 
-  pesquisarEventoPessoa = '';
+  public pesquisarEventoPessoa = '';
 
-  $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+  public $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
     let result = [];
     resolve(result);
     return result;

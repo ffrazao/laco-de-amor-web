@@ -35,9 +35,9 @@ import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pess
     MatTabsModule,
     MatAutocompleteModule,
 
-    PipeModule,
     UnidadeMedidaModule,
     EventoPessoaFuncaoModule,
+    PipeModule,
   ]
 })
 export class FormModule { }

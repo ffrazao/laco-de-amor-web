@@ -88,6 +88,7 @@ export class FormComponent implements OnInit {
 
     if (this.frm.invalid) {
       const msg = 'Dados inválidos!';
+      console.error(this.frm);
       this._mensagem.erro(msg);
       throw new Error(msg);
     }

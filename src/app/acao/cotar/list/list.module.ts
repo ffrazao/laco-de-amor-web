@@ -5,9 +5,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
 
-
 import { ListRoutingModule } from './list-routing.module';
 import { ListComponent } from './list.component';
+import { PipeModule } from '../../../comum/pipe/pipe.module';
 
 @NgModule({
   declarations: [ListComponent],
@@ -18,6 +18,7 @@ import { ListComponent } from './list.component';
     MatInputModule,
     MatFormFieldModule,
     MatListModule,
+    PipeModule,
   ]
 })
 export class ListModule { }

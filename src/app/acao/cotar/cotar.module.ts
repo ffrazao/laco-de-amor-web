@@ -15,7 +15,6 @@ import { ProdutoModeloModule } from '../../cadastro/produto-modelo/produto-model
 import { PessoaModule } from '../../cadastro/pessoa/pessoa.module';
 import { EventoPessoaFuncaoModule } from '../evento-pessoa-funcao/evento-pessoa-funcao.module';
 
-
 @NgModule({
   declarations: [CotarComponent],
   imports: [

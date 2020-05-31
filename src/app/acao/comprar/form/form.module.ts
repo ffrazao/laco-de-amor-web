@@ -10,12 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
 import { UnidadeMedidaModule } from '../../../cadastro/unidade-medida/unidade-medida.module';
 import { PipeModule } from '../../../comum/pipe/pipe.module';
 import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pessoa-funcao.module';
+import { CotarModule } from '../../cotar/cotar.module';
 
 
 @NgModule({
@@ -35,10 +37,12 @@ import { EventoPessoaFuncaoModule } from '../../evento-pessoa-funcao/evento-pess
     MatIconModule,
     MatTabsModule,
     MatAutocompleteModule,
+    ClipboardModule,
 
-    PipeModule,
     UnidadeMedidaModule,
     EventoPessoaFuncaoModule,
+    PipeModule,
+    CotarModule,
   ]
 })
 export class FormModule { }

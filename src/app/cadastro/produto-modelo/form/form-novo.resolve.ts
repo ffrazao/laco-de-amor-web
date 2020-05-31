@@ -13,7 +13,7 @@ export class FormNovoResolve implements Resolve<ProdutoModelo> {
     constructor(private _service: ProdutoModeloCrudService) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        this._service.acao = 'Visualizar';
+        this._service.acao = 'Novo';
         return {
             principal: this._service.novo(null),
         };

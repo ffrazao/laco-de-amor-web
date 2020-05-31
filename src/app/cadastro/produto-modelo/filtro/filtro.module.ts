@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { FiltroRoutingModule } from './filtro-routing.module';
 import { FiltroComponent } from './filtro.component';
-
+import { PipeModule } from '../../../comum/pipe/pipe.module';
 
 @NgModule({
   declarations: [FiltroComponent],
@@ -24,6 +24,7 @@ import { FiltroComponent } from './filtro.component';
     MatRadioModule,
     MatButtonModule,
     FiltroRoutingModule,
+    PipeModule,
   ]
 })
 export class FiltroModule { }

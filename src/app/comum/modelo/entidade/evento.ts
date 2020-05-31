@@ -12,5 +12,6 @@ export class Evento implements EntidadeId {
     public pai: Evento;
     public eventoPessoaList: EventoPessoa[] = [];
     public eventoProdutoList: EventoProduto[] = [];
+    public eventoProdutoListTotal: number;
 
 }

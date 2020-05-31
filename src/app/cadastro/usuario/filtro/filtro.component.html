@@ -80,7 +80,11 @@
 
 <div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
     <p><b>prod: {{prod}}</b></p>
-    <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p>
+    <div>er
+        <pre [innerHTML]="frm.errors | jsonFormat"></pre>
+    </div>
+    <div>vl
+        <pre [innerHTML]="frm.value | jsonFormat"></pre>
+    </div>
 </div>

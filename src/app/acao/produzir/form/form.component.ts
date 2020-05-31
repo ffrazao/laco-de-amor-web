@@ -61,16 +61,20 @@ export class FormComponent implements OnInit {
     this._route.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Produzir) => {
         if (p.eventoProdutoList) {
-          p.eventoProdutoList.forEach((ep: EventoProduto) =>
-            ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
-          );
+          p.eventoProdutoList.forEach((ep: EventoProduto) => {
+            if (ep.produto.produtoModelo.foto) {
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto);
+            }
+          });
         }
         if (p.eventoPessoaList) {
           p.eventoPessoaList.forEach((ep: EventoPessoa) => {
             if (ep.eventoProdutoList) {
-              ep.eventoProdutoList.forEach((ep1: EventoProduto) =>
-                ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto)
-              );
+              ep.eventoProdutoList.forEach((ep1: EventoProduto) => {
+                if (ep1.produto.produtoModelo.foto) {
+                  ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto);
+                }
+              });
             }
           });
         }
@@ -103,6 +107,7 @@ export class FormComponent implements OnInit {
 
     if (this.frm.invalid) {
       const msg = 'Dados inválidos!';
+      console.error(this.frm);
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
@@ -112,6 +117,13 @@ export class FormComponent implements OnInit {
       entidade.eventoProdutoList.forEach((ep: EventoProduto) =>
         ep.produto.produtoModelo.foto = removeMime(ep.produto.produtoModelo.foto)
       );
+    }
+    if (entidade.eventoPessoaList) {
+      entidade.eventoPessoaList.forEach((ep: EventoPessoa) => {
+        if (ep.eventoProdutoList) {
+          ep.eventoProdutoList.forEach((epp: EventoProduto) => epp.produto.produtoModelo.foto = removeMime(epp.produto.produtoModelo.foto));
+        }
+      });
     }
 
     if ('Novo' === this._service.acao) {
@@ -208,9 +220,9 @@ export class FormComponent implements OnInit {
     return produtoModelo ? `${produtoModelo.nome} (${produtoModelo.codigo})` : '';
   }
 
-  pesquisarEventoProduto = '';
+  public pesquisarEventoProduto = '';
 
-  $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
+  public $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
     let result = [];
     resolve(result);
     return result;
@@ -219,24 +231,25 @@ export class FormComponent implements OnInit {
   public completarEventoProduto(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
-        let result = [];
+        const result = [];
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
-          this._produtoModeloService.lista.forEach(val => {
-            let p = this.pesquisarEventoProduto.toLowerCase();
-            if (val.materiaPrima === 'N' &&
-              (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
+          this._produtoModeloService.filtro.nome = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.codigo = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.materiaPrima = 'N';
+          this._produtoModeloService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
       });
     }
   }

@@ -6,7 +6,7 @@
         <mat-label>Cotação</mat-label>
         <mat-select [(ngModel)]="cotacao" [ngModelOptions]="{standalone: true}" [compareWith]="cotacaoListComparar">
             <mat-option *ngFor="let option of cotacaoList" [value]="option">
-                {{option.data}}
+                {{option.data | date: 'dd/MM/yyyy HH:mm'}}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -155,6 +155,9 @@
                                                     <div *ngIf="el.controls.quantidade.errors?.required">
                                                         Campo obrigatório!
                                                     </div>
+                                                    <div *ngIf="el.controls.quantidade.errors?.min">
+                                                        Valor inválido!
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -189,6 +192,9 @@
                                                     *ngIf="isEnviado && el.controls.valorUnitario.invalid">
                                                     <div *ngIf="el.controls.valorUnitario.errors?.required">
                                                         Campo obrigatório!
+                                                    </div>
+                                                    <div *ngIf="el.controls.valorUnitario.errors?.min">
+                                                        Valor inválido!
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,7 +250,11 @@
 
 <div class="alert alert-warning mt-5" role="alert" *ngIf="!prod">
     <p><b>prod: {{prod}}</b></p>
-    <p>vl /{{frm.value | json}}/</p>
     <p>st /{{frm.status}}/</p>
-    <p>er /{{frm.errors | json}}/</p>
+    <div>er
+        <pre [innerHTML]="frm.errors | jsonFormat"></pre>
+    </div>
+    <div><a [cdkCopyToClipboard]="frm.value | json">vl</a>
+        <pre [innerHTML]="frm.value | jsonFormat"></pre>
+    </div>
 </div>

@@ -69,16 +69,20 @@ export class FormComponent implements OnInit {
     this._route.data.subscribe((info) => {
       info.resolve.principal.subscribe((p: Vender) => {
         if (p.eventoProdutoList) {
-          p.eventoProdutoList.forEach((ep: EventoProduto) =>
-            ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto)
-          );
+          p.eventoProdutoList.forEach((ep: EventoProduto) => {
+            if (ep.produto.produtoModelo.foto) {
+              ep.produto.produtoModelo.foto = adMime(ep.produto.produtoModelo.foto);
+            }
+          });
         }
         if (p.eventoPessoaList) {
           p.eventoPessoaList.forEach((ep: EventoPessoa) => {
             if (ep.eventoProdutoList) {
-              ep.eventoProdutoList.forEach((ep1: EventoProduto) =>
-                ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto)
-              );
+              ep.eventoProdutoList.forEach((ep1: EventoProduto) => {
+                if (ep1.produto.produtoModelo.foto) {
+                  ep1.produto.produtoModelo.foto = adMime(ep1.produto.produtoModelo.foto);
+                }
+              });
             }
           });
         }
@@ -115,6 +119,7 @@ export class FormComponent implements OnInit {
 
     if (this.frm.invalid) {
       const msg = 'Dados inválidos!';
+      console.error(this.frm);
       this._mensagem.erro(msg);
       throw new Error(msg);
     }
@@ -124,6 +129,13 @@ export class FormComponent implements OnInit {
       entidade.eventoProdutoList.forEach((ep: EventoProduto) =>
         ep.produto.produtoModelo.foto = removeMime(ep.produto.produtoModelo.foto)
       );
+    }
+    if (entidade.eventoPessoaList) {
+      entidade.eventoPessoaList.forEach((ep: EventoPessoa) => {
+        if (ep.eventoProdutoList) {
+          ep.eventoProdutoList.forEach((epp: EventoProduto) => epp.produto.produtoModelo.foto = removeMime(epp.produto.produtoModelo.foto));
+        }
+      });
     }
 
     if ('Novo' === this._service.acao) {
@@ -296,9 +308,9 @@ export class FormComponent implements OnInit {
     return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
   }
 
-  pesquisarEventoPessoa = '';
+  public pesquisarEventoPessoa = '';
 
-  $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+  public $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
     let result = [];
     resolve(result);
     return result;
@@ -307,46 +319,38 @@ export class FormComponent implements OnInit {
   public completarEventoPessoa(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
-        let result = [];
-        // if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
-        //   this._pessoaService.lista.forEach(val => {
-        //     let p = this.pesquisarEventoPessoa.toLowerCase();
-        //     if ((val.cliente && val.cliente.id) &&
-        //       (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
-        //       result.push(Object.assign({}, val));
-        //     }
-        //   });
-        // }
+        const result = [];
         if (typeof this.frm.value.eventoPessoaList[0].pessoa === 'string' && this.frm.value.eventoPessoaList[0].pessoa.length) {
-          this._pessoaService.lista.forEach(val => {
-            let p = this.frm.value.eventoPessoaList[0].pessoa.toLowerCase();
-            if ((val.cliente && val.cliente.id) &&
-              (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+          this._pessoaService.filtro.nome = this.frm.value.eventoPessoaList[0].pessoa;
+          this._pessoaService.filtro.cpfCnpj = this.frm.value.eventoPessoaList[0].pessoa;
+          this._pessoaService.filtro.pessoaVinculoTipo = ['CLIENTE'];
+          this._pessoaService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
       });
     }
   }
 
   public podeAdicionarEventoPessoa() {
-    return typeof this.pesquisarEventoPessoa === 'string';
+    return typeof this.frm.value.eventoPessoaList[0].pessoa === 'string';
   }
 
   public adicionarEventoPessoa(entidade: FormGroup) {
-    let ep = new EventoPessoa();
+    const ep = new EventoPessoa();
     ep.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[0];
-    ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
-    let id = ep.pessoa.id;
+    ep.pessoa = (this.frm.value.eventoPessoaList[0].pessoa as unknown) as Pessoa;
+    const id = ep.pessoa.id;
     let existe = false;
     this.frm.get('eventoPessoaList').value.forEach(e => {
       if (e.pessoa.id === id) {
@@ -359,7 +363,6 @@ export class FormComponent implements OnInit {
       this.frm.get('eventoPessoaList').value.push(ep);
     }
     entidade.get('eventoPessoa').setValue(ep);
-    this.pesquisarEventoPessoa = '';
   }
 
 }

@@ -1,3 +1,4 @@
+import { CotarCrudService } from './../../cotar/cotar.service';
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { ActivatedRouteSnapshot } from '@angular/router';
@@ -15,6 +16,7 @@ export class FormResolve implements Resolve<Comprar> {
         private _service: ComprarCrudService,
         private _unidadeMedidaService: UnidadeMedidaCrudService,
         private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
+        private _cotarService: CotarCrudService,
     ) {
     }
 
@@ -24,11 +26,13 @@ export class FormResolve implements Resolve<Comprar> {
     ): any {
         this._service.acao = 'Visualizar';
         this._eventoPessoaFuncaoService.filtro.codigo = 'FORNECEDOR';
+        this._cotarService.filtro.utilizado = 'N';
         return {
             principal: this._service.restore(route.params.id),
             apoio: [
                 {unidadeMedidaList: this._unidadeMedidaService.filtrar()},
-                {eventoPessoaFuncao: this._eventoPessoaFuncaoService.filtrar()}
+                {eventoPessoaFuncao: this._eventoPessoaFuncaoService.filtrar()},
+                {cotacaoList: this._cotarService.filtrar()},
             ]
         };
     }
