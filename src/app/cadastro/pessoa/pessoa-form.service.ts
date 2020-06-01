@@ -9,6 +9,7 @@ import { Cliente } from '../../comum/modelo/entidade/cliente';
 import { PessoaEndereco } from '../../comum/modelo/entidade/pessoa-endereco';
 import { Endereco } from '../../comum/modelo/entidade/endereco';
 import { PessoaFiltroDTO } from '../../comum/modelo/dto/pessoa.filtro.dto';
+import { isCpfCnpjValido } from '../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class PessoaFormService {
@@ -38,10 +39,11 @@ export class PessoaFormService {
 
     result.addControl('cpfCnpj',
       new FormControl(entidade.cpfCnpj, {
-        validators: Validators.pattern('([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})'),
+        validators: [Validators.pattern('([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})'),
+            isCpfCnpjValido()],
         updateOn: 'blur'
       }));
-      
+
     result.addControl('contato1',
       new FormControl(entidade.contato1, {
         validators: Validators.pattern('(\\(?\\d{2}\\)?\\s)?(\\d{4,5}\\-\\d{4})'),

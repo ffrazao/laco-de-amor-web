@@ -69,7 +69,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>CPF/CNPJ</mat-label>
-            <input matInput placeholder="Documento da Pessoa" formControlName="cpfCnpj">
+            <input matInput placeholder="Documento da Pessoa" formControlName="cpfCnpj" (blur)="formataCpfCnpj(frm.controls.pessoaTipo, frm.controls.cpfCnpj)">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm['controls'].cpfCnpj.invalid">
             <div *ngIf="frm['controls'].cpfCnpj.errors.required">
@@ -77,6 +77,9 @@
             </div>
             <div *ngIf="frm['controls'].cpfCnpj.errors.pattern">
                 Formato inválido! Esperado: 999.999.999-99 ou 99.999.999/9999-99
+            </div>
+            <div *ngIf="frm['controls'].cpfCnpj.errors.cpfCnpjNotValid">
+                Valor inválido!
             </div>
         </div>
     </div>
@@ -99,7 +102,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Contato 1</mat-label>
-            <input matInput placeholder="Contato 1 da Pessoa" formControlName="contato1">
+            <input matInput placeholder="Contato 1 da Pessoa" formControlName="contato1" (blur)="formataTelefone(frm.controls.contato1)">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm['controls'].contato1.invalid">
             <div *ngIf="frm['controls'].contato1.errors.required">
@@ -114,7 +117,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Contato 2</mat-label>
-            <input matInput placeholder="Contato 2 da Pessoa" formControlName="contato2">
+            <input matInput placeholder="Contato 2 da Pessoa" formControlName="contato2" (blur)="formataTelefone(frm.controls.contato2)">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm['controls'].contato2.invalid">
             <div *ngIf="frm['controls'].contato2.errors.required">
@@ -129,7 +132,7 @@
     <div class="form-group">
         <mat-form-field appearance="outline">
             <mat-label>Contato 3</mat-label>
-            <input matInput placeholder="Contato 3 da Pessoa" formControlName="contato3">
+            <input matInput placeholder="Contato 3 da Pessoa" formControlName="contato3" (blur)="formataTelefone(frm.controls.contato3)">
         </mat-form-field>
         <div class="text-danger" *ngIf="isEnviado && frm['controls'].contato3.invalid">
             <div *ngIf="frm['controls'].contato3.errors.required">
@@ -164,7 +167,7 @@
                             <div class="form-group" *ngIf="el.editar">
                                 <mat-form-field appearance="outline">
                                     <mat-label>CEP</mat-label>
-                                    <input matInput placeholder="CEP do endereço" formControlName="cep">
+                                    <input matInput placeholder="CEP do endereço" formControlName="cep" (blur)="formataCep(el.controls.endereco.controls.cep)">
                                     <button type="button" mat-icon-button matSuffix (click)="buscaCep(el.controls.endereco)">
                                         <mat-icon>search</mat-icon>
                                     </button>

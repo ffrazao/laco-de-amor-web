@@ -259,7 +259,7 @@ export class FormComponent implements OnInit {
   public pesquisarEventoProduto = '';
 
   public $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
-    let result = [];
+    const result = [];
     resolve(result);
     return result;
   });
@@ -365,7 +365,7 @@ export class FormComponent implements OnInit {
   public pesquisarEventoPessoa = '';
 
   public $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
-    let result = [];
+    const result = [];
     resolve(result);
     return result;
   });

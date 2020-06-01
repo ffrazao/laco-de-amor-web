@@ -11,7 +11,7 @@ import { Cliente } from '../../../comum/modelo/entidade/cliente';
 import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
 import { Parceiro } from '../../../comum/modelo/entidade/parceiro';
 import { PessoaEndereco } from '../../../comum/modelo/entidade/pessoa-endereco';
-import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
+import { deEnumParaChaveValor, formataCpfCnpj, formataCpf, formataCnpj, formataTelefone, formataCep } from '../../../comum/ferramenta/ferramenta-comum';
 import { ParceiroFuncao } from './../../../comum/modelo/dominio/parceiro-funcao';
 import { PessoaTipo } from '../../../comum/modelo/dominio/pessoa-tipo';
 import { ConsultaCepService, Cep } from 'src/app/comum/servico/consulta-cep.service';
@@ -233,6 +233,24 @@ export class FormComponent implements OnInit {
         endereco.controls.cep.setValue(r.cep);
       })
       .catch(e => this._mensagem.erro(`CEP: ${cep} -> ${e}`));
+  }
+
+  public formataCpfCnpj(pessoaTipo, cpfCnpj) {
+    if ('PF' === pessoaTipo.value) {
+      cpfCnpj.setValue(formataCpf(cpfCnpj.value));
+    } else if ('PF' === pessoaTipo.value) {
+      cpfCnpj.setValue(formataCnpj(cpfCnpj.value));
+    } else {
+      cpfCnpj.setValue(formataCpfCnpj(cpfCnpj.value));
+    }
+  }
+
+  public formataTelefone(telefone) {
+    telefone.setValue(formataTelefone(telefone.value));
+  }
+
+  public formataCep(cep) {
+    cep.setValue(formataCep(cep.value));
   }
 
 }
