@@ -160,6 +160,17 @@ export function isCpfCnpjValido() {
     };
 }
 
+export function isPessoaValido() {
+    return (control: AbstractControl): Validators => {
+        const pessoa = control.value;
+        return pessoaValida(pessoa) ? null : { pessoaNotValid: true };
+    };
+}
+
+export function pessoaValida(pessoa) {
+    return pessoa && !(typeof pessoa === 'string');
+}
+
 export function validarCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf === '') {
@@ -181,79 +192,41 @@ export function validarCPF(cpf) {
     // Valida 1o digito
     let add = 0;
     for (let i = 0; i < 9; i++) {
-        add += parseInt(cpf.charAt(i)) * (10 - i);
+        add += Number(cpf.charAt(i)) * (10 - i);
     }
     let rev = 11 - (add % 11);
     if (rev === 10 || rev === 11) {
         rev = 0;
     }
-    if (rev !== parseInt(cpf.charAt(9))) {
+    if (rev !== Number(cpf.charAt(9))) {
         return false;
     }
     // Valida 2o digito
     add = 0;
     for (let i = 0; i < 10; i++) {
-        add += parseInt(cpf.charAt(i)) * (11 - i);
+        add += Number(cpf.charAt(i)) * (11 - i);
     }
     rev = 11 - (add % 11);
     if (rev === 10 || rev === 11) {
         rev = 0;
     }
-    if (rev !== parseInt(cpf.charAt(10))) {
-        return false;
-    }
-    return true;
+    return rev !== Number(cpf.charAt(10)) ? false : true;
 }
 
 export function validarCNPJ(cnpj) {
-    cnpj = cnpj.replace(/[^\d]+/g, '');
-    if (cnpj === '') {
-        return false;
+    const valida = new Array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
+    let dig1 = 0;
+    let dig2 = 0;
+    const exp = /\.|\-|\//g;
+    cnpj = cnpj.toString().replace(exp, '');
+    const digito = Number(cnpj.charAt(12) + cnpj.charAt(13));
+    for (let i = 0; i < valida.length; i++) {
+        dig1 += (i > 0 ? (cnpj.charAt(i - 1) * valida[i]) : 0);
+        dig2 += cnpj.charAt(i) * valida[i];
     }
-    if ((cnpj.length !== 14) ||
-        (cnpj === '00000000000000') ||
-        (cnpj === '11111111111111') ||
-        (cnpj === '22222222222222') ||
-        (cnpj === '33333333333333') ||
-        (cnpj === '44444444444444') ||
-        (cnpj === '55555555555555') ||
-        (cnpj === '66666666666666') ||
-        (cnpj === '77777777777777') ||
-        (cnpj === '88888888888888') ||
-        (cnpj === '99999999999999')) {
-        return false;
-    }
-    // Valida DVs
-    let tamanho = cnpj.length - 2
-    let numeros = cnpj.substring(0, tamanho);
-    const digitos = cnpj.substring(tamanho);
-    let soma = 0;
-    let pos = tamanho - 7;
-    for (let i = tamanho; i >= 1; i--) {
-        soma += numeros.charAt(tamanho - i) * pos--;
-        if (pos < 2) {
-            pos = 9;
-        }
-    }
-    let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-    if (resultado !== digitos.charAt(0)) {
-        return false;
-    }
-    tamanho = tamanho + 1;
-    numeros = cnpj.substring(0, tamanho);
-    soma = 0;
-    pos = tamanho - 7;
-    for (let i = tamanho; i >= 1; i--) {
-        soma += numeros.charAt(tamanho - i) * pos--;
-        if (pos < 2) {
-            pos = 9;
-        }
-    }
-    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-    if (resultado !== digitos.charAt(1)) {
-        return false;
-    }
-    return true;
+    dig1 = (((dig1 % 11) < 2) ? 0 : (11 - (dig1 % 11)));
+    dig2 = (((dig2 % 11) < 2) ? 0 : (11 - (dig2 % 11)));
+    return (((dig1 * 10) + dig2) !== digito) ? false : true;
 }
 
 export function formataTelefone(valor: string) {
@@ -289,5 +262,14 @@ export function formataCep(valor: string) {
         return valor.replace(/(\d{5})(\d{3})/, (regex, a1, a2) => `${a1}-${a2}`);
     } else {
         return valor;
+    }
+}
+
+export function sugereLogin(nome: string) {
+    const nomes = nome.trim().toLowerCase().split(' ');
+    if (nomes.length === 0 || nomes.length === 1) {
+        return nomes[0].replace(/\W/g, '');
+    } else {
+        return `${nomes[0].replace(/\W/g, '')}.${nomes[nomes.length - 1].replace(/\W/g, '')}`;
     }
 }

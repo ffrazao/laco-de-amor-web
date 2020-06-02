@@ -19,7 +19,7 @@ export class ComprarFormService extends EventoFormService {
     const result = super.criarFormulario(entidade as Evento);
     result.controls.eventoPessoaList.clearValidators();
     result.controls.eventoPessoaList.updateValueAndValidity();
-    
+
     return result;
   }
 

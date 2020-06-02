@@ -15,13 +15,15 @@ export class AutorizarTrocarSenhaResolve implements Resolve<any> {
     ) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any | Observable<any> | Promise<any> {
-        const email = route.params['email'];
+        const email = route.params.email;
+        const token = route.params.token;
         if (!email) {
             this._mensagem.erro('E-mail não informado');
             this._router.navigate(['recuperar-senha']);
         }
         return {
-            email
+            email,
+            token
         };
     }
 

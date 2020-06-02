@@ -22,7 +22,7 @@ export class FormNovoResolve implements Resolve<Utilizar> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): any {
-        this._service.acao = 'Visualizar';
+        this._service.acao = 'Novo';
         this._eventoPessoaFuncaoService.filtro.codigo = 'PARCEIRO';
         return {
             principal: this._service.novo(null),

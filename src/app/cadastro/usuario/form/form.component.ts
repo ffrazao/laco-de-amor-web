@@ -1,17 +1,21 @@
+import { constante } from './../../../comum/constante';
 import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { UsuarioCrudService } from '../usuario.service';
 import { UsuarioFormService } from '../usuario-form.service';
-import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
+import { PessoaCrudService } from '../../pessoa/pessoa.service';
+import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { Usuario } from '../../../comum/modelo/entidade/usuario';
-import { Cliente } from '../../../comum/modelo/entidade/cliente';
-import { Fornecedor } from '../../../comum/modelo/entidade/fornecedor';
-import { Parceiro } from '../../../comum/modelo/entidade/parceiro';
-import { deEnumParaChaveValor } from '../../../comum/ferramenta/ferramenta-comum';
-import { ParceiroFuncao } from './../../../comum/modelo/dominio/parceiro-funcao';
+import { UsuarioPerfil } from '../../../comum/modelo/dominio/usuario-perfil';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
+import { removeMime, adMime, deEnumParaChaveValor, sugereLogin } from '../../../comum/ferramenta/ferramenta-comum';
+import { pessoaListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
+import { Confirmacao } from 'src/app/comum/modelo/dominio/confirmacao';
+import { AnexarService } from 'src/app/comum/servico/anexar/anexar.service';
+import { AnexarTipo } from 'src/app/comum/servico/anexar/anexar-tipo';
 
 @Component({
   selector: 'app-form',
@@ -27,24 +31,22 @@ export class FormComponent implements OnInit {
   public isEnviado = false;
   public id: number;
 
-  public enderecoEditando = false;
+  public SEM_IMAGEM = constante.SEM_IMAGEM;
 
-  public parceiroFuncaoList: any;
-  public usuarioTipoList: any;
-
-  private _cliente: boolean;
-  private _fornecedor: boolean;
-  private _parceiro: boolean;
+  public confirmacaoList: any;
+  public usuarioPerfilList: any;
 
   constructor(
     private _service: UsuarioCrudService,
     private _formService: UsuarioFormService,
+    private _pessoaService: PessoaCrudService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
+    private _anexar: AnexarService,
   ) {
-    this.parceiroFuncaoList = deEnumParaChaveValor(ParceiroFuncao);
-    //this.usuarioTipoList = deEnumParaChaveValor(UsuarioTipo);
+    this.confirmacaoList = deEnumParaChaveValor(Confirmacao);
+    this.usuarioPerfilList = deEnumParaChaveValor(UsuarioPerfil);
   }
 
   ngOnInit() {
@@ -60,12 +62,56 @@ export class FormComponent implements OnInit {
     });
   }
 
-  public get acao() {
-    return this._service.acao;
+  public get administrador() {
+    return this.frm.value.perfil && this.frm.value.perfil.includes('Admin');
   }
 
-  get usuarioEnderecoList(): FormArray {
-    return this.frm.get('usuarioEnderecoList') as FormArray;
+  public set administrador(valor) {
+    const p = this.frm.value.perfil.split(',');
+    if (valor) {
+      p.push('Admin');
+    } else {
+      p.splice(p.indexOf('Admin'), 1);
+    }
+    this.frm.controls.perfil.setValue(p.filter(v => v).sort().join(','));
+    this.frm.controls.perfil.markAllAsTouched();
+    this.frm.controls.perfil.markAsDirty();
+  }
+
+  public get cliente() {
+    return this.frm.value.perfil && this.frm.value.perfil.includes('Cliente');
+  }
+
+  public set cliente(valor) {
+    const p = this.frm.value.perfil.split(',');
+    if (valor) {
+      p.push('Cliente');
+    } else {
+      p.splice(p.indexOf('Cliente'), 1);
+    }
+    this.frm.controls.perfil.setValue(p.filter(v => v).sort().join(','));
+    this.frm.controls.perfil.markAllAsTouched();
+    this.frm.controls.perfil.markAsDirty();
+  }
+
+  public get parceiro() {
+    return this.frm.value.perfil && this.frm.value.perfil.includes('Parceiro');
+  }
+
+  public set parceiro(valor) {
+    const p = this.frm.value.perfil.split(',');
+    if (valor) {
+      p.push('Parceiro');
+    } else {
+      p.splice(p.indexOf('Parceiro'), 1);
+    }
+    this.frm.controls.perfil.setValue(p.filter(v => v).sort().join(','));
+    this.frm.controls.perfil.markAllAsTouched();
+    this.frm.controls.perfil.markAsDirty();
+  }
+
+  public get acao() {
+    return this._service.acao;
   }
 
   public enviar(event) {
@@ -80,6 +126,7 @@ export class FormComponent implements OnInit {
     }
 
     const entidade = this.frm.value;
+    entidade.foto = removeMime(entidade.foto);
 
     if ('Novo' === this._service.acao) {
       this._service.create(entidade).subscribe((id: number) => {
@@ -116,106 +163,101 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public novoEndereco(event) {
-    // event.preventDefault();
-    // const e = new UsuarioEndereco();
-    // const reg = this._formService.criarFormularioUsuarioEndereco(e);
-    // this.enderecoEditando = true;
-    // reg['editar'] = true;
-    // this.usuarioEnderecoList.push(reg);
+  public displayFnPessoa(pessoa?: Pessoa): string {
+    return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
   }
 
-  public salvarEndereco(reg) {
-    delete reg['anterior'];
-    reg['editar'] = false;
-    this.enderecoEditando = false;
+  public $filteredOptionsPessoa = new Promise((resolve, reject) => {
+    let result = [];
+    resolve(result);
+    return result;
+  });
+
+  public completarPessoa(event: KeyboardEvent) {
+    if (
+      !(
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
+    ) {
+      this.$filteredOptionsPessoa = new Promise((resolve, reject) => {
+        const result = [];
+        if (typeof this.frm.value.pessoa === 'string' && this.frm.value.pessoa.length) {
+          this._pessoaService.filtro.nome = this.frm.value.pessoa;
+          this._pessoaService.filtro.cpfCnpj = this.frm.value.pessoa;
+          this._pessoaService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
+              result.push(Object.assign({}, val));
+            });
+            resolve(result);
+            return result;
+          });
+        }
+      });
+    }
   }
 
-  public editarEndereco(reg) {
-    reg['anterior'] = reg.value;
-    reg['editar'] = true;
-    this.enderecoEditando = true;
+  public excluirPessoa(idx) {
+    this.frm.controls.pessoa.setValue({});
   }
 
-  public excluirEndereco(idx) {
-    this.usuarioEnderecoList.removeAt(idx);
-    this.enderecoEditando = false;
+  public pessoaListComparar(o1: Pessoa, o2: Pessoa) {
+    return pessoaListComparar(o1, o2);
   }
 
-  public cancelarEndereco(reg) {
-    if (this.usuarioEnderecoList.at(reg)['anterior']) {
-      const vlr = this.usuarioEnderecoList.at(reg)['anterior'];
-      this.usuarioEnderecoList.at(reg).setValue(vlr);
-      this.usuarioEnderecoList.at(reg)['editar'] = false;
-      delete this.usuarioEnderecoList.at(reg)['anterior'];
+  public carregarFoto(event) {
+    event.preventDefault();
+    this._anexar.carregar([AnexarTipo.IMAGEM], false).subscribe((v) => {
+      const foto = v['IMAGEM'][0];
+      this.frm.get('foto').setValue(foto);
+    });
+  }
+
+  public limparFoto(event) {
+    event.preventDefault();
+    this.frm.get('foto').setValue(null);
+  }
+
+  public adMime(v) {
+    return adMime(v);
+  }
+
+  public async loginDisponivel(event, login, id) {
+    event.preventDefault();
+    const disponivel = await this._service.loginDisponivel(login, id).toPromise();
+    if (disponivel) {
+      this._mensagem.sucesso('Login disponível');
     } else {
-      this.usuarioEnderecoList.removeAt(reg);
+      this._mensagem.erro('Login indisponível');
     }
-    this.enderecoEditando = false;
   }
 
-  get cliente(): FormGroup {
-    return this.frm.get('cliente') as FormGroup;
-  }
-
-  get fornecedor(): FormGroup {
-    return this.frm.get('fornecedor') as FormGroup;
-  }
-
-  get parceiro(): FormGroup {
-    return this.frm.get('parceiro') as FormGroup;
-  }
-
-  public get isCliente(): boolean {
-    if (this._cliente === undefined) {
+  public async pessoaDisponivel(event, pessoaId, id) {
+    event.preventDefault();
+    const disponivel = await this._service.pessoaDisponivel(pessoaId, id).toPromise();
+    if (disponivel) {
+      this._mensagem.sucesso('Pessoa disponível');
+    } else {
+      this._mensagem.erro('Pessoa indisponível');
     }
-    this._cliente = this.cliente.value !== null;
-    return this._cliente;
   }
 
-  public set isCliente(is: boolean) {
-    // let v = null;
-    // if (is) {
-    //   v = new Cliente();
-    //   v.id = this.frm.value.id;
-    // }
-    // this.frm.setControl('cliente', this._formService.criarFormularioCliente(v));
-    // this._cliente = is;
-  }
-
-  public get isFornecedor(): boolean {
-    if (this._fornecedor === undefined) {
+  public async emailDisponivel(event, email, id) {
+    event.preventDefault();
+    const disponivel = await this._service.emailDisponivel(email, id).toPromise();
+    if (disponivel) {
+      this._mensagem.sucesso('E-mail disponível');
+    } else {
+      this._mensagem.erro('E-mail indisponível');
     }
-    this._fornecedor = this.fornecedor.value !== null;
-    return this._fornecedor;
   }
 
-  public set isFornecedor(is: boolean) {
-    // let v = null;
-    // if (is) {
-    //   v = new Fornecedor();
-    //   v.id = this.frm.value.id;
-    // }
-    // this.frm.setControl('fornecedor', this._formService.criarFormularioFornecedor(v));
-    // this._fornecedor = is;
-  }
-
-  public get isParceiro(): boolean {
-    if (this._parceiro === undefined) {
+  public sugereLogin(usuario: Usuario) {
+    if (usuario.pessoa && usuario.pessoa.id && usuario.pessoa.nome && (!usuario.login || usuario.login.trim().length === 0)) {
+      const login = sugereLogin(usuario.pessoa.nome);
+      this.frm.controls.login.setValue(login);
     }
-    this._parceiro = this.parceiro.value !== null;
-    return this._parceiro;
-  }
-
-  public set isParceiro(is: boolean) {
-    // let v = null;
-    // if (is) {
-    //   v = new Parceiro();
-    //   v.id = this.frm.value.id;
-    //   v.funcao = null;
-    // }
-    // this.frm.setControl('parceiro', this._formService.criarFormularioParceiro(v));
-    // this._parceiro = is;
   }
 
 }

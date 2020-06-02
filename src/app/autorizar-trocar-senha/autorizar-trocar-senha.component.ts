@@ -32,6 +32,7 @@ export class AutorizarTrocarSenhaComponent implements OnInit {
     this._route.data.subscribe((info) => {
       const valor = new AutorizarTrocarSenha();
       valor.email = info['resolve']['email'];
+      valor.token = info['resolve']['token'];
       this.frm = this._formService.criarFormulario(valor);
     });
   }

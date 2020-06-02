@@ -289,9 +289,9 @@ export class FormComponent implements OnInit {
     return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
   }
 
-  pesquisarEventoPessoa = '';
+  public pesquisarEventoPessoa = '';
 
-  $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
+  public $filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
     let result = [];
     resolve(result);
     return result;
@@ -300,25 +300,26 @@ export class FormComponent implements OnInit {
   public completarEventoPessoa(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoPessoa = new Promise((resolve, reject) => {
-        let result = [];
+        const result = [];
         if (typeof this.pesquisarEventoPessoa === 'string' && this.pesquisarEventoPessoa.length) {
-          this._pessoaService.lista.forEach(val => {
-            let p = this.pesquisarEventoPessoa.toLowerCase();
-            if ((val.parceiro && val.parceiro.id && val.parceiro.funcao === 'Costureiro(a)') &&
-              (val.nome.toLowerCase().includes(p) || val.cpfCnpj.toLowerCase().includes(p))) {
+          this._pessoaService.filtro.nome = this.pesquisarEventoPessoa;
+          this._pessoaService.filtro.cpfCnpj = this.pesquisarEventoPessoa;
+          this._pessoaService.filtro.pessoaVinculoTipo = ['PARCEIRO'];
+          this._pessoaService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
-      })
+      });
     }
   }
 
@@ -327,10 +328,10 @@ export class FormComponent implements OnInit {
   }
 
   public adicionarEventoPessoa(entidade: FormGroup) {
-    let ep = new EventoPessoa();
-    ep.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[0];
+    const ep = new EventoPessoa();
+    ep.eventoPessoaFuncao = this.eventoPessoaFuncao;
     ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
-    let id = ep.pessoa.id;
+    const id = ep.pessoa.id;
     let existe = false;
     this.frm.get('eventoPessoaList').value.forEach(e => {
       if (e.pessoa.id === id) {

@@ -7,8 +7,8 @@
             <mat-label>Data</mat-label>
             <input matInput type="datetime-local" placeholder="Data da Utilização" formControlName="data">
         </mat-form-field>
-        <div class="text-danger" *ngIf="isEnviado && frm.controls.data.invalid">
-            <div *ngIf="frm.controls.data.errors?.required">
+        <div class="text-danger" *ngIf="isEnviado && frm['controls'].data.invalid">
+            <div *ngIf="frm['controls'].data.errors?.required">
                 Campo obrigatório!
             </div>
         </div>
@@ -34,16 +34,16 @@
                     </tr>
                 </thead>
                 <tbody formArrayName="eventoProdutoList">
-                    <tr *ngFor="let el of eventoProdutoList.controls; index as i" [formGroupName]="i">
+                    <tr *ngFor="let el of eventoProdutoList['controls']; index as i" [formGroupName]="i">
                         <td>
                             {{i+1}}
                         </td>
                         <td>
-                            <mat-label *ngIf="!el.editar"><b>{{el?.value?.eventoPessoa?.pessoa?.nome}}</b>
+                            <mat-label *ngIf="!el['editar']"><b>{{el?.value?.eventoPessoa?.pessoa?.nome}}</b>
                                 ({{el?.value?.eventoPessoa?.pessoa?.cpfCnpj}})</mat-label>
-                            <div class="form-group" *ngIf="el.editar">
+                            <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline"
-                                    *ngIf="!(el.controls.eventoPessoa.value && !el.controls.eventoPessoa?.value?.pessoa?.id)">
+                                    *ngIf="!(el['controls'].eventoPessoa.value && !el['controls'].eventoPessoa?.value?.pessoa?.id)">
                                     <mat-label>Parceiro</mat-label>
                                     <mat-select formControlName="eventoPessoa" [compareWith]="eventoPessoaListComparar">
                                         <mat-option *ngFor="let option of frm.value.eventoPessoaList" [value]="option">
@@ -55,7 +55,7 @@
                                     </mat-select>
                                 </mat-form-field>
                                 <div class="form-group"
-                                    *ngIf="el.controls.eventoPessoa.value && !el.controls.eventoPessoa?.value?.pessoa?.id">
+                                    *ngIf="el['controls'].eventoPessoa.value && !el['controls'].eventoPessoa?.value?.pessoa?.id">
                                     <mat-form-field>
                                         <mat-form-field appearance="outline">
                                             <mat-label>Filtro</mat-label>
@@ -78,18 +78,18 @@
                                         Adicionar
                                     </button>
                                 </div>
-                                <div class="text-danger" *ngIf="isEnviado && el.controls.eventoPessoa.invalid">
-                                    <div *ngIf="el.controls.eventoPessoa.errors?.required">
+                                <div class="text-danger" *ngIf="isEnviado && el['controls'].eventoPessoa.invalid">
+                                    <div *ngIf="el['controls'].eventoPessoa.errors?.required">
                                         Campo obrigatório!
                                     </div>
                                 </div>
                             </div>
                         </td>
-                        <td [attr.colspan]="el.editar ? 3 : 0">
-                            <img *ngIf="!el.editar"
+                        <td [attr.colspan]="el['editar'] ? 3 : 0">
+                            <img *ngIf="!el['editar']"
                                 [src]="el?.value?.produto?.produtoModelo?.foto ? adMime(el?.value?.produto?.produtoModelo?.foto) : SEM_IMAGEM"
                                 class="rounded mx-auto d-block" style="max-height: 100px; max-width: 100px;">
-                            <div class="form-group" *ngIf="el.editar">
+                            <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline"
                                     *ngIf="!(el?.value?.produto?.produtoModelo && !el?.value?.produto?.produtoModelo?.id)">
                                     <mat-label>Produto</mat-label>
@@ -123,41 +123,41 @@
                                     </mat-form-field>
                                     <button type="button" class="btn btn-primary btn-sm m-4"
                                         [disabled]="podeAdicionarEventoProduto()"
-                                        (click)="adicionarEventoProduto(el.controls)">
+                                        (click)="adicionarEventoProduto(el['controls'])">
                                         Adicionar
                                     </button>
                                 </div>
-                                <div class="text-danger" *ngIf="isEnviado && el.controls.produto.invalid">
-                                    <div *ngIf="el.controls.produto.errors?.required">
+                                <div class="text-danger" *ngIf="isEnviado && el['controls'].produto.invalid">
+                                    <div *ngIf="el['controls'].produto.errors?.required">
                                         Campo obrigatório!
                                     </div>
                                 </div>
                             </div>
                         </td>
-                        <td *ngIf="!el.editar">
-                            <mat-label *ngIf="!el.editar">{{el?.value?.produto?.produtoModelo?.nome}}</mat-label>
+                        <td *ngIf="!el['editar']">
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.produto?.produtoModelo?.nome}}</mat-label>
                         </td>
-                        <td *ngIf="!el.editar">
-                            <mat-label *ngIf="!el.editar">{{el?.value?.produto?.produtoModelo?.codigo}}</mat-label>
+                        <td *ngIf="!el['editar']">
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.produto?.produtoModelo?.codigo}}</mat-label>
                         </td>
                         <td>
-                            <mat-label *ngIf="!el.editar">{{el?.value?.quantidade}}</mat-label>
-                            <div class="form-group" *ngIf="el.editar">
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.quantidade}}</mat-label>
+                            <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Quantidade</mat-label>
                                     <input matInput type="number" placeholder="Quantidade" class="text-right"
                                         formControlName="quantidade">
                                 </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && el.controls.quantidade.invalid">
-                                    <div *ngIf="el.controls.quantidade.errors?.required">
+                                <div class="text-danger" *ngIf="isEnviado && el['controls'].quantidade.invalid">
+                                    <div *ngIf="el['controls'].quantidade.errors?.required">
                                         Campo obrigatório!
                                     </div>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <mat-label *ngIf="!el.editar">{{el?.value?.unidadeMedida?.nome}}</mat-label>
-                            <div class="form-group" *ngIf="el.editar">
+                            <mat-label *ngIf="!el['editar']">{{el?.value?.unidadeMedida?.nome}}</mat-label>
+                            <div class="form-group" *ngIf="el['editar']">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Unidade de Medida</mat-label>
                                     <mat-select formControlName="unidadeMedida"
@@ -167,8 +167,8 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <div class="text-danger" *ngIf="isEnviado && el.controls.unidadeMedida.invalid">
-                                    <div *ngIf="el.controls.unidadeMedida.errors?.required">
+                                <div class="text-danger" *ngIf="isEnviado && el['controls'].unidadeMedida.invalid">
+                                    <div *ngIf="el['controls'].unidadeMedida.errors?.required">
                                         Campo obrigatório!
                                     </div>
                                 </div>
@@ -176,20 +176,20 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-sm" *ngIf="el.editar"
+                                <button type="button" class="btn btn-primary btn-sm" *ngIf="el['editar']"
                                     (click)="salvarEventoProduto(el)">
                                     salvar
                                 </button>
                                 <button type="button" class="btn btn-primary btn-sm"
-                                    *ngIf="!el.editar && !eventoProdutoEditando" (click)="editarEventoProduto(el)">
+                                    *ngIf="!el['editar'] && !eventoProdutoEditando" (click)="editarEventoProduto(el)">
                                     editar
                                 </button>
                                 <button type="button" class="btn btn-primary btn-sm" (click)="cancelarEventoProduto(i);"
-                                    *ngIf="el.editar">
+                                    *ngIf="el['editar']">
                                     cancelar
                                 </button>
                                 <button type="button" class="btn btn-primary btn-sm" (click)="excluirEventoProduto(i);"
-                                    *ngIf="!el.editar && !eventoProdutoEditando">
+                                    *ngIf="!el['editar'] && !eventoProdutoEditando">
                                     excluir
                                 </button>
                             </div>
@@ -202,8 +202,8 @@
             *ngIf="!eventoProdutoEditando">
             Adicionar
         </button>
-        <div class="text-danger" *ngIf="isEnviado && frm.controls.eventoProdutoList.invalid">
-            <div *ngIf="frm.controls.eventoProdutoList.errors?.required">
+        <div class="text-danger" *ngIf="isEnviado && frm['controls'].eventoProdutoList.invalid">
+            <div *ngIf="frm['controls'].eventoProdutoList.errors?.required">
                 Campo obrigatório!
             </div>
         </div>

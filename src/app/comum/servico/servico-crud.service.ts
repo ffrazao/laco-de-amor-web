@@ -28,7 +28,11 @@ export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroD
     this._localStorageService = injector.get<LocalStorageService>(LocalStorageService as Type<LocalStorageService>);
   }
 
-  private get headerData() {
+  public get http() {
+    return this._http;
+  }
+
+  protected get headerData() {
     const credentials = 'Bearer ' + this._localStorageService.token;
     const result = {
       'Content-Type': 'application/json; charset=utf-8',

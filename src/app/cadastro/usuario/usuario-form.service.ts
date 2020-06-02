@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { Usuario } from '../../comum/modelo/entidade/usuario';
 import { UsuarioFiltroDTO } from '../../comum/modelo/dto/usuario.filtro.dto';
+import { isPessoaValido } from '../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class UsuarioFormService {
@@ -20,11 +21,11 @@ export class UsuarioFormService {
     const result = this._formBuilder.group(
       {
         id: [entidade.id, []],
-        login: [entidade.login, [Validators.required]],
+        pessoa: [entidade.pessoa, [isPessoaValido()]],
+        login: [entidade.login, [Validators.required, Validators.pattern(/^[a-z0-9_.]{1,16}$/)]],
         foto: [entidade.foto, []],
         email: [entidade.email, [Validators.required, Validators.email]],
-        perfil: [entidade.perfil, []],
-        pessoa: [entidade.pessoa, []],
+        perfil: [entidade.perfil, [Validators.required]],
         ativo: [entidade.ativo, [Validators.required]],
       }
     );

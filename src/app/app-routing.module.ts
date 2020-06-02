@@ -30,6 +30,11 @@ const routes: Routes = [
     resolve: { resolve: AutorizarTrocarSenhaResolve },
   },
   {
+    path: 'autorizar-trocar-senha/:email/:token',
+    loadChildren: () => import('./autorizar-trocar-senha/autorizar-trocar-senha.module').then(m => m.AutorizarTrocarSenhaModule),
+    resolve: { resolve: AutorizarTrocarSenhaResolve },
+  },
+  {
     path: 'trocar-senha/:email/:token',
     loadChildren: () => import('./trocar-senha/trocar-senha.module').then(m => m.TrocarSenhaModule),
     resolve: { resolve: TrocarSenhaResolve },

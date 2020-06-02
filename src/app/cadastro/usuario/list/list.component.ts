@@ -9,6 +9,7 @@ import { Confirmacao } from 'src/app/comum/modelo/dominio/confirmacao';
 import { UsuarioPerfil } from 'src/app/comum/modelo/dominio/usuario-perfil';
 import { deEnumParaChaveValor, adMime } from '../../../comum/ferramenta/ferramenta-comum';
 import { constante } from './../../../comum/constante';
+import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 
 @Component({
   selector: 'app-list',
@@ -24,7 +25,9 @@ export class ListComponent implements OnInit {
     'login',
     'perfil',
     'email',
+    'pessoa',
     'ativo',
+    'acao',
   ];
 
   public dataSource: MatTableDataSource<Usuario>;
@@ -35,7 +38,8 @@ export class ListComponent implements OnInit {
 
   constructor(
     private _service: UsuarioCrudService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _mensagem: MensagemService,
   ) {
     this.confirmacaoList = deEnumParaChaveValor(Confirmacao);
   }
@@ -70,12 +74,16 @@ export class ListComponent implements OnInit {
     return result ? result[0].valor : '';
   }
 
-  public exibePerfil(v: UsuarioPerfil) {
-  //   const vinc =
-  //     (reg.parceiro && reg.parceiro.id ? 'Parceiro (' + (reg.parceiro.funcao ? this.exibeParceiroFuncao(reg.parceiro.funcao) : 'Não informado') + ') ' : '') +
-  //     (reg.fornecedor && reg.fornecedor.id ? 'Fornecedor ' : '') +
-  //     (reg.cliente && reg.cliente.id ? 'Cliente ' : '');
-  //   return vinc ? vinc : 'Sem vínculo';
+  public exibePerfil(v: Usuario) {
+    return v.perfil;
+  }
+
+  public async reiniciarSenha(usuarioId: number) {
+    if (await this._mensagem.confirme('Confirma o reinicio da senha?')) {
+      this._service.reiniciarSenha(usuarioId).subscribe(r => {
+        this._mensagem.sucesso('E-mail de recuperação de senha enviado!');
+      });
+    }
   }
 
 }

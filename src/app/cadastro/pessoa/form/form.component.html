@@ -3,7 +3,7 @@
     <p class="h5 mb-4 text-left">Formulário ({{acao}})</p>
 
     <div class="form-group">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width:60% !important" >
             <mat-label>Nome</mat-label>
             <input matInput placeholder="Nome da Pessoa" formControlName="nome">
         </mat-form-field>
@@ -58,7 +58,6 @@
                 </li>
             </ul>
         </mat-radio-group>
-
         <div class="text-danger" *ngIf="isEnviado && frm['controls'].pessoaTipo.invalid">
             <div *ngIf="frm['controls'].pessoaTipo.errors.required">
                 Campo obrigatório!
@@ -94,7 +93,7 @@
                 Campo obrigatório!
             </div>
             <div *ngIf="frm['controls'].email.errors.email">
-                E-mail inválido!
+                Valor inválido!
             </div>
         </div>
     </div>

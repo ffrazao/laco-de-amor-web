@@ -7,10 +7,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';
 import { PipeModule } from '../../../comum/pipe/pipe.module';
+import { PessoaModule } from '../../pessoa/pessoa.module';
 
 @NgModule({
   declarations: [FormComponent],
@@ -26,7 +29,11 @@ import { PipeModule } from '../../../comum/pipe/pipe.module';
     MatSelectModule,
     MatRadioModule,
     MatButtonModule,
+    MatIconModule,
+    MatAutocompleteModule,
+
     PipeModule,
+    PessoaModule,
   ]
 })
 export class FormModule { }
