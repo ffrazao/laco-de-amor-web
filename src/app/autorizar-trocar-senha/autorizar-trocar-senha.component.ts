@@ -54,7 +54,7 @@ export class AutorizarTrocarSenhaComponent implements OnInit {
       this._router.navigate(['trocar-senha', reg.email, reg.token]);
     }, (err) => {
       const msg = 'Erro no processo de recuperação de senha';
-      console.log(msg, err);
+      console.error(msg, err);
       this._mensagem.erro(msg);
     });
   }

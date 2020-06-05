@@ -1,3 +1,4 @@
+import { ProdutoModelo } from './../../../comum/modelo/entidade/produto-modelo';
 import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
@@ -6,15 +7,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { constante } from '../../../comum/constante';
 import { VenderCrudService } from '../vender.service';
 import { VenderFormService } from '../vender-form.service';
-import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { MensagemService } from '../../../comum/servico/mensagem/mensagem.service';
 import { ProdutoModeloCrudService } from '../../../cadastro/produto-modelo/produto-modelo.service';
 import { PessoaCrudService } from '../../../cadastro/pessoa/pessoa.service';
 import { Vender } from '../../../comum/modelo/entidade/vender';
 import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
-import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
 import { Produto } from '../../../comum/modelo/entidade/produto';
+import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
+import { ProdutoPreco } from './../../../comum/modelo/entidade/produto-preco';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { Endereco } from './../../../comum/modelo/entidade/endereco';
@@ -57,7 +58,6 @@ export class FormComponent implements OnInit {
     private _mensagem: MensagemService,
     private _produtoModeloService: ProdutoModeloCrudService,
     private _pessoaService: PessoaCrudService,
-    private _eventoPessoaFuncaoService: EventoPessoaFuncaoCrudService,
   ) {
   }
 
@@ -240,9 +240,9 @@ export class FormComponent implements OnInit {
     return produtoModelo ? `${produtoModelo.nome} (${produtoModelo.codigo})` : '';
   }
 
-  pesquisarEventoProduto = '';
+  public pesquisarEventoProduto = '';
 
-  $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
+  public $filteredOptionsEventoProduto = new Promise((resolve, reject) => {
     let result = [];
     resolve(result);
     return result;
@@ -251,25 +251,26 @@ export class FormComponent implements OnInit {
   public completarEventoProduto(event: KeyboardEvent) {
     if (
       !(
-        (event.key === "ArrowUp") ||
-        (event.key === "ArrowDown") ||
-        (event.key === "ArrowRight") ||
-        (event.key === "ArrowLeft"))
+        (event.key === 'ArrowUp') ||
+        (event.key === 'ArrowDown') ||
+        (event.key === 'ArrowRight') ||
+        (event.key === 'ArrowLeft'))
     ) {
       this.$filteredOptionsEventoProduto = new Promise((resolve, reject) => {
-        let result = [];
+        const result = [];
         if (typeof this.pesquisarEventoProduto === 'string' && this.pesquisarEventoProduto.length) {
-          this._produtoModeloService.lista.forEach(val => {
-            let p = this.pesquisarEventoProduto.toLowerCase();
-            if (val.materiaPrima === 'S' &&
-              (val.nome.toLowerCase().includes(p) || val.codigo.toLowerCase().includes(p))) {
+          this._produtoModeloService.filtro.nome = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.codigo = this.pesquisarEventoProduto;
+          this._produtoModeloService.filtro.materiaPrima = 'N';
+          this._produtoModeloService.filtrar().subscribe(lista => {
+            lista.forEach(val => {
               result.push(Object.assign({}, val));
-            }
+            });
+            resolve(result);
+            return result;
           });
         }
-        resolve(result);
-        return result;
-      })
+      });
     }
   }
 
@@ -279,10 +280,10 @@ export class FormComponent implements OnInit {
 
   public adicionarEventoProduto(fg: FormGroup) {
 
-    let produto = new Produto();
+    const produto = new Produto();
     produto.produtoModelo = (this.pesquisarEventoProduto as unknown) as ProdutoModelo;
 
-    let id = produto.produtoModelo.id;
+    const id = produto.produtoModelo.id;
     let existe = false;
     if (this.frm['produtoList']) {
       this.frm['produtoList'].forEach(e => {
@@ -303,7 +304,6 @@ export class FormComponent implements OnInit {
   public filtrarCotacaoGenerica(eventoProduto: EventoProduto) {
     return !eventoProduto.eventoPessoa;
   }
-
   public displayFnEventoPessoa(pessoa?: Pessoa): string {
     return pessoa ? `${pessoa.nome} (${pessoa.cpfCnpj})` : '';
   }
@@ -343,13 +343,13 @@ export class FormComponent implements OnInit {
   }
 
   public podeAdicionarEventoPessoa() {
-    return typeof this.frm.value.eventoPessoaList[0].pessoa === 'string';
+    return typeof this.pesquisarEventoPessoa === 'string';
   }
 
   public adicionarEventoPessoa(entidade: FormGroup) {
     const ep = new EventoPessoa();
-    ep.eventoPessoaFuncao = this._eventoPessoaFuncaoService.lista[0];
-    ep.pessoa = (this.frm.value.eventoPessoaList[0].pessoa as unknown) as Pessoa;
+    ep.eventoPessoaFuncao = this.eventoPessoaFuncao;
+    ep.pessoa = (this.pesquisarEventoPessoa as unknown) as Pessoa;
     const id = ep.pessoa.id;
     let existe = false;
     this.frm.get('eventoPessoaList').value.forEach(e => {
@@ -363,6 +363,20 @@ export class FormComponent implements OnInit {
       this.frm.get('eventoPessoaList').value.push(ep);
     }
     entidade.get('eventoPessoa').setValue(ep);
+    this.pesquisarEventoPessoa = '';
+  }
+
+  public produtoMudou(produto, linha) {
+    if (produto && produto.produtoModelo.produtoPrecoList) {
+      for (let i = 0; i <= produto.produtoModelo.produtoPrecoList.length; i++) {
+        const pp = produto.produtoModelo.produtoPrecoList[i];
+        if (pp.destinacao === 'Venda') {
+          linha.get('valorUnitario').setValue(produto.produtoModelo.produtoPrecoList[i].valor);
+          linha.updateValueAndValidity();
+          break;
+        }
+      }
+    }
   }
 
 }

@@ -27,6 +27,7 @@ export class EventoFormService {
         data: [entidade.data, [Validators.required]],
         eventoTipo: [entidade.eventoTipo, [Validators.required]],
         pai: [entidade.pai, []],
+        paiId: [entidade?.pai?.id, []],
         eventoProdutoList: this.criarFormularioEventoProdutoList(entidade.eventoProdutoList),
         eventoPessoaList: this.criarFormularioEventoPessoaList(entidade.eventoPessoaList),
         eventoProdutoListTotal: [this.calculaOrcamento(entidade.eventoProdutoList), []],
@@ -86,7 +87,7 @@ export class EventoFormService {
     return result;
   }
 
-  private multiplicaValores(a, b) {
+  public multiplicaValores(a, b) {
     return (a && b && isNumber(a) && isNumber(b)) ? a * b : null;
   }
 

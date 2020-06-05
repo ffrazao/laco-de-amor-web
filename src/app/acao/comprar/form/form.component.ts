@@ -22,7 +22,7 @@ import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { EventoPessoaFuncaoCrudService } from '../../evento-pessoa-funcao/evento-pessoa-funcao.service';
 import { eventoPessoaListComparar, unidadeMedidaListComparar, cotacaoListComparar, eventoProdutoListComparar } from '../../../comum/ferramenta/ferramenta-sistema';
 import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
-import { adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
+import { adMime, removeMime, deepCopy, } from '../../../comum/ferramenta/ferramenta-comum';
 
 @Component({
   selector: 'app-form',
@@ -42,7 +42,7 @@ export class FormComponent implements OnInit {
 
   public unidadeMedidaList: UnidadeMedida[] = [];
   private eventoPessoaFuncao;
-  public cotacao;
+  private _cotacao;
   public cotacaoList: Cotar[] = [];
 
   constructor(
@@ -153,6 +153,7 @@ export class FormComponent implements OnInit {
       f = new Comprar();
     }
     this.frm = this._formService.criarFormulario(f);
+    this.cotacao = f.pai;
   }
 
   public async restaurar() {
@@ -190,43 +191,71 @@ export class FormComponent implements OnInit {
     return cotacaoListComparar(o1, o2);
   }
 
+  public get cotacao() {
+    if (!this._cotacao) {
+      const entidade = this.frm.value;
+      this._cotacao = entidade.pai;
+    }
+    return this._cotacao;
+  }
+
+  public set cotacao(valor) {
+    this._cotacao = valor;
+  }
+
   public async utilizarCotacao(cotacao: Cotar) {
-    if (!this.frm.value.eventoPessoaList.length
-      || await this._mensagem.confirme(`Confirme a utilização da cotação ${cotacao.data}`)) {
-      // captar o valor atual do formulario
-      const entidade: Comprar = this.frm.value as Comprar;
-      // definir o evento pai
-      entidade.pai = cotacao;
+    if (!(this.frm.value.eventoPessoaList.length && this.frm.value.eventoProdutoList.length)
+      || await this._mensagem.confirme(`Confirme a utilização da cotação ${cotacao.data}. Os dados atuais serão substituidos`)) {
+      const entidade = new Comprar();
+      const f = (this.frm.value as Comprar);
+      entidade.id = f.id;
+      entidade.data = f.data;
+      entidade.eventoTipo = deepCopy(f.eventoTipo);
+      entidade.eventoPessoaList = [];
+      entidade.eventoProdutoList = [];
+      entidade.pai = deepCopy(cotacao);
       entidade.paiId = cotacao.id;
-      // trabalhar as pessoas envolvidas
-      const epesl = entidade.eventoPessoaList;
-      // zerar lista de compra
-      epesl.length = 0;
-      // incluir os itens cotados como itens de compra
-      entidade.pai.eventoPessoaList.forEach(ep => {
-        ep.id = null;
-        epesl.push(ep as EventoPessoa);
+
+      cotacao.eventoPessoaList.forEach((v: EventoPessoa) => {
+        const x = new EventoPessoa();
+        x.eventoPessoaFuncao = deepCopy(v.eventoPessoaFuncao);
+        x.pessoa = deepCopy(v.pessoa);
+        entidade.eventoPessoaList.push(x);
       });
-      // trabalhar os produtos a serem comprados
-      const eprdl = entidade.eventoProdutoList;
-      // zerar lista de compra
-      eprdl.length = 0;
-      // incluir os itens cotados como itens de compra
-      entidade.pai.eventoProdutoList.forEach(ep => {
-        ep.id = null;
-        ep.eventoPessoa = null;
-        eprdl.push(ep as EventoProduto);
-        const menorCotacao = this.menorCotacao(ep.produto, entidade.pai);
-        ep.quantidade = menorCotacao.quantidade;
-        ep.unidadeMedida = menorCotacao.unidadeMedida;
-        ep.valorUnitario = menorCotacao.valorUnitario;
-        ep.valorTotal = menorCotacao.valorTotal;
-        ep.eventoPessoa = menorCotacao.eventoPessoa;
+
+      cotacao.eventoProdutoList.forEach((v: EventoProduto) => {
+        const x = new EventoProduto();
+        x.produto = deepCopy(v.produto);
+        const menorCotacao = this.menorCotacao(v.produto, cotacao);
+        x.quantidade = menorCotacao.quantidade;
+        x.unidadeMedida = deepCopy(menorCotacao.unidadeMedida);
+        x.valorUnitario = menorCotacao.valorUnitario;
+        x.valorTotal = menorCotacao.valorTotal;
+        x.eventoPessoa = new EventoPessoa();
+        x.eventoPessoa.pessoa = deepCopy(menorCotacao.eventoPessoa.pessoa);
+        x.eventoPessoa.eventoPessoaFuncao = deepCopy(menorCotacao.eventoPessoa.eventoPessoaFuncao);
+        entidade.eventoProdutoList.push(x);
       });
-      // atualizar o formulario
-      this.frm.setValue(entidade);
+
+      this.frm = this._formService.criarFormulario(entidade);
       this.frm.updateValueAndValidity();
-      // this.frm = this._formService.criarFormulario(entidade);
+    }
+  }
+
+  public async removerCotacao(cotacao: Cotar) {
+    if (await this._mensagem.confirme(`Confirme a remoção de referência à cotação ${this.frm.value.pai.data}.`)) {
+      let encontrou = false;
+      for (const ct of this.cotacaoList) {
+        if (ct.id === this.frm.value.paiId) {
+          encontrou = true;
+        }
+      }
+      if (!encontrou) {
+        this.cotacaoList.push(this.frm.value.pai);
+        this.cotacaoList.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+      }
+      this.frm.controls.pai.setValue(null);
+      this.frm.controls.paiId.setValue(null);
     }
   }
 
@@ -325,16 +354,19 @@ export class FormComponent implements OnInit {
   }
 
   public eventoPessoaListChange(event: MatSelectChange, eventoProduto: FormGroup) {
-    const produto: Produto = eventoProduto.value.produto;
+    const produto: Produto = (eventoProduto.value.produto);
     const fornecedor: Fornecedor = ((event.value as EventoPessoa).pessoa as Fornecedor);
     const cotacao: EventoProduto = this.getCotacao(produto, fornecedor);
     if (cotacao) {
       eventoProduto.controls.quantidade.setValue(cotacao.quantidade);
-      eventoProduto.controls.unidadeMedida.setValue(cotacao.unidadeMedida);
+      eventoProduto.controls.unidadeMedida.setValue(deepCopy(cotacao.unidadeMedida));
       eventoProduto.controls.valorUnitario.setValue(cotacao.valorUnitario);
-      eventoProduto.controls.valorTotal.setValue(cotacao.quantidade * cotacao.valorUnitario);
-      eventoProduto.updateValueAndValidity();
+      eventoProduto.controls.valorTotal.setValue(this._formService.multiplicaValores(cotacao.quantidade, cotacao.valorUnitario));
+    } else {
+      eventoProduto.controls.valorUnitario.setValue(null);
+      eventoProduto.controls.valorTotal.setValue(null);
     }
+    eventoProduto.updateValueAndValidity();
   }
 
   private getCotacao(produto: Produto, fornecedor: Fornecedor): EventoProduto {

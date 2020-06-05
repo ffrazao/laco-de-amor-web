@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LocalStorageService } from './local-storage.service';
 import { EntidadeId } from '../modelo/entidade-id';
-import { FiltroDTO } from '../modelo/dto/filtro.dto';
+import { FiltroIdDTO } from '../modelo/dto/filtro-id.dto';
 import { InjetorEstaticoService } from './../../comum/servico/injetor-estatico.service';
 
-export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroDTO> {
+export abstract class ServicoCrudService<E extends EntidadeId, F extends FiltroIdDTO> {
 
   private _http: HttpClient;
   private _localStorageService: LocalStorageService;

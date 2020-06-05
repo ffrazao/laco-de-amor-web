@@ -349,4 +349,16 @@ export class FormComponent implements OnInit {
     return unidadeMedidaListComparar(f1, f2);
   }
 
+  public valorAnterior(control) {
+    const produto = control.value.produto;
+    if (produto && produto.produtoModelo.produtoPrecoList) {
+      for (let i = 0; i <= produto.produtoModelo.produtoPrecoList.length; i++) {
+        const pp = produto.produtoModelo.produtoPrecoList[i];
+        if (pp && pp.destinacao && pp.destinacao === 'Compra') {
+          return produto.produtoModelo.produtoPrecoList[i].valor;
+        }
+      }
+    }
+    return null;
+  }
 }

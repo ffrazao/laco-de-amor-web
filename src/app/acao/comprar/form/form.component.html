@@ -2,16 +2,23 @@
 
     <p class="h5 mb-4 text-left">Formulário ({{acao}})</p>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" *ngIf="!frm.value.pai">
         <mat-label>Cotação</mat-label>
-        <mat-select [(ngModel)]="cotacao" [ngModelOptions]="{standalone: true}" [compareWith]="cotacaoListComparar">
+        <mat-select [(ngModel)]="cotacao" 
+            [ngModelOptions]="{standalone: true}" 
+            [compareWith]="cotacaoListComparar">
             <mat-option *ngFor="let option of cotacaoList" [value]="option">
                 {{option.data | date: 'dd/MM/yyyy HH:mm'}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <button type="button" class="btn btn-primary btn-sm m-4" [disabled]="!cotacao" (click)="utilizarCotacao(cotacao)">
+    <button type="button" class="btn btn-primary btn-sm m-4" [disabled]="!cotacao" *ngIf="!frm.value.pai" (click)="utilizarCotacao(cotacao)">
         Utilizar
+    </button>
+
+    <mat-label *ngIf="frm.value.pai">Cotação utilizada: <b>{{frm.value.pai.data | date: 'dd/MM/yyyy HH:mm'}}</b></mat-label>
+    <button type="button" class="btn btn-secondary btn-sm m-4" *ngIf="frm.value.pai" (click)="removerCotacao()">
+        Remover
     </button>
 
     <div class="form-group">

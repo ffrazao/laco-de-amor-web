@@ -327,6 +327,7 @@
                                             <input matInput type="number" placeholder="Valor Unitário"
                                                 class="text-right" formControlName="valorUnitario">
                                         </mat-form-field>
+                                        <mat-label>Última Compra: {{valorAnterior(p)  | currency:'BRL':'symbol'}}</mat-label>
                                         <div class="text-danger" *ngIf="isEnviado && p.controls.valorUnitario.invalid">
                                             <div *ngIf="p.controls.valorUnitario.errors?.required">
                                                 Campo obrigatório!

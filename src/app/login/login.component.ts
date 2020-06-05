@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
       if (err.error.error_description === 'Bad credentials') {
         msg = 'Credenciais inválidas!';
       }
-      console.log(msg, err);
+      console.error(msg, err);
       this._mensagem.erro(msg);
     });
   }

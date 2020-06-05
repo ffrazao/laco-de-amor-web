@@ -1,7 +1,7 @@
-import { FiltroDTO } from './filtro.dto';
+import { FiltroIdDTO } from './filtro-id.dto';
 import { Confirmacao } from '../dominio/confirmacao';
 
-export class ProdutoModeloFiltroDTO implements FiltroDTO {
+export class ProdutoModeloFiltroDTO extends FiltroIdDTO {
 
     nome: string;
     codigo: string;

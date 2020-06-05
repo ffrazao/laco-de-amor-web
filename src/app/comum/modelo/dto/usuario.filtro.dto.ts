@@ -1,7 +1,7 @@
-import { FiltroDTO } from './filtro.dto';
+import { FiltroIdDTO } from './filtro-id.dto';
 import { Confirmacao } from '../dominio/confirmacao';
 
-export class UsuarioFiltroDTO implements FiltroDTO {
+export class UsuarioFiltroDTO extends FiltroIdDTO {
 
     login: string;
     email: string;

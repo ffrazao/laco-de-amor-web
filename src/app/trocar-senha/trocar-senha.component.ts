@@ -55,7 +55,7 @@ export class TrocarSenhaComponent implements OnInit {
       this._router.navigate(['/', 'login']);
     }, (err) => {
       const msg = 'Erro ao alterar a senha';
-      console.log(msg, err);
+      console.error(msg, err);
       this._mensagem.erro(msg);
     });
   }

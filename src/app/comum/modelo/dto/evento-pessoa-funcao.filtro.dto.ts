@@ -1,6 +1,6 @@
-import { FiltroDTO } from './filtro.dto';
+import { FiltroIdDTO } from './filtro-id.dto';
 
-export class EventoPessoaFuncaoFiltroDTO implements FiltroDTO {
+export class EventoPessoaFuncaoFiltroDTO extends FiltroIdDTO {
 
     public nome: string;
     public codigo: string;

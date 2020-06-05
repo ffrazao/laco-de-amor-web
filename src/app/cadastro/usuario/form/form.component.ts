@@ -254,9 +254,14 @@ export class FormComponent implements OnInit {
   }
 
   public sugereLogin(usuario: Usuario) {
-    if (usuario.pessoa && usuario.pessoa.id && usuario.pessoa.nome && (!usuario.login || usuario.login.trim().length === 0)) {
-      const login = sugereLogin(usuario.pessoa.nome);
-      this.frm.controls.login.setValue(login);
+    if (usuario.pessoa && usuario.pessoa.id) {
+      if (usuario.pessoa.nome && (!usuario.login || usuario.login.trim().length === 0)) {
+        const login = sugereLogin(usuario.pessoa.nome);
+        this.frm.controls.login.setValue(login);
+      }
+      if (usuario.pessoa.email && (!usuario.email || usuario.email.trim().length === 0)) {
+        this.frm.controls.email.setValue(usuario.pessoa.email);
+      }
     }
   }
 
