@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmeComponent } from './confirme.component';
 
 @Injectable()
@@ -13,11 +13,24 @@ export class MensagemService {
   }
 
   public sucesso(msg: string, titulo: string = null) {
-    this.toastr.success(msg, titulo ? titulo : 'Sucesso!');
+    this.toastr.success(msg, titulo ? titulo : 'Sucesso!', {
+      positionClass: 'toast-top-center',
+      closeButton: true,
+    });
+  }
+
+  public atencao(msg: string, titulo: string = null) {
+    this.toastr.warning(msg, titulo ? titulo : 'Atenção!', {
+      positionClass: 'toast-top-center',
+      closeButton: true,
+    });
   }
 
   public erro(msg: string, titulo: string = null) {
-    this.toastr.error(msg, titulo ? titulo : 'Erro!');
+    this.toastr.error(msg, titulo ? titulo : 'Erro!', {
+      positionClass: 'toast-top-center',
+      closeButton: true,
+    });
   }
 
   public erroGrave(msg: string, titulo: string = null) {

@@ -4,17 +4,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
 import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
 import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
+import { AuthGuardAdminService } from './comum/servico/auth-guard/auth-guard.admin';
+import { AuthGuardAdminParceiroService } from './comum/servico/auth-guard/auth-guard.admin.parceiro';
 
 const routes: Routes = [
   {
     path: 'cadastro',
     loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule),
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, AuthGuardAdminService]
   },
   {
     path: 'acao',
     loadChildren: () => import('./acao/acao.module').then(m => m.AcaoModule),
-    canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService, AuthGuardAdminParceiroService]
   },
   {
     path: 'login',

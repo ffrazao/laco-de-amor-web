@@ -22,7 +22,7 @@ export class UsuarioCrudService extends ServicoCrudService<Usuario, UsuarioFiltr
 
     return this.http.get<boolean>(
       `${environment.REST_API_URL}/${this.funcionalidade}/login-disponivel${param}`,
-      { headers: this.headerData }
+      { headers: this.loginService.apiRequestHttpHeader }
     );
   }
 
@@ -34,7 +34,7 @@ export class UsuarioCrudService extends ServicoCrudService<Usuario, UsuarioFiltr
 
     return this.http.get<boolean>(
       `${environment.REST_API_URL}/${this.funcionalidade}/pessoa-disponivel${param}`,
-      { headers: this.headerData }
+      { headers: this.loginService.apiRequestHttpHeader }
     );
   }
 
@@ -46,13 +46,15 @@ export class UsuarioCrudService extends ServicoCrudService<Usuario, UsuarioFiltr
 
     return this.http.get<boolean>(
       `${environment.REST_API_URL}/${this.funcionalidade}/email-disponivel${param}`,
-      { headers: this.headerData }
+      { headers: this.loginService.apiRequestHttpHeader }
     );
   }
 
   public reiniciarSenha(usuarioId: number) {
     return this.http.put<void>(
-      `${environment.REST_API_URL}/${this.funcionalidade}/reiniciar-senha`, {id: usuarioId}, { headers: this.headerData }
+      `${environment.REST_API_URL}/${this.funcionalidade}/reiniciar-senha`,
+      { id: usuarioId },
+      { headers: this.loginService.apiRequestHttpHeader }
     );
   }
 

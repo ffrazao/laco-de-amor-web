@@ -6,7 +6,7 @@
             <mat-icon>home</mat-icon>
         </button>
 
-        <button mat-button [matMenuTriggerFor]="cadastroMenu" *ngIf="estaLogado">
+        <button mat-button [matMenuTriggerFor]="cadastroMenu" *ngIf="estaLogado && temPerfil(['Admin'])">
             Cadastro
         </button>
         <mat-menu #cadastroMenu="matMenu">
@@ -27,31 +27,31 @@
             </button>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="acoesMenu" *ngIf="estaLogado">
+        <button mat-button [matMenuTriggerFor]="acoesMenu" *ngIf="estaLogado && temPerfil(['Admin', 'Parceiro'])">
             Ações
         </button>
         <mat-menu #acoesMenu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="temPerfil(['Admin'])">
                 <a [routerLink]="['/', 'acao', 'cotar']">
                     Cotar Matéria-Prima
                 </a>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="temPerfil(['Admin'])">
                 <a [routerLink]="['/', 'acao', 'comprar']">
                     Comprar Matéria-Prima
                 </a>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="temPerfil(['Admin', 'Parceiro'])">
                 <a [routerLink]="['/', 'acao', 'utilizar']">
                     Utilizar Matéria-Prima
                 </a>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="temPerfil(['Admin', 'Parceiro'])">
                 <a [routerLink]="['/', 'acao', 'produzir']">
                     Produzir Itens
                 </a>
             </button>
-            <button mat-menu-item>
+            <button mat-menu-item *ngIf="temPerfil(['Admin'])">
                 <a [routerLink]="['/', 'acao', 'vender']">
                     Vender Itens
                 </a>

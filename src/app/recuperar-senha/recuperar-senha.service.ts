@@ -1,10 +1,9 @@
 import { RecuperarSenha } from './../comum/modelo/recuperar-senha';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+
 import { environment } from 'src/environments/environment';
 
-import { LocalStorageService } from '../comum/servico/local-storage.service';
 
 @Injectable()
 export class RecuperarSenhaService {

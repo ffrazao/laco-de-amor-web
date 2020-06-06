@@ -1,12 +1,11 @@
-import { Observable } from 'rxjs';
-import { LocalStorageService } from './../local-storage.service';
+import { LoginService } from './../../../login/login.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
     constructor(
-        private _localStorageService: LocalStorageService,
+        private _loginService: LoginService,
         private _router: Router
     ) { }
 
@@ -14,11 +13,12 @@ export class AuthGuardService implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): boolean {
-        const logado = this._localStorageService.estaLogado;
+        const logado = this._loginService.estaLogado;
 
         if (!logado) {
             this._router.navigate(['/', 'login']);
         }
+
         return logado;
     }
 }

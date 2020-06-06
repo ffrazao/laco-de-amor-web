@@ -21,6 +21,11 @@ import { HttpConfigInterceptor } from './comum/servico/interceptor/httpconfig.in
 import { ServicoModule } from './comum/servico/servico.module';
 import { PipeModule } from './comum/pipe/pipe.module';
 import { MirrorModule } from './comum/componente/mirror/mirror.module';
+import { AuthGuardAdminService } from './comum/servico/auth-guard/auth-guard.admin';
+import { AuthGuardClienteService } from './comum/servico/auth-guard/auth-guard.cliente';
+import { AuthGuardParceiroService } from './comum/servico/auth-guard/auth-guard.parceiro';
+import { AuthGuardAdminClienteService } from './comum/servico/auth-guard/auth-guard.admin.cliente';
+import { AuthGuardAdminParceiroService } from './comum/servico/auth-guard/auth-guard.admin.parceiro';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -50,13 +55,18 @@ registerLocaleData(localePt, 'pt-BR');
   ],
   providers: [
     AuthGuardService,
+    AuthGuardAdminService,
+    AuthGuardClienteService,
+    AuthGuardParceiroService,
+    AuthGuardAdminClienteService,
+    AuthGuardAdminParceiroService,
     AutorizarTrocarSenhaResolve,
     TrocarSenhaResolve,
-    {
+    /* {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,
       multi: true
-    },
+    }, */
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpConfigInterceptor, multi: true

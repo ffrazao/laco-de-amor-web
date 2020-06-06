@@ -4,8 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-import { LocalStorageService } from '../comum/servico/local-storage.service';
-
 @Injectable()
 export class AutorizarTrocarSenhaService {
 

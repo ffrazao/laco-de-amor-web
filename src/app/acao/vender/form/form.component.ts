@@ -1,4 +1,3 @@
-import { ProdutoModelo } from './../../../comum/modelo/entidade/produto-modelo';
 import { environment } from './../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
@@ -15,7 +14,6 @@ import { EventoProduto } from '../../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../../comum/modelo/entidade/evento-pessoa';
 import { Produto } from '../../../comum/modelo/entidade/produto';
 import { ProdutoModelo } from '../../../comum/modelo/entidade/produto-modelo';
-import { ProdutoPreco } from './../../../comum/modelo/entidade/produto-preco';
 import { UnidadeMedida } from '../../../comum/modelo/entidade/unidade-medida';
 import { Pessoa } from '../../../comum/modelo/entidade/pessoa';
 import { Endereco } from './../../../comum/modelo/entidade/endereco';
@@ -299,6 +297,7 @@ export class FormComponent implements OnInit {
     }
     this.pesquisarEventoProduto = '';
     fg['produto'].setValue(produto);
+    this.produtoMudou(produto, fg);
   }
 
   public filtrarCotacaoGenerica(eventoProduto: EventoProduto) {
@@ -366,13 +365,17 @@ export class FormComponent implements OnInit {
     this.pesquisarEventoPessoa = '';
   }
 
-  public produtoMudou(produto, linha) {
+  public produtoMudou(produto, linha: FormGroup | object) {
     if (produto && produto.produtoModelo.produtoPrecoList) {
       for (let i = 0; i <= produto.produtoModelo.produtoPrecoList.length; i++) {
         const pp = produto.produtoModelo.produtoPrecoList[i];
         if (pp.destinacao === 'Venda') {
-          linha.get('valorUnitario').setValue(produto.produtoModelo.produtoPrecoList[i].valor);
-          linha.updateValueAndValidity();
+          if (linha instanceof FormGroup) {
+            linha.get('valorUnitario').setValue(produto.produtoModelo.produtoPrecoList[i].valor);
+            linha.updateValueAndValidity();
+          } else {
+            linha['valorUnitario'].setValue(produto.produtoModelo.produtoPrecoList[i].valor);
+          }
           break;
         }
       }

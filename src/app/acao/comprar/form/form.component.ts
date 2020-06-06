@@ -242,7 +242,7 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public async removerCotacao(cotacao: Cotar) {
+  public async removerCotacao() {
     if (await this._mensagem.confirme(`Confirme a remoção de referência à cotação ${this.frm.value.pai.data}.`)) {
       let encontrou = false;
       for (const ct of this.cotacaoList) {
