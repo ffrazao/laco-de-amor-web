@@ -1,5 +1,5 @@
 import { LoginFormService } from './login-form.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { MensagemService } from '../comum/servico/mensagem/mensagem.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
   public frm: FormGroup;
 
@@ -21,18 +21,23 @@ export class LoginComponent implements OnInit {
 
   public escondeSenha = true;
 
+  @ViewChild('recebeFoco') campoFoco: ElementRef;
+
   constructor(
     private _service: LoginService,
     private _formService: LoginFormService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _mensagem: MensagemService,
-    ) { 
-
-    }
+  ) {
+  }
 
   ngOnInit(): void {
     this.frm = this._formService.criarFormulario(new Login());
+  }
+
+  ngAfterViewInit() {
+    this.campoFoco.nativeElement.focus();
   }
 
   public enviar(event) {

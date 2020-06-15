@@ -12,7 +12,7 @@ import { RecuperarSenhaRoutingModule } from './recuperar-senha-routing.module';
 import { RecuperarSenhaComponent } from './recuperar-senha.component';
 import { RecuperarSenhaService } from './recuperar-senha.service';
 import { RecuperarSenhaFormService } from './recuperar-senha-form.service';
-
+import { EfetuaLogoutResolve } from './../comum/servico/resolver/efetua-logout.resolver';
 
 @NgModule({
   declarations: [RecuperarSenhaComponent],
@@ -31,6 +31,7 @@ import { RecuperarSenhaFormService } from './recuperar-senha-form.service';
   providers: [
     RecuperarSenhaService,
     RecuperarSenhaFormService,
+    EfetuaLogoutResolve,
   ]
 })
 export class RecuperarSenhaModule { }

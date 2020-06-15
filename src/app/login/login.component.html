@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <mat-label>Usuário</mat-label>
-                                <input matInput placeholder="Nome do Usuário" formControlName="login">
+                                <input matInput placeholder="Nome do Usuário" formControlName="login" #recebeFoco>
                             </mat-form-field>
                             <div class="text-danger" *ngIf="isEnviado && frm.controls.login.invalid">
                                 <div *ngIf="frm.controls.login.errors.required">

@@ -14,9 +14,6 @@ import { RodapeModule } from './comum/componente/rodape/rodape.module';
 import { AnexarModule } from './comum/servico/anexar/anexar.module';
 import { MensagemModule } from './comum/servico/mensagem/mensagem.module';
 import { AuthGuardService } from './comum/servico/auth-guard/auth-guard';
-import { AutorizarTrocarSenhaResolve } from './autorizar-trocar-senha/autorizar-trocar-senha.resolve';
-import { TrocarSenhaResolve } from './trocar-senha/trocar-senha.resolve';
-import { ErrorIntercept } from './comum/servico/erro/error-intercept';
 import { HttpConfigInterceptor } from './comum/servico/interceptor/httpconfig.interceptor';
 import { ServicoModule } from './comum/servico/servico.module';
 import { PipeModule } from './comum/pipe/pipe.module';
@@ -60,8 +57,6 @@ registerLocaleData(localePt, 'pt-BR');
     AuthGuardParceiroService,
     AuthGuardAdminClienteService,
     AuthGuardAdminParceiroService,
-    AutorizarTrocarSenhaResolve,
-    TrocarSenhaResolve,
     /* {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,
