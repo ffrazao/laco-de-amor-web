@@ -25,7 +25,7 @@ import {
   pessoaEnderecoListComparar
 } from '../../../comum/ferramenta/ferramenta-sistema';
 import { EventoPessoaFuncao } from '../../../comum/modelo/entidade/evento-pessoa-funcao';
-import { adMime, removeMime } from '../../../comum/ferramenta/ferramenta-comum';
+import { adMime, removeMime, data } from '../../../comum/ferramenta/ferramenta-comum';
 
 
 @Component({
@@ -366,18 +366,13 @@ export class FormComponent implements OnInit {
   }
 
   public produtoMudou(produto, linha: FormGroup | object) {
-    if (produto && produto.produtoModelo.produtoPrecoList) {
-      for (let i = 0; i <= produto.produtoModelo.produtoPrecoList.length; i++) {
-        const pp = produto.produtoModelo.produtoPrecoList[i];
-        if (pp.destinacao === 'Venda') {
-          if (linha instanceof FormGroup) {
-            linha.get('valorUnitario').setValue(produto.produtoModelo.produtoPrecoList[i].valor);
-            linha.updateValueAndValidity();
-          } else {
-            linha['valorUnitario'].setValue(produto.produtoModelo.produtoPrecoList[i].valor);
-          }
-          break;
-        }
+    const valor = this._formService.calculaMenorPreco(produto, produto.produtoModelo.produtoPrecoList);
+    if (valor) {
+      if (linha instanceof FormGroup) {
+        linha.get('valorUnitario').setValue(valor);
+        linha.updateValueAndValidity();
+      } else {
+        linha['valorUnitario'].setValue(valor);
       }
     }
   }

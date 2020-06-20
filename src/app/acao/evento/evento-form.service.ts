@@ -1,3 +1,4 @@
+import { ProdutoPreco } from './../../comum/modelo/entidade/produto-preco';
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 
@@ -6,7 +7,7 @@ import { EventoProduto } from '../../comum/modelo/entidade/evento-produto';
 import { EventoPessoa } from '../../comum/modelo/entidade/evento-pessoa';
 import { EventoFiltroDTO } from 'src/app/comum/modelo/dto/evento.filtro.dto';
 import { Produto } from 'src/app/comum/modelo/entidade/produto';
-import { isNumber } from '../../comum/ferramenta/ferramenta-comum';
+import { isNumber, data } from '../../comum/ferramenta/ferramenta-comum';
 
 @Injectable()
 export class EventoFormService {
@@ -197,6 +198,27 @@ export class EventoFormService {
     };
   }
 
+  public calculaMenorPreco(produto: Produto, produtoPrecoList: ProdutoPreco[]) {
+    const hoje = new Date();
+    let maior = null;
+    let result = null;
+    if (produto && produtoPrecoList) {
+      for (let i = 0; i <= produtoPrecoList.length; i++) {
+        const pp = produtoPrecoList[i];
+        if (pp && pp.destinacao === 'Venda') {
+          const vigencia = data(pp.vigencia);
+          if (!maior || maior.getTime() < vigencia.getTime()) {
+            if (vigencia.getTime() <= hoje.getTime()) {
+                result = produtoPrecoList[i].valor;
+                maior = vigencia;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
 }
 
 export class ResultadoValoresCotacao {
@@ -204,3 +226,5 @@ export class ResultadoValoresCotacao {
   media = 0;
   maior = 0;
 }
+
+

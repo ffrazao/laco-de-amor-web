@@ -271,3 +271,14 @@ export function sugereLogin(nome: string) {
         return `${nomes[0].replace(/\W/g, '')}.${nomes[nomes.length - 1].replace(/\W/g, '')}`;
     }
 }
+
+export function data(vlr): Date {
+  if (!vlr) {
+    return vlr;
+  }
+  if (!(vlr instanceof Date)) {
+    vlr = vlr.split('-');
+    vlr = new Date(vlr[0], vlr[1] - 1, vlr[2]);
+  }
+  return vlr;
+}
